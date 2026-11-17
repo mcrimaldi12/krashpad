@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <title>Krash Zone</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bungee&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap">
 <style>
 /* Layout: a one-screen arcade. Every game is a job site under a hazard-striped top bar.
    One deliberate look (daytime construction site), so colors are set explicitly, no dark/light switch.
@@ -15,7 +15,7 @@
 :root{
   --asphalt:#22252b; --asphalt2:#30343c; --hazard:#ffc21a; --hazard-dk:#b88500; --orange:#ff6a1a;
   --sky:#8fd3ff; --dirt:#a8703c; --chalk:#fffaf0; --steel:#8a95a5; --go:#22a95e; --red:#e8443a;
-  --display:"Bungee","Arial Black","Impact",sans-serif;
+  --display:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
   --read:"Andika","Trebuchet MS","Comic Sans MS",sans-serif;
   --stripes:repeating-linear-gradient(-45deg,var(--hazard) 0 18px,var(--asphalt) 18px 36px);
   color-scheme:dark;
@@ -31,34 +31,35 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 #flash{position:fixed;inset:0;background:#fff7d6;opacity:0;pointer-events:none;z-index:49}
 
 /* ---------- Home ---------- */
-#home{background:radial-gradient(120% 80% at 50% 0%,#3a3f49 0,var(--asphalt) 60%);align-items:center;gap:clamp(10px,2.4vh,22px);padding:0 16px 76px;overflow-y:auto}
+#home{background:radial-gradient(90% 60% at 50% 0%,#33467a 0,#1a2140 55%,#11152a 100%);align-items:center;gap:clamp(10px,2.4vh,22px);padding:0 16px 76px;overflow-y:auto}
 .hz{height:16px;width:100vw;flex:none;background:var(--stripes)}
 .top{display:flex;align-items:center;justify-content:space-between;width:min(100%,900px);gap:12px}
-.logo{font-family:var(--display);font-size:clamp(34px,8vw,64px);line-height:1;color:var(--hazard);letter-spacing:1px;text-shadow:0 4px 0 var(--hazard-dk),0 8px 18px rgba(0,0,0,.5)}
-.logo b{color:var(--orange);font-weight:inherit;text-shadow:0 4px 0 #9b3a06,0 8px 18px rgba(0,0,0,.5)}
-.bolts{display:flex;align-items:center;gap:8px;background:var(--asphalt2);border:3px solid #474c56;border-radius:999px;padding:6px 14px 6px 8px;font-family:var(--display);font-size:clamp(18px,3.4vw,26px);color:var(--hazard)}
+.logo{font-family:var(--display);font-weight:700;font-size:clamp(36px,8.4vw,68px);line-height:1;color:var(--hazard);letter-spacing:.5px;transform:skewX(-8deg);text-shadow:0 4px 0 var(--hazard-dk),0 0 28px rgba(255,194,26,.45)}
+.logo b{color:var(--orange);font-weight:inherit;text-shadow:0 4px 0 #9b3a06,0 0 28px rgba(255,106,26,.5)}
+.bolts{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);backdrop-filter:blur(6px);border-radius:999px;padding:6px 14px 6px 8px;font-family:var(--display);font-weight:700;font-size:clamp(18px,3.4vw,26px);color:var(--hazard)}
 .nut{width:28px;height:28px;flex:none;background:var(--steel);clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);position:relative}
 .nut::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--asphalt)}
-.go{font-family:var(--display);font-size:clamp(44px,10vw,84px);color:var(--asphalt);background:var(--hazard);border-radius:28px;padding:10px clamp(40px,10vw,90px);box-shadow:0 10px 0 var(--hazard-dk),0 18px 30px rgba(0,0,0,.45);animation:throb 1.6s ease-in-out infinite;flex:none}
-.go:active{transform:translateY(8px);box-shadow:0 2px 0 var(--hazard-dk)}
+.go{font-family:var(--display);font-weight:700;font-size:clamp(46px,10vw,86px);letter-spacing:2px;color:#3a2200;background:linear-gradient(180deg,#ffe066 0%,#ffc21a 45%,#ff9f1a 100%);border-radius:32px;padding:6px clamp(44px,11vw,100px);box-shadow:0 10px 0 #c46f00,0 0 40px rgba(255,180,30,.55),inset 0 3px 0 rgba(255,255,255,.6);animation:throb 1.6s ease-in-out infinite;flex:none}
+.go:active{transform:translateY(8px);box-shadow:0 2px 0 #c46f00}
 @keyframes throb{50%{transform:scale(1.05)}}
-.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:min(100%,900px)}
-@media (min-width:600px){.tiles{grid-template-columns:repeat(4,1fr)}}
-.tile{background:var(--asphalt2);border:4px solid #474c56;border-radius:20px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--display);font-size:clamp(15px,2.6vw,20px);color:var(--chalk);box-shadow:0 6px 0 #15171b}
-.tile:active{transform:translateY(5px);box-shadow:0 1px 0 #15171b}
-.tile svg{width:100%;max-width:150px;height:auto;aspect-ratio:200/140}
-.tile.t-wreck{border-color:var(--red)} .tile.t-dig{border-color:var(--hazard)} .tile.t-race{border-color:#3b82f6} .tile.t-mem{border-color:var(--go)} .tile.t-train{border-color:var(--orange)} .tile.t-trace{border-color:#b07cf0} .tile.t-cards{border-color:#5aa9e6} .tile.t-match{border-color:#ff8fb1}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:min(100%,1040px)}
+@media (min-width:600px){.tiles{grid-template-columns:repeat(5,1fr)}}
+.tile{--c1:#475569;--c2:#1e293b;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--c1),var(--c2));border-radius:24px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--display);font-weight:700;font-size:clamp(16px,2.4vw,21px);color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.35);box-shadow:0 8px 0 rgba(0,0,0,.28),0 14px 26px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.35)}
+.tile::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 70% at 30% 0%,rgba(255,255,255,.28),transparent 55%);pointer-events:none}
+.tile:active{transform:translateY(6px);box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.tile svg{width:100%;max-width:150px;height:auto;aspect-ratio:200/140;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
+.t-trace{--c1:#a78bfa;--c2:#5b21b6}.t-cards{--c1:#38bdf8;--c2:#1d4ed8}.t-match{--c1:#fb7185;--c2:#be185d}.t-mem{--c1:#34d399;--c2:#047857}.t-wreck{--c1:#f87171;--c2:#991b1b}.t-dig{--c1:#fbbf24;--c2:#b45309}.t-race{--c1:#22d3ee;--c2:#0e7490}.t-train{--c1:#fb923c;--c2:#c2410c}.t-fire{--c1:#ff8a3d;--c2:#b91c1c}.t-chase{--c1:#818cf8;--c2:#1e3a8a}
 .row2{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.pill{font-family:var(--display);font-size:20px;background:var(--asphalt2);border:3px solid #474c56;border-radius:999px;padding:12px 22px;color:var(--hazard)}
+.pill{font-family:var(--display);font-weight:700;font-size:20px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.16);box-shadow:0 6px 16px rgba(0,0,0,.3);border-radius:999px;padding:12px 22px;color:var(--hazard)}
 .gear{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
 .gear i{position:absolute;inset:0;border-radius:50%;border:4px solid var(--hazard);clip-path:inset(100% 0 0 0)}
 
 /* ---------- Game frame ---------- */
-#game{background:var(--asphalt)}
-.bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:var(--asphalt);border-bottom:6px solid transparent;border-image:var(--stripes) 1}
-.ibtn{width:58px;height:58px;border-radius:16px;background:var(--asphalt2);border:3px solid #474c56;display:grid;place-items:center;font-size:28px;color:var(--chalk);flex:none}
+#game{background:#151b2e}
+.bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:linear-gradient(#1f2747,#151b2e);position:relative;z-index:3;box-shadow:0 6px 16px rgba(0,0,0,.3);border-bottom:6px solid transparent;border-image:var(--stripes) 1}
+.ibtn{width:58px;height:58px;border-radius:18px;background:linear-gradient(#3a4569,#252d4a);border:0;box-shadow:inset 0 2px 0 rgba(255,255,255,.15),0 4px 10px rgba(0,0,0,.3);display:grid;place-items:center;font-size:28px;color:var(--chalk);flex:none}
 .ibtn svg{width:30px;height:30px}
-.ibtn.hear{background:var(--hazard);border-color:var(--hazard-dk);color:var(--asphalt)}
+.ibtn.hear{background:linear-gradient(#ffe066,#ffb21a);color:#3a2200;box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 4px 12px rgba(255,180,30,.4)}
 .prog{display:flex;gap:5px;align-items:flex-end;justify-content:center;min-width:0;flex:1 1 auto}
 .cone{flex:0 1 22px;min-width:7px;height:28px;background:#4a4f58;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);transition:background .3s,transform .3s}
 @media (max-width:500px){.cone{flex-basis:14px;height:20px}.prog{gap:3px}}
@@ -67,7 +68,9 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .word{font-family:var(--read);font-weight:700}
 
 /* ---------- Wreck It ---------- */
-.a-wreck{background:linear-gradient(#7cc8f5,#bfe6ff 70%)}
+.a-wreck{background:linear-gradient(#4aa8f0,#9fd8ff 55%,#e2f4ff)}
+.a-wreck::before,.a-dig::before,.a-train::before{content:"";position:absolute;top:16%;left:6%;width:90px;height:34px;border-radius:40px;background:rgba(255,255,255,.9);box-shadow:38px -14px 0 4px rgba(255,255,255,.9),330px 26px 0 0 rgba(255,255,255,.8),370px 12px 0 8px rgba(255,255,255,.8),700px -6px 0 4px rgba(255,255,255,.85),740px 8px 0 0 rgba(255,255,255,.85);animation:drift 60s linear infinite alternate;pointer-events:none}
+@keyframes drift{to{transform:translateX(-200px)}}
 .a-wreck .ground{position:absolute;left:0;right:0;bottom:0;height:12%;background:linear-gradient(#b07a45,#8a5a30);border-top:6px solid #6b4423}
 .jib{position:absolute;top:10px;left:0;right:0;height:22px;background:repeating-linear-gradient(60deg,transparent 0 10px,var(--hazard) 10px 14px),repeating-linear-gradient(-60deg,transparent 0 10px,var(--hazard) 10px 14px);border-top:5px solid var(--hazard);border-bottom:5px solid var(--hazard)}
 .trolley{position:absolute;top:12px;left:50%;width:0;transition:left .38s cubic-bezier(.4,1.4,.6,1)}
@@ -87,7 +90,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 @keyframes glow{to{box-shadow:0 0 0 8px var(--hazard),0 0 30px 10px rgba(255,194,26,.8)}}
 
 /* ---------- Dig & Dump ---------- */
-.a-dig{background:linear-gradient(#8fd3ff 0 42%,#c58b4f 42%,#a8703c);--ls:clamp(40px,min(12vw,11vh),84px)}
+.a-dig{background:linear-gradient(#5bb6f2,#bfe6ff 42%,#d29a5a 42%,#a8703c 75%,#8a5a30);--ls:clamp(40px,min(12vw,11vh),84px)}
 .truckrow{position:absolute;top:5%;left:0;right:0;display:flex;justify-content:center}
 .truck{position:relative;display:flex;align-items:flex-end;padding-bottom:calc(var(--ls) * .5)}
 .bed{display:flex;gap:8px;padding:10px 12px 14px;background:var(--hazard);border:5px solid var(--hazard-dk);border-radius:6px 6px 16px 16px;min-width:calc(var(--ls) * 2.4);justify-content:center;transform-origin:left bottom}
@@ -104,8 +107,8 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 @keyframes pop{from{transform:scale(0)}}
 
 /* ---------- Turbo Race ---------- */
-.a-race{background:repeating-linear-gradient(90deg,#3f9d4f 0 30px,#47a957 30px 60px)}
-.road{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(96vw,620px);background:#3a3d44;border-left:12px solid transparent;border-right:12px solid transparent;border-image:repeating-linear-gradient(var(--red) 0 30px,#fff 30px 60px) 12;--spd:.5s;touch-action:none;overflow:hidden}
+.a-race,.a-chase{background:repeating-linear-gradient(90deg,#3f9d4f 0 30px,#47a957 30px 60px)}
+.road{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(96vw,620px);background:linear-gradient(90deg,#2b2f38,#3d424d 50%,#2b2f38);box-shadow:0 0 30px rgba(0,0,0,.4);border-left:12px solid transparent;border-right:12px solid transparent;border-image:repeating-linear-gradient(var(--red) 0 30px,#fff 30px 60px) 12;--spd:.5s;touch-action:none;overflow:hidden}
 .lane-line{position:absolute;top:-80px;bottom:0;width:8px;margin-left:-4px;background:repeating-linear-gradient(#fff 0 44px,transparent 44px 80px);animation:dash var(--spd) linear infinite}
 @keyframes dash{to{transform:translateY(80px)}}
 .car{position:absolute;bottom:5%;width:var(--cw);--cw:min(17vw,110px,16vh);transition:left .18s ease-out;filter:drop-shadow(0 8px 6px rgba(0,0,0,.4))}
@@ -114,7 +117,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .car.boost::after{height:70%}
 .car.spin{animation:spin .7s}
 @keyframes spin{to{transform:rotate(360deg)}}
-.gate{position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 8px;will-change:transform}
+.gate{position:absolute;z-index:2;left:0;right:0;top:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 8px;will-change:transform}
 .gsign{background:#1f7a46;color:#fff;border:5px solid #fff;border-radius:14px;text-align:center;font-family:var(--read);font-weight:700;font-size:clamp(28px,min(8vw,8vh),58px);padding:6px 4px;box-shadow:0 6px 0 rgba(0,0,0,.35);line-height:1.1}
 .gsign.hit{background:var(--hazard);color:var(--asphalt);transform:scale(1.15);transition:transform .2s}
 .finish{position:absolute;left:0;right:0;top:0;height:60px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/40px 40px;transform:translateY(-100px);display:none}
@@ -126,7 +129,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .face{position:absolute;inset:0;display:grid;place-items:center;color:var(--asphalt);font-family:var(--read);font-weight:700;font-size:clamp(26px,min(7vw,7vh),60px)}
 .face svg{width:88%;height:88%}
 .door{position:absolute;inset:0;background:repeating-linear-gradient(#d4d8de 0 12px,#a9b0ba 12px 15px);transition:transform .38s cubic-bezier(.5,0,.3,1);display:grid;place-items:center;border-bottom:8px solid var(--hazard)}
-.door b{font-family:var(--display);font-size:clamp(20px,4vmin,34px);color:#5b616b}
+.door b{font-family:var(--display);font-weight:700;font-size:clamp(20px,4vmin,34px);color:#5b616b}
 .door::after{content:"";position:absolute;bottom:10%;left:40%;right:40%;height:8px;border-radius:4px;background:#5b616b}
 .card.open .door{transform:translateY(-102%)}
 .card.done{border-color:var(--go);animation:pop2 .4s}
@@ -134,7 +137,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 @keyframes pop2{50%{transform:scale(1.1)}}
 
 /* ---------- Word Train ---------- */
-.a-train{background:linear-gradient(#8fd3ff 0 52%,#78bf63 52%);--cw:min(calc((100vw - 40px) / (var(--n,4) + 1.6)),150px)}
+.a-train{background:radial-gradient(140% 40% at 50% 52%,#9be07f 0 30%,transparent 31%),linear-gradient(#5bb6f2,#c4ecff 52%,#6fbf58 52%,#4e9f3d);--cw:min(calc((100vw - 40px) / (var(--n,4) + 1.6)),150px)}
 .trainrow{position:absolute;top:14%;left:0;right:0;display:flex;justify-content:center}
 .train{display:flex;align-items:flex-end;gap:6px;transition:transform 1.1s cubic-bezier(.2,.8,.3,1)}
 .engine{width:calc(var(--cw) * 1.35);flex:none;transform:scaleX(-1)}
@@ -157,31 +160,31 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .bground{position:absolute;left:0;right:0;bottom:0;height:calc(4% + 215px);background:#2a2320;border-top:6px solid #3d332d}
 .bldg{position:absolute;bottom:calc(4% + 215px);left:50%;width:min(56vw,300px);height:min(44vh,360px,calc(100% - 4% - 215px - 90px));margin-left:calc(min(56vw,300px) / -2);background:#7b6f66;border:5px solid #4a413b;border-bottom:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:10px;padding:14px}
 .bldg i{background:#3a3532;border-radius:3px}.bldg i.lit{background:#ffd36b;box-shadow:0 0 12px #ffd36b}
-.tape{position:absolute;left:-12%;right:-12%;bottom:18%;height:26px;background:var(--stripes);transform:rotate(-6deg);display:grid;place-items:center;font-family:var(--display);font-size:14px;color:var(--asphalt)}
+.tape{position:absolute;left:-12%;right:-12%;bottom:18%;height:26px;background:var(--stripes);transform:rotate(-6deg);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:14px;color:var(--asphalt)}
 .tape span{background:var(--hazard);padding:1px 10px;border-radius:3px}
 .wire{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 .plunger{position:absolute;bottom:calc(4% + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:170px;height:200px}
-.pbox{position:absolute;bottom:0;left:0;right:0;height:100px;background:var(--red);border:6px solid #8f241d;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-size:38px;color:var(--chalk);z-index:2}
+.pbox{position:absolute;bottom:0;left:0;right:0;height:100px;background:var(--red);border:6px solid #8f241d;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:38px;color:var(--chalk);z-index:2}
 .handle{position:absolute;left:0;right:0;top:0;height:150px;touch-action:none;cursor:grab;z-index:1}
 .handle .tb{position:absolute;top:0;left:10px;right:10px;height:30px;background:var(--hazard);border:5px solid var(--hazard-dk);border-radius:15px}
 .handle .rod{position:absolute;top:26px;left:50%;width:16px;margin-left:-8px;height:124px;background:linear-gradient(90deg,#8a95a5,#d4d8de,#8a95a5)}
-.push{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;font-family:var(--display);font-size:clamp(24px,5vw,40px);color:var(--hazard);animation:throb 1s infinite;pointer-events:none}
-.count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:min(40vw,40vh);color:var(--hazard);pointer-events:none;text-shadow:0 10px 0 var(--hazard-dk)}
+.push{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;font-family:var(--display);font-weight:700;font-size:clamp(24px,5vw,40px);color:var(--hazard);animation:throb 1s infinite;pointer-events:none}
+.count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:min(40vw,40vh);color:var(--hazard);pointer-events:none;text-shadow:0 10px 0 var(--hazard-dk)}
 .reward{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;background:rgba(13,16,32,.82);z-index:5;animation:fade .4s}
 @keyframes fade{from{opacity:0}}
-.reward h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(32px,8vw,64px);color:var(--hazard);text-shadow:0 4px 0 var(--hazard-dk)}
+.reward h2{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(32px,8vw,64px);color:var(--hazard);text-shadow:0 4px 0 var(--hazard-dk)}
 .reward .art{width:min(70vw,360px);animation:hop 1s cubic-bezier(.3,1.6,.5,1)}
 .reward .art svg{width:100%;height:auto}
 .reward .nm{font-family:var(--read);font-weight:700;font-size:clamp(28px,6vw,48px)}
 @keyframes hop{0%{transform:translateX(-120vw)}60%{transform:translateX(0)}75%{transform:translateY(-30px)}100%{transform:none}}
-.big{font-family:var(--display);font-size:clamp(20px,4vw,30px);border-radius:18px;padding:14px 26px;background:var(--hazard);color:var(--asphalt);box-shadow:0 7px 0 var(--hazard-dk)}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(20px,4vw,30px);border-radius:18px;padding:14px 26px;background:var(--hazard);color:var(--asphalt);box-shadow:0 7px 0 var(--hazard-dk)}
 .big.alt{background:var(--asphalt2);color:var(--chalk);box-shadow:0 7px 0 #15171b;border:3px solid #474c56}
 
 /* ---------- Garage ---------- */
 #garage{background:#2a2d33}
 .ghead{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:6px solid transparent;border-image:var(--stripes) 1}
-.ghead h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(24px,5vw,40px);color:var(--hazard)}
-.ghead span{margin-left:auto;font-family:var(--display);font-size:20px;color:var(--steel)}
+.ghead h2{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(24px,5vw,40px);color:var(--hazard)}
+.ghead span{margin-left:auto;font-family:var(--display);font-weight:700;font-size:20px;color:var(--steel)}
 .ggrid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,44vw),1fr));gap:12px;padding:14px;align-content:start}
 .gcard{background:#3a3f48;border:4px solid #50565f;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--read);font-weight:700;font-size:20px}
 .gcard svg{width:100%;height:auto}
@@ -193,7 +196,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 /* ---------- Grown-ups ---------- */
 #parent{background:#f3efe6;color:#22252b;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px));gap:16px;user-select:text;-webkit-user-select:text}
 #parent *{user-select:text;-webkit-user-select:text}
-#parent h2{margin:0;font-family:var(--display);font-weight:400;font-size:28px}
+#parent h2{margin:0;font-family:var(--display);font-weight:700;font-size:28px}
 #parent h3{margin:8px 0 0;font-size:20px}
 #parent label{display:flex;flex-direction:column;gap:6px;font-size:18px;font-weight:700}
 #parent textarea{font:inherit;font-weight:400;font-size:20px;min-height:110px;border-radius:12px;border:2px solid #c9c2b2;padding:10px;background:#fff;color:#22252b}
@@ -218,20 +221,20 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .fcf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:26px;background:var(--chalk);color:var(--asphalt);border:6px solid var(--asphalt);box-shadow:0 14px 0 rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:44px 14px 14px}
 .fcf.back{transform:rotateY(180deg)}
 .fctag{position:absolute;top:0;left:0;right:0;height:34px;background:var(--stripes);display:grid;place-items:center}
-.fctag b{background:var(--hazard);color:var(--asphalt);font-family:var(--display);font-weight:400;font-size:16px;padding:0 10px;border-radius:4px}
+.fctag b{background:var(--hazard);color:var(--asphalt);font-family:var(--display);font-weight:700;font-size:16px;padding:0 10px;border-radius:4px}
 .fcw{font-family:var(--read);font-weight:700;font-size:clamp(70px,min(20vw,17vh),170px);line-height:1}
-.fchint{font-family:var(--display);font-size:14px;color:var(--steel)}
+.fchint{font-family:var(--display);font-weight:700;font-size:14px;color:var(--steel)}
 .fcs{font-family:var(--read);font-weight:700;font-size:clamp(26px,min(6.4vw,6vh),50px);text-align:center;line-height:1.25}
 .fcs mark{background:var(--hazard);color:var(--asphalt);border-radius:8px;padding:0 6px}
 .fcf.back svg{width:min(55%,230px);height:auto;flex:none}
 .fcbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.fcb{font-family:var(--display);font-size:clamp(20px,4.4vw,30px);border-radius:20px;padding:12px 22px;min-height:70px;box-shadow:0 7px 0 rgba(0,0,0,.35)}
+.fcb{font-family:var(--display);font-weight:700;font-size:clamp(20px,4.4vw,30px);border-radius:20px;padding:12px 22px;min-height:70px;box-shadow:0 7px 0 rgba(0,0,0,.35)}
 .fcb:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .fcb.again{background:var(--orange);color:#fff}
 .fcb.gotit{background:var(--go);color:#fff}
 .fcb.hearb{background:var(--hazard);color:var(--asphalt);width:70px;padding:0;display:grid;place-items:center}
 .fcb.hearb svg{width:34px;height:34px}
-.stamp{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);font-family:var(--display);font-size:clamp(34px,8vw,64px);color:var(--go);border:6px solid var(--go);border-radius:14px;padding:2px 16px;background:rgba(255,250,240,.9);z-index:3}
+.stamp{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);font-family:var(--display);font-weight:700;font-size:clamp(34px,8vw,64px);color:var(--go);border:6px solid var(--go);border-radius:14px;padding:2px 16px;background:rgba(255,250,240,.9);z-index:3}
 
 /* ---------- Match Up ---------- */
 .a-match{background:linear-gradient(#5f6a78,#454c57)}
@@ -251,18 +254,66 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 /* ---------- type a new word ---------- */
 .kb{position:fixed;inset:0;z-index:45;background:rgba(13,16,32,.78);display:grid;place-items:center;padding:16px}
 .kbcard{background:var(--chalk);color:var(--asphalt);border-radius:22px;padding:20px;width:min(100%,460px);display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 6px var(--hazard)}
-.kbcard h3{margin:0;font-family:var(--display);font-weight:400;font-size:24px}
+.kbcard h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px}
 .kbcard input{font-family:var(--read);font-weight:700;font-size:44px;padding:8px 14px;border:4px solid var(--asphalt);border-radius:14px;width:100%;user-select:text;-webkit-user-select:text;background:#fff;color:var(--asphalt)}
 .kbmsg{min-height:22px;color:#b3261e;font-size:18px;font-weight:700}
 .kbcard p{margin:0;font-size:15px;color:#5b616b}
 .pill.icon{padding:8px 16px;display:grid;place-items:center}
 .pill.icon svg,.ibtn.kbb svg{width:30px;height:30px}
+/* ---------- Fire Rescue ---------- */
+.a-fire{background:linear-gradient(#1b2350 0%,#5a3a7a 45%,#ff8a5c 80%,#ffb36b 100%)}
+.a-fire .skyline{position:absolute;left:0;right:0;bottom:12%;height:30%;background:linear-gradient(90deg,#241c3d 0 8%,transparent 8% 10%,#2c2348 10% 22%,transparent 22% 24%,#241c3d 24% 30%,transparent 30% 68%,#2c2348 68% 80%,transparent 80% 83%,#241c3d 83% 100%);opacity:.9}
+.a-fire .fground{position:absolute;left:0;right:0;bottom:0;height:12%;background:linear-gradient(#3b3f4a,#262a33);border-top:4px solid #555b66}
+.fbldg{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);width:min(64vw,560px);height:min(66%,520px);background:linear-gradient(90deg,#7b5a4e,#946d5f 50%,#7b5a4e);border-radius:10px 10px 0 0;box-shadow:inset 0 10px 0 #5e4339,0 0 40px rgba(0,0,0,.35);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:clamp(8px,2vmin,18px);padding:clamp(14px,3vmin,28px) clamp(10px,2.4vmin,22px)}
+.fwin{position:relative;border-radius:10px;background:linear-gradient(#2a3350,#1a2036);box-shadow:inset 0 0 0 5px #4a3530;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.fwin.burning{background:linear-gradient(#ffd27a,#ff7a2e)}
+.fwin.saved{background:linear-gradient(#36507a,#22324f)}
+.flames{position:absolute;left:8%;right:8%;bottom:28%;height:66%;pointer-events:none}
+.flames i{position:absolute;bottom:0;width:44%;height:100%;border-radius:50% 50% 30% 30%/70% 70% 30% 30%;background:radial-gradient(circle at 50% 78%,#fff6c2 0 14%,#ffc23a 34%,#ff5a1f 62%,rgba(255,60,20,0) 72%);animation:flick .55s ease-in-out infinite alternate;transform-origin:50% 100%}
+.flames i:nth-child(1){left:0;height:78%;animation-delay:-.2s}.flames i:nth-child(2){left:28%}.flames i:nth-child(3){left:56%;height:68%;animation-delay:-.35s}
+@keyframes flick{from{transform:scaleY(.82) skewX(5deg)}to{transform:scaleY(1.12) skewX(-5deg)}}
+.fwin:not(.burning) .flames{display:none}
+.wsign{position:relative;z-index:1;background:var(--chalk);color:var(--asphalt);border:4px solid var(--asphalt);border-radius:12px;font-family:var(--read);font-weight:700;font-size:clamp(24px,min(6vw,6vh),50px);padding:0 10px;line-height:1.15;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.fwin.saved .wsign{opacity:.35}
+.fwin:not(.burning):not(.saved) .wsign{display:none}
+.ftruck{position:absolute;left:1%;bottom:4%;width:min(34vw,240px);z-index:2;filter:drop-shadow(0 8px 8px rgba(0,0,0,.4))}
+.ftruck svg{width:100%;height:auto;display:block}
+@media (max-width:600px){.fbldg{width:90vw;height:56%;bottom:22%}.ftruck{width:44vw;bottom:1%}.a-fire .fground{height:22%}.a-fire .skyline{bottom:22%}}
+/* ---------- Police Chase ---------- */
+.car.cop .lr{animation:blink .5s steps(1) infinite}.car.cop .lb{animation:blink .5s steps(1) infinite -.25s}
+@keyframes blink{50%{opacity:.25}}
+.car.cop::before{content:"";position:absolute;left:-30%;right:-30%;top:40%;height:40%;border-radius:50%;background:radial-gradient(rgba(80,140,255,.45),transparent 70%);animation:blink .5s steps(1) infinite;pointer-events:none}
+.robber{position:absolute;z-index:1;top:3%;width:var(--cw);--cw:min(15vw,96px,14vh);transition:top .8s ease,left .3s;filter:drop-shadow(0 8px 6px rgba(0,0,0,.4))}
+.robber svg{width:100%;height:auto;display:block}
+/* ---------- the hero crew ---------- */
+.crew{display:flex;gap:clamp(4px,2vw,18px);justify-content:center;align-items:flex-end;flex:none}
+.crew button{width:clamp(58px,13vw,96px);display:flex;flex-direction:column;align-items:center;animation:bob 2.4s ease-in-out infinite}
+.crew button:nth-child(2){animation-delay:-.6s}.crew button:nth-child(3){animation-delay:-1.2s}.crew button:nth-child(4){animation-delay:-1.8s}
+.crew svg{width:100%;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45))}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.heropop{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;align-items:flex-end;gap:4px;pointer-events:none}
+.heropop .hfig{width:clamp(80px,16vmin,130px)}
+.heropop .hfig svg{width:100%;height:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+.hbub{order:2;margin-bottom:60%;background:#fff;color:var(--asphalt);font-family:var(--display);font-weight:700;font-size:clamp(20px,4vmin,30px);padding:8px 16px;border-radius:20px 20px 20px 4px;box-shadow:0 6px 18px rgba(0,0,0,.35);white-space:nowrap}
+.reward .rhero{width:clamp(90px,18vmin,150px);position:absolute;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));animation:bob 1.6s ease-in-out infinite}
+.reward .rhero svg{width:100%;height:auto}
+#pVoices{font:inherit;font-size:18px;padding:10px;border-radius:12px;border:2px solid #c9c2b2;background:#fff;color:#22252b;max-width:100%}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.go,.push{animation:none}}
 </style>
 </head>
 <body>
 <div id="app">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="gY" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#f2a400"/></linearGradient>
+  <linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6f61"/><stop offset="1" stop-color="#c4281f"/></linearGradient>
+  <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b8dff"/><stop offset="1" stop-color="#1c46b8"/></linearGradient>
+  <linearGradient id="gO" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffab52"/><stop offset="1" stop-color="#e5600a"/></linearGradient>
+  <linearGradient id="gG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45d98a"/><stop offset="1" stop-color="#138544"/></linearGradient>
+  <linearGradient id="gW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eaf8ff"/><stop offset="1" stop-color="#7cc6f2"/></linearGradient>
+  <linearGradient id="gWh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d3d8e0"/></linearGradient>
+  <linearGradient id="gN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34446e"/><stop offset="1" stop-color="#161e36"/></linearGradient>
+</defs></svg>
 
 <div class="screen show" id="home">
   <div class="hz"></div>
@@ -270,6 +321,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
     <div class="logo">KRASH<b>ZONE</b></div>
     <div class="bolts" title="Bolts earned"><span class="nut"></span><span class="boltN">0</span></div>
   </div>
+  <div class="crew" id="crew"></div>
   <button class="go" id="go" aria-label="Play a surprise game">GO!</button>
   <div class="tiles" id="tiles"></div>
   <div class="row2">
@@ -307,6 +359,10 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
     <input type="range" id="pVol" min="0" max="100" step="5">
   </label>
   <div class="prow"><button class="pbtn" id="pMute"></button><button class="pbtn" id="pVoice">Test the voice</button><button class="pbtn" id="pBoom">Test a boom</button></div>
+  <label for="pVoices">Voice (voices with "Enhanced", "Premium" or "Natural" in the name sound the most lively)
+    <select id="pVoices"></select>
+  </label>
+  <div class="note">On an iPad you can add better free voices: Settings, Accessibility, Spoken Content, Voices, English, then download one marked Enhanced or Premium (Ava, Zoe and Evan are good). Then pick it here.</div>
   <h3>How he's doing</h3>
   <div class="note">Right / missed for each word. Red means tricky (the games show these more often). Green means mastered.</div>
   <div class="wtable" id="pTable"></div>
@@ -325,6 +381,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 </div>
 
 <div id="flash"></div>
+<div class="heropop" id="heropop" hidden><div class="hbub" id="hbub"></div><div class="hfig" id="hfig"></div></div>
 </div>
 <canvas id="fx"></canvas>
 
@@ -341,6 +398,7 @@ const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 // ================= settings and progress (this device only) =================
 const KEY = "krashzone";
 const DEFAULT_WORDS = "I the like we go see can he she them they tar car hair bus train plane a and is it to my you look up big stop dig truck boom";
+const MORE_WORDS = "help fire police red blue run jump come here said in on at no yes not play down away one two three find make where what this that was are have do get will all am be for fast hot";
 let S = { vol: 80, muted: false, words: DEFAULT_WORDS, stats: {}, bolts: 0, garage: [], rounds: 0 };
 try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -395,6 +453,9 @@ const SFX = {
   door() { hiss(0.35, { v: 0.25, f0: 500, f1: 1800, type: "bandpass" }); },
   beep(f = 660) { tone(f, 0.2, { type: "square", v: 0.14 }); },
   thud() { tone(140, 0.3, { v: 0.6, to: 40 }); },
+  cheer() { [0, 0.07, 0.14].forEach((at, i) => tone([784, 988, 1319][i], 0.16, { type: "triangle", v: 0.16, at })); tone(1568, 0.5, { type: "sine", v: 0.12, at: 0.21 }); hiss(0.4, { v: 0.18, f0: 6000, f1: 2500, type: "highpass", at: 0.05 }); },
+  siren() { const o_ = out(); if (!o_) return; const a = AC, t = a.currentTime, o = a.createOscillator(), g = a.createGain(); o.type = "triangle"; for (let k = 0; k < 4; k++) { o.frequency.setValueAtTime(720, t + k * 0.36); o.frequency.linearRampToValueAtTime(1000, t + k * 0.36 + 0.18); o.frequency.linearRampToValueAtTime(720, t + k * 0.36 + 0.36); } g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.05); g.gain.setValueAtTime(0.2, t + 1.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5); o.connect(g).connect(o_); o.start(t); o.stop(t + 1.55); },
+  spray() { hiss(1.1, { v: 0.35, f0: 3000, f1: 1500, type: "bandpass" }); },
   tada() { [523, 659, 784, 1047].forEach((f, i) => tone(f, i === 3 ? 0.8 : 0.22, { type: "square", v: 0.12, at: i * 0.12 })); },
 };
 
@@ -402,23 +463,26 @@ const SFX = {
 let VOICE = null;
 function pickVoice() {
   let vs = []; try { vs = speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang)); } catch (e) {}
-  for (const re of [/natural/i, /premium|enhanced/i, /samantha/i, /google us english/i, /aria|jenny|ava|allison|zira/i]) { const v = vs.find(v => re.test(v.name) && /en[-_]us/i.test(v.lang)) || vs.find(v => re.test(v.name)); if (v) return v; }
+  if (S.voice) { const v = vs.find(v => v.name === S.voice); if (v) return v; }
+  for (const re of [/natural|neural/i, /premium/i, /enhanced/i, /ava|zoe|evan|nicky|samantha/i, /google us english/i, /aria|jenny|guy|allison|zira/i]) { const v = vs.find(v => re.test(v.name) && /en[-_]us/i.test(v.lang)) || vs.find(v => re.test(v.name)); if (v) return v; }
   return vs.find(v => /en[-_]us/i.test(v.lang)) || vs[0] || null;
 }
 try { VOICE = pickVoice(); speechSynthesis.onvoiceschanged = () => { VOICE = pickVoice(); }; } catch (e) {}
-function say(text, rate = 0.8) {
+// Prompts: clear and a little bright. Cheers: faster and higher, with a cheer sound under them.
+function say(text, rate = 0.88, pitch = 1.18) {
   return new Promise(res => {
     if (S.muted || !window.speechSynthesis) return res();
     let done = false; const fin = () => { if (!done) { done = true; res(); } };
     try {
       speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text);
-      if (VOICE) u.voice = VOICE; u.lang = (VOICE && VOICE.lang) || "en-US"; u.rate = rate; u.pitch = 1.05; u.volume = Math.min(1, S.vol / 70);
+      if (VOICE) u.voice = VOICE; u.lang = (VOICE && VOICE.lang) || "en-US"; u.rate = rate; u.pitch = pitch; u.volume = Math.min(1, S.vol / 70);
       u.onend = fin; u.onerror = fin; setTimeout(fin, 900 + text.length * 110); speechSynthesis.speak(u);
     } catch (e) { fin(); }
   });
 }
 const letterName = c => c.toUpperCase() + ".";
-const PRAISE = ["Boom!", "Yes!", "Nice!", "You got it!", "Awesome!", "Smashed it!", "Great job!", "Wow!", "Kaboom!", "Big win!"];
+const PRAISE = ["Boom!", "Yeah!", "You got it!", "Awesome!", "Smashed it!", "Woo hoo!", "Kaboom!", "Turbo power!", "Nailed it!", "You rock!", "Way to go!", "Super!"];
+function cheer(text) { SFX.cheer(); return say(text, 1.06, 1.42); }
 
 // ================= effects layer: explosions, sparks, smoke, confetti =================
 const fx = $("#fx"), fc = fx.getContext("2d"); let P = [], RINGS = [], fxOn = false, DPR = 1;
@@ -439,6 +503,7 @@ function tick() {
       g.addColorStop(0, `rgba(255,245,200,${a})`); g.addColorStop(0.4, `rgba(${p.c},${a * 0.8})`); g.addColorStop(1, `rgba(${p.c},0)`);
       fc.fillStyle = g; fc.beginPath(); fc.arc(p.x, p.y, p.r, 0, 7); fc.fill(); fc.globalCompositeOperation = "source-over";
     } else if (p.k === "smoke") { fc.fillStyle = `rgba(${p.c},${a * 0.5})`; fc.beginPath(); fc.arc(p.x, p.y, p.r, 0, 7); fc.fill(); }
+    else if (p.k === "drop") { fc.fillStyle = `rgba(${p.c},${Math.min(1, a * 1.5)})`; fc.beginPath(); fc.arc(p.x, p.y, p.r, 0, 7); fc.fill(); }
     else if (p.k === "spark") { fc.strokeStyle = `rgba(${p.c},${a})`; fc.lineWidth = p.r; fc.lineCap = "round"; fc.beginPath(); fc.moveTo(p.x, p.y); fc.lineTo(p.x - p.vx * 2.5, p.y - p.vy * 2.5); fc.stroke(); }
     else { fc.save(); fc.translate(p.x, p.y); fc.rotate(p.rot); fc.globalAlpha = a; fc.fillStyle = p.col; fc.fillRect(-p.r, -p.r * 0.6, p.r * 2, p.r * 1.2); fc.restore(); }
   }
@@ -473,23 +538,47 @@ const Wh = (x, y, r = 15) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#1d1f24
 const TRACK = (x1, x2, y) => `<rect x="${x1}" y="${y}" width="${x2 - x1}" height="26" rx="13" fill="#2a2d33"/>` + [0, 1, 2, 3, 4].map(i => `<circle cx="${x1 + 13 + i * (x2 - x1 - 26) / 4}" cy="${y + 13}" r="8" fill="#6b7280"/>`).join("");
 const VEH = [
   { id: "dump", name: "Dump Truck", svg: `<path d="M14 48 L118 48 L108 98 L24 98Z" fill="#ffc21a" stroke="#b88500" stroke-width="4" stroke-linejoin="round"/><path d="M30 62 H104 M32 78 H100" stroke="#e0a800" stroke-width="5"/><path d="M122 56 H162 Q172 56 176 66 L186 86 V104 H122Z" fill="#ff8a1a"/><path d="M134 64 H160 Q166 64 169 70 L175 84 H134Z" fill="${WIN}"/><rect x="12" y="98" width="176" height="10" rx="3" fill="#3a3d44"/>${Wh(44, 114)}${Wh(80, 114)}${Wh(160, 114)}` },
+  { id: "police", name: "Police Car", svg: `<path d="M16 100 Q16 86 30 84 L58 80 L80 60 H128 L150 80 L178 84 Q190 87 188 100 L186 106 H18Z" fill="#f2f2ee"/><path d="M17 92 H189 Q189 100 186 106 H18Z" fill="#1f3a8a"/><path d="M86 66 H104 V80 H72Z M110 66 H126 L142 80 H110Z" fill="${WIN}"/><rect x="92" y="52" width="14" height="9" rx="3" fill="#e8443a"/><rect x="106" y="52" width="14" height="9" rx="3" fill="#3b82f6"/><text x="104" y="102" font-size="10" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial">POLICE</text><path d="M60 86 L64 92 L58 92Z" fill="#ffc21a"/>${Wh(52, 108)}${Wh(152, 108)}` },
   { id: "excavator", name: "Excavator", svg: `${TRACK(40, 170, 96)}<rect x="56" y="66" width="104" height="32" rx="6" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="118" y="34" width="38" height="34" rx="5" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="125" y="40" width="24" height="20" rx="3" fill="${WIN}"/><path d="M84 70 L54 24 L24 56" stroke="#ffb000" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 50 L38 60 L32 86 Q14 88 8 72Z" fill="#6b7280"/><circle cx="54" cy="24" r="6" fill="#3a3d44"/>` },
   { id: "dozer", name: "Bulldozer", svg: `${TRACK(34, 166, 96)}<rect x="60" y="62" width="96" height="36" rx="5" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="104" y="30" width="44" height="34" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="111" y="36" width="30" height="20" fill="${WIN}"/><rect x="76" y="40" width="7" height="24" fill="#3a3d44"/><path d="M60 84 L28 92" stroke="#3a3d44" stroke-width="8"/><path d="M10 58 Q24 86 14 122 L30 122 Q38 90 26 58Z" fill="#8a95a5" stroke="#5c6573" stroke-width="3"/>` },
+  { id: "ambulance", name: "Ambulance", svg: `<rect x="12" y="44" width="122" height="62" rx="6" fill="#f2f2ee" stroke="#c9ced6" stroke-width="2"/><path d="M134 58 H160 Q168 58 172 66 L186 88 V106 H134Z" fill="#f2f2ee" stroke="#c9ced6" stroke-width="2"/><path d="M142 64 H160 L172 86 H142Z" fill="${WIN}"/><rect x="12" y="86" width="174" height="7" fill="#e8443a"/><rect x="62" y="52" width="12" height="28" fill="#e8443a"/><rect x="54" y="60" width="28" height="12" fill="#e8443a"/><rect x="100" y="37" width="22" height="8" rx="3" fill="#3b82f6"/>${Wh(42, 110)}${Wh(150, 110)}` },
   { id: "mixer", name: "Cement Mixer", svg: `<rect x="14" y="94" width="172" height="10" rx="3" fill="#3a3d44"/><path d="M134 54 H164 Q172 54 176 62 L186 82 V100 H134Z" fill="#e8443a"/><path d="M144 62 H162 L171 80 H144Z" fill="${WIN}"/><g transform="rotate(-12 72 70)"><ellipse cx="72" cy="70" rx="58" ry="30" fill="#f2f2ee" stroke="#8a95a5" stroke-width="4"/><path d="M44 48 L50 92 M70 42 L74 98 M98 45 L102 95" stroke="#ff6a1a" stroke-width="9"/></g><rect x="118" y="70" width="12" height="26" fill="#8a95a5"/>${Wh(40, 112)}${Wh(76, 112)}${Wh(160, 112)}` },
   { id: "crane", name: "Crane", svg: `<rect x="20" y="88" width="160" height="16" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="132" y="60" width="40" height="30" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="140" y="66" width="24" height="16" fill="${WIN}"/><path d="M120 86 L40 10" stroke="#ff6a1a" stroke-width="10" stroke-linecap="round"/><path d="M110 82 L46 20" stroke="#b84a10" stroke-width="3" stroke-dasharray="6 6"/><line x1="40" y1="12" x2="40" y2="66" stroke="#3a3d44" stroke-width="2"/><path d="M40 66 q-8 0 -8 8 q0 8 8 8" stroke="#3a3d44" stroke-width="4" fill="none"/>${Wh(46, 112)}${Wh(82, 112)}${Wh(118, 112)}${Wh(156, 112)}` },
   { id: "roller", name: "Steamroller", svg: `<rect x="60" y="64" width="110" height="36" rx="6" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><path d="M100 64 V30 H160 V64" fill="none" stroke="#3a3d44" stroke-width="5"/><rect x="96" y="26" width="70" height="8" rx="3" fill="#e8443a"/><rect x="118" y="44" width="40" height="20" fill="${WIN}"/><rect x="18" y="72" width="62" height="50" rx="25" fill="#8a95a5" stroke="#5c6573" stroke-width="4"/><path d="M28 86 H70 M28 100 H70" stroke="#6b7480" stroke-width="3"/>${Wh(150, 106, 18)}<rect x="0" y="122" width="200" height="8" fill="#2a2d33"/>` },
+  { id: "moto", name: "Police Motorcycle", svg: `<path d="M46 104 L84 72 H128 L154 104" stroke="#22252b" stroke-width="7" fill="none" stroke-linejoin="round"/><path d="M72 68 Q98 50 132 60 L140 78 H80Z" fill="#f2f2ee"/><path d="M82 72 H138" stroke="#1f3a8a" stroke-width="6"/><path d="M134 58 L150 34 L157 38 L145 62Z" fill="${WIN}"/><path d="M58 64 H92" stroke="#22252b" stroke-width="9" stroke-linecap="round"/><rect x="146" y="26" width="11" height="7" rx="2" fill="#3b82f6"/><rect x="58" y="52" width="11" height="7" rx="2" fill="#e8443a"/>${Wh(46, 104, 22)}${Wh(154, 104, 22)}` },
   { id: "race", name: "Race Car", svg: `<path d="M14 98 Q14 84 30 82 L66 76 L92 58 H132 L150 76 L182 82 Q192 86 190 100 L186 104 H18Z" fill="#e8443a"/><path d="M98 64 H128 L140 76 H90Z" fill="${WIN}"/><rect x="8" y="64" width="22" height="7" fill="#22252b"/><rect x="16" y="70" width="5" height="14" fill="#22252b"/><circle cx="112" cy="90" r="11" fill="#fff"/><text x="112" y="95" font-size="14" font-weight="900" text-anchor="middle" fill="#22252b" font-family="Arial">1</text><path d="M30 92 H92" stroke="#ffc21a" stroke-width="4"/>${Wh(50, 106, 16)}${Wh(156, 106, 16)}` },
   { id: "monster", name: "Monster Truck", svg: `<path d="M40 52 L60 30 H118 L134 52 H170 Q180 52 180 62 V80 H30 V62 Q30 52 40 52Z" fill="#22a95e"/><path d="M66 36 H96 V52 H54Z M102 36 H116 L128 52 H102Z" fill="${WIN}"/><rect x="50" y="80" width="100" height="8" fill="#3a3d44"/>${[52, 150].map(x => `<circle cx="${x}" cy="106" r="28" fill="#1d1f24"/><circle cx="${x}" cy="106" r="20" fill="none" stroke="#4a4f58" stroke-width="5" stroke-dasharray="7 6"/><circle cx="${x}" cy="106" r="9" fill="#c9ced6"/>`).join("")}` },
   { id: "fire", name: "Fire Truck", svg: `<rect x="14" y="56" width="124" height="48" rx="5" fill="#e8443a"/><path d="M138 60 H164 L184 86 V104 H138Z" fill="#e8443a"/><path d="M144 66 H161 L174 84 H144Z" fill="${WIN}"/><g stroke="#c9ced6" stroke-width="4"><line x1="20" y1="46" x2="132" y2="38"/><line x1="20" y1="54" x2="132" y2="46"/>${[34, 54, 74, 94, 114].map(x => `<line x1="${x}" y1="${53 - (x - 20) * 0.07}" x2="${x}" y2="${45 - (x - 20) * 0.07}"/>`).join("")}</g><rect x="14" y="80" width="170" height="6" fill="#fff"/><rect x="150" y="52" width="14" height="8" rx="2" fill="#3b82f6"/>${Wh(44, 108)}${Wh(84, 108)}${Wh(156, 108)}` },
+  { id: "heli", name: "Rescue Helicopter", svg: `<rect x="96" y="22" width="8" height="18" fill="#3a3d44"/><rect x="26" y="15" width="148" height="7" rx="3.5" fill="#3a3d44"/><path d="M62 60 L14 54 L14 68 L62 76Z" fill="#e8443a"/><circle cx="14" cy="61" r="12" fill="none" stroke="#3a3d44" stroke-width="3"/><path d="M60 52 Q60 38 80 38 H130 Q166 40 170 72 Q170 94 140 94 H80 Q60 94 60 74Z" fill="#e8443a"/><path d="M132 46 Q158 50 162 72 H132Z" fill="${WIN}"/><rect x="60" y="76" width="110" height="6" fill="#f2f2ee"/><rect x="95" y="50" width="7" height="18" fill="#fff"/><rect x="89.5" y="55.5" width="18" height="7" fill="#fff"/><path d="M74 108 H160 M90 94 V108 M142 94 V108" stroke="#3a3d44" stroke-width="5" stroke-linecap="round"/>` },
   { id: "bus", name: "School Bus", svg: `<rect x="10" y="40" width="180" height="64" rx="10" fill="#ffc21a" stroke="#b88500" stroke-width="3"/>${[22, 52, 82, 112, 142].map(x => `<rect x="${x}" y="50" width="24" height="22" rx="3" fill="${WIN}"/>`).join("")}<rect x="170" y="50" width="14" height="40" rx="2" fill="${WIN}"/><rect x="10" y="80" width="180" height="5" fill="#22252b"/>${Wh(44, 108)}${Wh(156, 108)}` },
   { id: "train", name: "Train", svg: `<rect x="10" y="40" width="50" height="62" rx="4" fill="#e8443a"/><rect x="18" y="48" width="34" height="22" fill="${WIN}"/><rect x="4" y="34" width="62" height="10" rx="3" fill="#22252b"/><rect x="58" y="56" width="110" height="44" rx="20" fill="#2f63d8"/><rect x="128" y="30" width="18" height="28" fill="#22252b"/><rect x="122" y="24" width="30" height="10" rx="3" fill="#22252b"/><circle cx="168" cy="78" r="8" fill="#ffd36b"/><path d="M166 100 L192 120 H160Z" fill="#8a95a5"/><rect x="6" y="100" width="170" height="8" fill="#22252b"/>${Wh(34, 116, 13)}${Wh(78, 114, 16)}${Wh(116, 114, 16)}${Wh(150, 116, 12)}` },
   { id: "plane", name: "Plane", svg: `<path d="M18 74 Q18 62 34 62 H160 Q190 64 194 76 Q190 88 160 88 H34 Q18 86 18 74Z" fill="#f2f2ee" stroke="#8a95a5" stroke-width="3"/><path d="M28 62 L14 30 H32 L60 62Z" fill="#e8443a"/><path d="M80 80 L118 80 L84 122 H66Z" fill="#2f63d8"/><path d="M90 66 L114 66 L94 44 H82Z" fill="#2f63d8" opacity=".7"/>${[60, 76, 92, 108, 124, 140].map(x => `<circle cx="${x}" cy="72" r="4" fill="#5aa9e6"/>`).join("")}<path d="M172 68 Q184 70 186 76 H172Z" fill="#22252b"/>` },
   { id: "rocket", name: "Rocket", svg: `<g transform="rotate(45 100 70)"><path d="M86 92 L100 132 L114 92Z" fill="#ff8a1a"/><path d="M100 4 Q124 30 124 92 H76 Q76 30 100 4Z" fill="#f2f2ee" stroke="#22252b" stroke-width="3"/><circle cx="100" cy="50" r="11" fill="${WIN}" stroke="#22252b" stroke-width="3"/><path d="M76 74 L58 106 L76 98Z M124 74 L142 106 L124 98Z" fill="#e8443a"/></g>` },
 ];
-const ART = Object.fromEntries(VEH.map(v => [v.id, v.svg]));
+const GRAD = { "#ffc21a": "gY", "#e8443a": "gR", "#2f63d8": "gB", "#ff8a1a": "gO", "#22a95e": "gG", "#bfe6ff": "gW", "#f2f2ee": "gWh", "#1f3a8a": "gN" };
+const modern = svgText => '<ellipse cx="100" cy="133" rx="84" ry="5" fill="rgba(0,0,0,.22)"/>' + svgText.replace(/fill="(#[0-9a-f]{6})"/g, (m, c) => GRAD[c] ? `fill="url(#${GRAD[c]})"` : m);
+const ART = Object.fromEntries(VEH.map(v => [v.id, modern(v.svg)]));
 const svg = id => `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${ART[id]}</svg>`;
+const HSH = '<ellipse cx="60" cy="155" rx="34" ry="5" fill="rgba(0,0,0,.25)"/>';
+const HEROES = [
+  { id: "blaze", name: "Captain Blaze", hi: "I'm Captain Blaze! Let's put out some fires!", svg: HSH + `<rect x="40" y="118" width="16" height="30" rx="6" fill="#3a3d44"/><rect x="64" y="118" width="16" height="30" rx="6" fill="#3a3d44"/><rect x="35" y="142" width="23" height="11" rx="5" fill="#1d1f24"/><rect x="62" y="142" width="23" height="11" rx="5" fill="#1d1f24"/><path d="M30 76 Q30 66 42 64 H78 Q90 66 90 76 V124 H30Z" fill="url(#gY)"/><rect x="30" y="102" width="60" height="7" fill="#e6f7ff"/><rect x="30" y="111" width="60" height="3" fill="#9ad3ea"/><path d="M60 64 V124" stroke="#d99a00" stroke-width="2"/><path d="M32 74 L18 104" stroke="url(#gY)" stroke-width="15" stroke-linecap="round"/><circle cx="17" cy="107" r="8" fill="#8d5a3b"/><path d="M88 74 L104 50" stroke="url(#gY)" stroke-width="15" stroke-linecap="round"/><circle cx="106" cy="46" r="9" fill="#8d5a3b"/><circle cx="60" cy="44" r="24" fill="#8d5a3b"/><ellipse cx="51" cy="46" rx="4.2" ry="5.2" fill="#1d1f24"/><ellipse cx="69" cy="46" rx="4.2" ry="5.2" fill="#1d1f24"/><circle cx="52.5" cy="44" r="1.7" fill="#fff"/><circle cx="70.5" cy="44" r="1.7" fill="#fff"/><path d="M50 55 Q60 64 70 55" stroke="#1d1f24" stroke-width="3" fill="#fff" stroke-linecap="round"/><path d="M32 40 Q34 13 60 13 Q86 13 88 40Z" fill="url(#gR)"/><path d="M24 41 Q60 30 96 41 Q98 47 91 47 Q60 39 29 47 Q22 47 24 41Z" fill="#a51f18"/><path d="M53 17 H67 L69 31 L60 38 L51 31Z" fill="url(#gY)" stroke="#b88500" stroke-width="1.5"/>` },
+  { id: "ace", name: "Officer Ace", hi: "Officer Ace here! Let's catch some words!", svg: HSH + `<rect x="40" y="118" width="16" height="30" rx="6" fill="#161e36"/><rect x="64" y="118" width="16" height="30" rx="6" fill="#161e36"/><rect x="35" y="142" width="23" height="11" rx="5" fill="#0b0f1c"/><rect x="62" y="142" width="23" height="11" rx="5" fill="#0b0f1c"/><path d="M30 76 Q30 66 42 64 H78 Q90 66 90 76 V122 H30Z" fill="url(#gB)"/><rect x="30" y="113" width="60" height="9" fill="#111827"/><rect x="55" y="113" width="10" height="9" rx="2" fill="#ffc21a"/><path d="M74 78 l3 6 6.5 1 -4.7 4.4 1.1 6.4 -5.9 -3.1 -5.9 3.1 1.1 -6.4 -4.7 -4.4 6.5 -1Z" fill="#ffd84d" stroke="#b88500" stroke-width="1"/><path d="M60 64 L54 74 L60 80 L66 74Z" fill="#111827"/><path d="M32 74 L20 104" stroke="url(#gB)" stroke-width="15" stroke-linecap="round"/><circle cx="19" cy="107" r="8" fill="#e0ac7e"/><path d="M88 74 L100 94" stroke="url(#gB)" stroke-width="15" stroke-linecap="round"/><circle cx="102" cy="97" r="8" fill="#e0ac7e"/><rect x="99" y="80" width="7" height="14" rx="3.5" fill="#e0ac7e"/><circle cx="60" cy="45" r="24" fill="#e0ac7e"/><path d="M40 42 H58 V49 Q49 57 40 49Z M62 42 H80 V49 Q71 57 62 49Z" fill="#111827"/><path d="M58 44 H62" stroke="#111827" stroke-width="2.5"/><path d="M44 45 L50 43" stroke="rgba(255,255,255,.5)" stroke-width="2"/><path d="M50 58 Q60 65 70 58" stroke="#1d1f24" stroke-width="3" fill="#fff" stroke-linecap="round"/><path d="M34 34 Q36 13 60 13 Q84 13 86 34Z" fill="url(#gN)"/><path d="M29 34 H91 Q90 41 83 41 H36 Q29 41 29 34Z" fill="#0b0f1c"/><circle cx="60" cy="24" r="5.5" fill="#ffd84d" stroke="#b88500" stroke-width="1"/>` },
+  { id: "dozer", name: "Mega Dozer", hi: "Mega Dozer, ready to smash!", svg: HSH + `<rect x="38" y="116" width="18" height="28" rx="4" fill="#5c6573"/><rect x="64" y="116" width="18" height="28" rx="4" fill="#5c6573"/><rect x="31" y="139" width="30" height="13" rx="6.5" fill="#22252b"/><rect x="59" y="139" width="30" height="13" rx="6.5" fill="#22252b"/><rect x="24" y="62" width="72" height="58" rx="14" fill="url(#gY)"/><rect x="36" y="82" width="48" height="16" rx="4" fill="#22252b"/><path d="M42 98 L50 82 M55 98 L63 82 M68 98 L76 82" stroke="#ffc21a" stroke-width="5"/><rect x="6" y="68" width="16" height="36" rx="8" fill="#5c6573"/><path d="M2 102 H26 L22 117 H6Z" fill="#8a95a5"/><rect x="98" y="40" width="16" height="36" rx="8" fill="#5c6573"/><path d="M94 42 H118 L114 28 H98Z" fill="#8a95a5"/><rect x="33" y="16" width="54" height="44" rx="13" fill="url(#gY)"/><rect x="39" y="26" width="42" height="17" rx="8.5" fill="#101a24"/><rect x="45" y="30" width="11" height="9" rx="4.5" fill="#5ef2ff"/><rect x="64" y="30" width="11" height="9" rx="4.5" fill="#5ef2ff"/><path d="M49 51 H71" stroke="#b07a00" stroke-width="3.5" stroke-linecap="round"/><line x1="60" y1="16" x2="60" y2="7" stroke="#5c6573" stroke-width="3"/><circle cx="60" cy="6" r="4.5" fill="#ff6a1a"/>` },
+  { id: "turbo", name: "Turbo", hi: "I'm Turbo! Let's go fast!", svg: HSH + `<rect x="40" y="118" width="16" height="30" rx="6" fill="url(#gR)"/><rect x="64" y="118" width="16" height="30" rx="6" fill="url(#gR)"/><rect x="35" y="142" width="23" height="11" rx="5" fill="#1d1f24"/><rect x="62" y="142" width="23" height="11" rx="5" fill="#1d1f24"/><path d="M30 76 Q30 66 42 64 H78 Q90 66 90 76 V124 H30Z" fill="url(#gR)"/><rect x="40" y="64" width="7" height="60" fill="#fff"/><circle cx="68" cy="94" r="11" fill="#fff"/><text x="68" y="99.5" font-size="15" font-weight="900" text-anchor="middle" fill="#c4281f" font-family="Arial">1</text><path d="M32 74 L16 48" stroke="url(#gR)" stroke-width="15" stroke-linecap="round"/><circle cx="14" cy="44" r="9" fill="#1d1f24"/><path d="M88 74 L104 48" stroke="url(#gR)" stroke-width="15" stroke-linecap="round"/><circle cx="106" cy="44" r="9" fill="#1d1f24"/><circle cx="60" cy="42" r="27" fill="url(#gR)"/><path d="M60 15 V30" stroke="#fff" stroke-width="6"/><path d="M37 40 Q60 29 83 40 V51 Q60 60 37 51Z" fill="#101a24"/><ellipse cx="51" cy="45" rx="3.6" ry="4.6" fill="#7ff3ff"/><ellipse cx="69" cy="45" rx="3.6" ry="4.6" fill="#7ff3ff"/><path d="M43 39 Q55 34 66 36" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/>` },
+];
+const heroSvg = id => `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${HEROES.find(h => h.id === id).svg}</svg>`;
+const GAME_HERO = { fire: "blaze", chase: "ace", wreck: "dozer", dig: "dozer", race: "turbo", train: "turbo" };
+let heroT = null;
+function heroSay(text, id) {
+  id = id || GAME_HERO[CUR] || pick(HEROES).id; const box = $("#heropop");
+  $("#hfig").innerHTML = heroSvg(id); $("#hbub").textContent = text; box.hidden = false; clearTimeout(heroT);
+  box.animate([{ transform: "translateY(120%)" }, { transform: "translateY(-6%)" }, { transform: "none" }], { duration: 380, easing: "cubic-bezier(.3,1.4,.5,1)" });
+  heroT = setTimeout(() => { const a = box.animate([{ transform: "none" }, { transform: "translateY(130%)" }], { duration: 260, easing: "ease-in" }); a.onfinish = () => { box.hidden = true; }; }, 1700);
+}
+const TOPCOP = `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="2" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="46" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="2" y="66" width="12" height="22" rx="3" fill="#111"/><rect x="46" y="66" width="12" height="22" rx="3" fill="#111"/><path d="M30 2 Q48 6 48 30 V86 Q48 96 30 96 Q12 96 12 86 V30 Q12 6 30 2Z" fill="#f4f4f0"/><path d="M30 2 Q48 6 48 30 V34 H12 V30 Q12 6 30 2Z" fill="#1f2a4d"/><path d="M12 78 H48 V86 Q48 96 30 96 Q12 96 12 86Z" fill="#1f2a4d"/><path d="M18 38 Q30 31 42 38 L40 50 H20Z" fill="#bfe6ff"/><rect class="lr" x="12" y="55" width="18" height="8" rx="2" fill="#ff3b30"/><rect class="lb" x="30" y="55" width="18" height="8" rx="2" fill="#2f7bff"/></svg>`;
+const TOPROB = `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="2" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="46" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="2" y="66" width="12" height="22" rx="3" fill="#111"/><rect x="46" y="66" width="12" height="22" rx="3" fill="#111"/><rect x="10" y="4" width="40" height="92" rx="10" fill="#4b3f72"/><rect x="15" y="10" width="30" height="14" rx="4" fill="#bfe6ff"/><circle cx="30" cy="58" r="12" fill="#c9a24a"/><text x="30" y="64" font-size="16" font-weight="900" text-anchor="middle" fill="#3b2f12" font-family="Arial">$</text></svg>`;
 const TOPCAR = `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="2" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="46" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="2" y="66" width="12" height="22" rx="3" fill="#111"/><rect x="46" y="66" width="12" height="22" rx="3" fill="#111"/><path d="M30 2 Q48 6 48 30 V86 Q48 96 30 96 Q12 96 12 86 V30 Q12 6 30 2Z" fill="#e8443a"/><path d="M18 38 Q30 30 42 38 L40 52 H20Z" fill="${WIN}"/><rect x="27" y="4" width="6" height="90" fill="#fff" opacity=".85"/><rect x="8" y="90" width="44" height="8" rx="2" fill="#22252b"/></svg>`;
-const PIC = { car: "race", bus: "bus", train: "train", plane: "plane", truck: "dump" };   // words that also have a picture card in Memory Garage
+const PIC = { car: "race", bus: "bus", train: "train", plane: "plane", truck: "dump", police: "police", fire: "fire" };   // words that also have a picture card in Memory Garage
 
 // ================= dragging (fine motor practice) =================
 function draggable(el, { onPick, onDrop }) {
@@ -519,7 +608,7 @@ const API = {
   right(w, x, y) { record(w, true); STREAK++; S.bolts++; save(); boltFly(x, y); },
   reward(x, y) { S.bolts++; save(); boltFly(x, y); },
   wrong(w) { record(w, false); STREAK = 0; },
-  praise(w = "") { return say(`${pick(PRAISE)} ${w}`); },
+  praise(w = "") { const line = pick(PRAISE); heroSay(line); return cheer(`${line} ${w}`); },
   finish() { S.rounds++; save(); later(openBoom, 900); },
 };
 function startGame(id) {
@@ -611,8 +700,8 @@ GAMES.dig = { name: "Dig & Dump", art: "excavator", total: 4, start(A, api) {
 } };
 
 // ---------- 3. Turbo Race: steer into the lane with the word you hear ----------
-GAMES.race = { name: "Turbo Race", art: "race", total: 6, start(A, api) {
-  A.innerHTML = `<div class="road" id="road"><div class="lane-line" style="left:33.33%"></div><div class="lane-line" style="left:66.66%"></div><div class="gate" id="gate"></div><div class="finish" id="fin"></div><div class="car" id="car">${TOPCAR}</div></div>`;
+function raceGame(A, api, cop) {
+  A.innerHTML = `<div class="road" id="road"><div class="lane-line" style="left:33.33%"></div><div class="lane-line" style="left:66.66%"></div><div class="gate" id="gate"></div><div class="finish" id="fin"></div>${cop ? `<div class="robber" id="rob">${TOPROB}</div>` : ""}<div class="car${cop ? " cop" : ""}" id="car">${cop ? TOPCOP : TOPCAR}</div></div>`;
   const road = A.querySelector("#road"), car = A.querySelector("#car"), gate = A.querySelector("#gate"), words = pickWords(6);
   let lane = 1, i = 0, t = null, running = false, dur = 5600, t0 = 0, dragging = false, misses = 0; const gen = GEN;
   const setLane = l => { lane = Math.max(0, Math.min(2, l)); car.style.left = `calc(${(lane + 0.5) * 100 / 3}% - var(--cw) / 2)`; };
@@ -638,7 +727,7 @@ GAMES.race = { name: "Turbo Race", art: "race", total: 6, start(A, api) {
   function judge() {
     const sign = gate.children[lane], w = sign.dataset.w;
     if (w === t) {
-      sign.classList.add("hit"); api.right(t, ...center(sign)); SFX.zoom(); car.classList.add("boost"); road.style.setProperty("--spd", ".16s");
+      sign.classList.add("hit"); api.right(t, ...center(sign)); cop ? SFX.siren() : SFX.zoom(); if (cop) { const rob = A.querySelector('#rob'); rob.style.top = (3 + (i + 1) * 7) + '%'; rob.style.left = `calc(${(rand(3) + 0.5) * 100 / 3}% - var(--cw) / 2)`; } car.classList.add("boost"); road.style.setProperty("--spd", ".16s");
       confetti(...center(sign), 24); api.praise(t); dur = Math.max(3600, dur - 350); i++; misses = 0;
       later(() => { car.classList.remove("boost"); road.style.setProperty("--spd", ".5s"); }, 1300);
       later(next, 1700);
@@ -651,9 +740,42 @@ GAMES.race = { name: "Turbo Race", art: "race", total: 6, start(A, api) {
   function finishLine() {
     const fin = A.querySelector("#fin"); fin.style.display = "block"; gate.innerHTML = "";
     fin.animate([{ transform: "translateY(-100px)" }, { transform: `translateY(${car.offsetTop}px)` }], { duration: 1200, fill: "forwards" });
-    SFX.zoom(); later(() => { SFX.tada(); say("You won the race!"); const r = road.getBoundingClientRect();
+    SFX.zoom(); later(() => { SFX.tada(); cheer(cop ? "You caught the robber!" : "You won the race!"); heroSay(cop ? "Caught him!" : "You win!"); const r = road.getBoundingClientRect();
       for (let k = 0; k < 5; k++) later(() => confetti(r.left + Math.random() * r.width, r.top + Math.random() * r.height * 0.6, 40), k * 200); }, 1200);
+    if (cop) { const rob = A.querySelector('#rob'); rob.style.left = car.style.left; rob.style.top = `calc(${car.offsetTop}px - var(--cw) * 1.75)`; later(SFX.siren, 300); }
     later(() => api.finish(), 1500);
+  }
+  if (cop) { const rob = A.querySelector('#rob'); rob.style.left = `calc(50% - var(--cw) / 2)`; }
+  next();
+}
+GAMES.race = { name: "Turbo Race", art: "race", total: 6, start(A, api) { raceGame(A, api, false); } };
+GAMES.chase = { name: "Police Chase", art: "police", total: 6, start(A, api) { raceGame(A, api, true); } };
+
+// ---------- 9. Fire Rescue: hear the word, spray the window that says it ----------
+GAMES.fire = { name: "Fire Rescue", art: "fire", total: 5, start(A, api) {
+  A.innerHTML = `<div class="skyline"></div><div class="fbldg" id="fb">${"<div class=\"fwin\"><div class=\"flames\"><i></i><i></i><i></i></div><div class=\"wsign\"></div></div>".repeat(6)}</div><div class="ftruck" id="ft">${svg("fire")}</div><div class="fground"></div>`;
+  const wins = [...A.querySelectorAll(".fwin")], truck = A.querySelector("#ft"), words = pickWords(5); let i = 0, miss = 0, busy = false;
+  function next() {
+    api.progress(i); if (i >= words.length) return api.finish();
+    busy = false; miss = 0; const t = words[i], k = STREAK >= 4 ? 4 : 3, ch = shuffle([t, ...distract(t, k - 1)]), spots = shuffle([0, 1, 2, 3, 4, 5]).slice(0, k);
+    wins.forEach(w => { w.className = "fwin"; w.dataset.w = ""; w.onclick = null; });
+    spots.forEach((sp, j) => { const w = wins[sp]; w.classList.add("burning"); w.dataset.w = ch[j]; w.querySelector(".wsign").textContent = ch[j]; w.onclick = () => tap(w, t); w.animate([{ filter: "brightness(2)" }, { filter: "none" }], { duration: 500 }); });
+    SFX.boom(0.4); later(() => ask(`Fire! Spray the word... ${t}`), 600);
+  }
+  function tap(w, t) {
+    if (busy || !w.classList.contains("burning")) return; audio();
+    if (w.dataset.w === t) {
+      busy = true; api.right(t, ...center(w)); SFX.spray();
+      const tr = truck.getBoundingClientRect(), sx = tr.left + tr.width * 0.7, sy = tr.top + tr.height * 0.32, [tx, ty] = center(w), T = 30, g = 0.35;
+      for (let k = 0; k < 26; k++) later(() => { const jx = (Math.random() - 0.5) * 40, jy = (Math.random() - 0.5) * 30; add({ k: "drop", x: sx, y: sy, vx: (tx + jx - sx) / T, vy: (ty + jy - sy) / T - 0.5 * g * T, g, drag: 1, r: 5 + Math.random() * 4, decay: 1 / (T + 6), c: "150,205,255" }); }, k * 32);
+      later(() => { w.classList.remove("burning"); w.classList.add("saved"); for (let k = 0; k < 18; k++) add({ k: "smoke", x: tx + (Math.random() - 0.5) * 60, y: ty, vx: (Math.random() - 0.5) * 2, vy: -Math.random() * 2.5 - 1, r: 14 + Math.random() * 14, grow: 1.02, drag: 0.98, decay: 0.012, c: "235,240,245" }); api.praise(t); }, 1000);
+      later(() => { i++; next(); }, 2700);
+    } else {
+      miss++; if (miss === 1) api.wrong(t); SFX.bonk();
+      w.animate([{ transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "none" }], { duration: 300 });
+      say(`That says ${w.dataset.w}. Find... ${t}`);
+      if (miss >= 2) wins.forEach(x => { if (x.dataset.w === t) x.querySelector(".wsign").animate([{ boxShadow: "0 0 0 8px #ffc21a" }, { boxShadow: "0 0 0 0 #ffc21a" }], { duration: 800, iterations: 3 }); });
+    }
   }
   next();
 } };
@@ -672,7 +794,7 @@ GAMES.mem = { name: "Memory Garage", art: "fire", total: 6, start(A, api) {
       later(() => {
         a.classList.add("done"); b.classList.add("done"); confetti(...center(a), 26); confetti(...center(b), 26); SFX.honk();
         api.reward(...center(b)); got++; api.progress(got); lock = false;
-        if (got === words.length) { later(() => { SFX.tada(); say("You found them all!"); }, 500); api.finish(); }
+        if (got === words.length) { later(() => { SFX.tada(); cheer("You found them all!"); heroSay("All found!"); }, 500); api.finish(); }
       }, 700);
     } else later(() => { a.classList.remove("open"); b.classList.remove("open"); lock = false; }, 1500);
   });
@@ -680,7 +802,7 @@ GAMES.mem = { name: "Memory Garage", art: "fire", total: 6, start(A, api) {
 } };
 
 // ---------- 5. Word Train: drag the words onto the train in the right order to build a sentence ----------
-const SENTENCES = ["I can see the bus.", "We like the train.", "He can go.", "She can see the plane.", "They like the car.", "We can see them.", "I like my truck.", "He can dig.", "She can see the big truck.", "The bus can go.", "The car can stop.", "I see a big plane.", "They can go up.", "You can see my car.", "The train can go and stop.", "Look, a big truck!", "The truck can dig.", "I like my hair.", "He can see the tar.", "She can go to the bus.", "They like to dig.", "We can go see the train.", "Look at my car!", "I like it.", "Boom! It can go!", "It is a big truck.", "The bus is big."];
+const SENTENCES = ["I can see the bus.", "We like the train.", "He can go.", "She can see the plane.", "They like the car.", "We can see them.", "I like my truck.", "He can dig.", "She can see the big truck.", "The bus can go.", "The car can stop.", "I see a big plane.", "They can go up.", "You can see my car.", "The train can go and stop.", "Look, a big truck!", "The truck can dig.", "I like my hair.", "He can see the tar.", "She can go to the bus.", "They like to dig.", "We can go see the train.", "Look at my car!", "I like it.", "Boom! It can go!", "It is a big truck.", "The bus is big.", "Help! Fire!", "The fire truck can go fast.", "The police car is blue.", "Stop! Police!", "Come here!", "I can run and jump.", "Where is the bus?", "We can help.", "It is hot.", "Look at the red fire truck!", "Get in the car.", "I have a big truck.", "What is that?", "This is my bus.", "The police can help.", "They said yes!", "We will go down.", "I can find the car.", "Can we play?", "The plane can go up and down.", "One, two, three, go!"];
 function pickSentences(n) {
   const L = wordList(), ok = SENTENCES.filter(s => s.split(" ").every(tk => L.includes(norm(tk))));
   const src = ok.length >= n ? ok : SENTENCES;
@@ -765,7 +887,7 @@ GAMES.cards = { name: "Flash Cards", art: "bus", total: 8, start(A, api) {
     got++; api.progress(got);
     const st = document.createElement("div"); st.className = "stamp"; st.textContent = "GOT IT!"; card.querySelector(".fcin").appendChild(st);
     st.animate([{ transform: "translate(-50%,-50%) rotate(-14deg) scale(2.5)", opacity: 0 }, { transform: "translate(-50%,-50%) rotate(-14deg) scale(1)", opacity: 1 }], { duration: 250 });
-    SFX.thud(); say(pick(["Yes!", "Got it!", "Nice!", "Boom!"]) + " " + w);
+    SFX.thud(); { const l = pick(PRAISE); heroSay(l); cheer(l + " " + w); }
     later(() => { explode(cx, cy, 0.8, ["#fffaf0", "#ffc21a"]); card.animate([{ transform: card.style.transform || "none" }, { transform: "translateY(-120vh) rotate(-20deg)" }], { duration: 500, easing: "ease-in", fill: "forwards" }); }, 650);
     later(deal, 1300);
   }
@@ -813,7 +935,7 @@ GAMES.match = { name: "Match Up", art: "monster", total: 8, start(A, api) {
           const [bx, by] = anchor(tgt); fixed += chain(ax, ay, bx, by, false); ropes.innerHTML = fixed;
           el.classList.add("ok"); tgt.classList.add("ok"); SFX.pop(); confetti(...center(tgt), 22); api.right(el.dataset.w, ...center(tgt)); say(el.dataset.w);
           matched++; done++; api.progress(done);
-          if (matched === n) { board++; later(() => { SFX.honk(); say(board >= 2 ? "All hooked up!" : "Nice! Next ones!"); }, 700); later(deal, 2000); }
+          if (matched === n) { board++; later(() => { SFX.honk(); cheer(board >= 2 ? "All hooked up!" : "Nice! Next ones!"); }, 700); later(deal, 2000); }
         } else { ropes.innerHTML = fixed; SFX.bonk(); api.wrong(el.dataset.w); say(`That's ${tgt.dataset.w}. Find ${el.dataset.w}.`); }
       };
       el.addEventListener("pointermove", move); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
@@ -917,7 +1039,7 @@ GAMES.trace = { name: "Trace It", art: "roller", total: 3, start(A, api) {
   }
   function wordDone() {
     done = true; const [mx, my] = center(cv); api.right(queue[i], mx, my);
-    later(() => { explode(mx, my, 1, ["#2f63d8", "#ffc21a", "#ff6a1a"]); say(`${queue[i]}! ${pick(["You traced it!", "Great tracing!", "Perfect!"])}`); }, 200);
+    later(() => { explode(mx, my, 1, ["#2f63d8", "#ffc21a", "#ff6a1a"]); { const l = pick(["You traced it!", "Great tracing!", "Perfect!", "Awesome tracing!"]); heroSay(l); cheer(`${queue[i]}! ${l}`); } }, 200);
     const v = ver; later(() => { if (v === ver) { i++; next(); } }, 2600);
   }
   function path(pts, from, to) { cx.beginPath(); for (let k = from; k <= to; k++) k === from ? cx.moveTo(pts[k][0], pts[k][1]) : cx.lineTo(pts[k][0], pts[k][1]); if (from === to) cx.lineTo(pts[from][0] + 0.1, pts[from][1]); cx.stroke(); }
@@ -989,7 +1111,7 @@ function openBoom() {
     const up = () => { handle.removeEventListener("pointermove", move); handle.removeEventListener("pointerup", up); handle.removeEventListener("pointercancel", up); if (!fired) { handle.style.transition = "transform .3s cubic-bezier(.3,1.6,.5,1)"; handle.style.transform = ""; } };
     handle.addEventListener("pointermove", move); handle.addEventListener("pointerup", up); handle.addEventListener("pointercancel", up);
   });
-  later(() => say("You did it! Push the handle down!"), 300);
+  later(() => cheer("You did it! Push the handle down!"), 300);
   function detonate() {
     SFX.thud(); $("#push").remove(); const cd = document.createElement("div"); cd.className = "count"; B.appendChild(cd);
     [3, 2, 1].forEach((n, k) => later(() => { cd.textContent = n; SFX.beep(520 + k * 120); say(String(n), 1); cd.animate([{ transform: "scale(1.6)", opacity: 0.2 }, { transform: "scale(1)", opacity: 1 }], { duration: 300 }); }, k * 850));
@@ -1001,7 +1123,7 @@ function openBoom() {
       later(() => explode(cx, r.bottom - 20, 2, cols), 650);
       bldg.animate([{ transform: "none" }, { transform: "translateY(15%) skewX(-4deg)", opacity: 0.6 }, { transform: "translateY(110%) skewX(6deg)", opacity: 0 }], { duration: 1100, easing: "ease-in", fill: "forwards" });
       later(() => { for (let k = 0; k < 24; k++) add({ k: "smoke", x: r.left + Math.random() * r.width, y: r.bottom, vx: (Math.random() - 0.5) * 6, vy: -Math.random() * 1.5, r: 24 + Math.random() * 20, grow: 1.02, drag: 0.97, decay: 0.008, c: "120,110,100" }); }, 500);
-      later(() => say("Kaboom!", 0.9), 300);
+      later(() => cheer("Ka-BOOM!"), 300);
       later(showReward, 3000);
     }, 2600);
   }
@@ -1011,8 +1133,8 @@ function showReward() {
   if (next) { v = next; S.garage.push(v.id); title = "NEW RIDE!"; } else { v = pick(VEH); S.bolts += 5; title = "+5 BOLTS!"; }
   save(); updBolts(); P = P.filter(p => p.k !== "smoke"); RINGS = [];   // clear the smoke so he can see his new ride
   const R = document.createElement("div"); R.className = "reward";
-  R.innerHTML = `<h2>${title}</h2><div class="art">${svg(v.id)}</div><div class="nm">${v.name}</div><div class="row2"><button class="big" id="again">PLAY AGAIN</button><button class="big alt" id="toGarage">MY GARAGE</button><button class="big alt" id="toHome" aria-label="Home">HOME</button></div>`;
-  $("#boom").appendChild(R); SFX.tada(); later(() => { SFX.honk(); say(next ? `You got the ${v.name}!` : `${v.name}! Plus five bolts!`); }, 700);
+  R.innerHTML = `<div class="rhero">${heroSvg(pick(HEROES).id)}</div><h2>${title}</h2><div class="art">${svg(v.id)}</div><div class="nm">${v.name}</div><div class="row2"><button class="big" id="again">PLAY AGAIN</button><button class="big alt" id="toGarage">MY GARAGE</button><button class="big alt" id="toHome" aria-label="Home">HOME</button></div>`;
+  $("#boom").appendChild(R); SFX.tada(); later(() => { SFX.honk(); cheer(next ? `Whoa! You got the ${v.name}!` : `${v.name}! Plus five bolts!`); }, 700);
   R.querySelector("#again").onclick = () => startGame(randomGame());
   R.querySelector("#toGarage").onclick = openGarage;
   R.querySelector("#toHome").onclick = goHome;
@@ -1034,9 +1156,11 @@ function openGarage() {
 function goHome() {
   stopAll(); show("home"); updBolts(); $("#gcount").textContent = `${S.garage.length}/${VEH.length}`;
 }
-const TILE_ORDER = ["trace", "cards", "match", "mem", "wreck", "dig", "race", "train"];
+const TILE_ORDER = ["trace", "cards", "match", "mem", "fire", "chase", "wreck", "dig", "race", "train"];
 $("#tiles").innerHTML = TILE_ORDER.map(id => `<button class="tile t-${id}" data-g="${id}">${svg(GAMES[id].art)}${GAMES[id].name}</button>`).join("");
 $("#tiles").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { audio(); startGame(b.dataset.g); });
+$("#crew").innerHTML = HEROES.map(h => `<button data-h="${h.id}" aria-label="${h.name}">${heroSvg(h.id)}</button>`).join("");
+$("#crew").querySelectorAll("button").forEach(b => b.onclick = () => { audio(); const h = HEROES.find(x => x.id === b.dataset.h); b.animate([{ transform: "translateY(0)" }, { transform: "translateY(-24px) rotate(-6deg)" }, { transform: "none" }], { duration: 500, easing: "cubic-bezier(.3,1.5,.5,1)" }); SFX.cheer(); say(h.hi, 1.02, 1.35); });
 $("#go").onclick = () => { audio(); SFX.engine(); startGame(randomGame()); };
 $("#garageBtn").onclick = () => { audio(); openGarage(); };
 $("#gBack").onclick = goHome;
@@ -1052,7 +1176,7 @@ function holdEnd() { clearInterval(holdT); gearFill.style.clipPath = "inset(100%
 ["pointerup", "pointerleave", "pointercancel"].forEach(t => gear.addEventListener(t, holdEnd));
 let resetArmed = false;
 function openParent() {
-  stopAll(); show("parent"); $("#pWords").value = S.words; $("#pVol").value = S.vol; muteLabel(); table(); resetArmed = false; $("#pResetNote").textContent = "";
+  stopAll(); show("parent"); $("#pWords").value = S.words; $("#pVol").value = S.vol; voiceList(); muteLabel(); table(); resetArmed = false; $("#pResetNote").textContent = "";
 }
 function table() {
   const L = wordList(), p = pool();
@@ -1064,7 +1188,13 @@ $("#pWords").oninput = e => { S.words = e.target.value; save(); table(); };
 $("#pDefault").onclick = () => { S.words = DEFAULT_WORDS; save(); $("#pWords").value = S.words; table(); };
 $("#pVol").oninput = e => { S.vol = +e.target.value; save(); };
 $("#pMute").onclick = () => { S.muted = !S.muted; save(); muteLabel(); };
-$("#pVoice").onclick = () => say("I can see the bus.");
+$("#pVoice").onclick = () => { say("I can see the bus.").then(() => cheer("Boom! You got it!")); };
+function voiceList() {
+  let vs = []; try { vs = speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang)); } catch (e) {}
+  const cur = VOICE ? VOICE.name : "";
+  $("#pVoices").innerHTML = `<option value="">Automatic (best on this device)</option>` + vs.map(v => `<option value="${v.name.replace(/"/g, "&quot;")}" ${v.name === S.voice ? "selected" : ""}>${v.name} (${v.lang})${v.name === cur && !S.voice ? " - in use" : ""}</option>`).join("");
+}
+$("#pVoices").onchange = e => { S.voice = e.target.value; save(); VOICE = pickVoice(); cheer("Hi! This is my voice. Let's go!"); };
 $("#pBoom").onclick = () => explode(innerWidth / 2, innerHeight / 2, 1.5, ["#7b6f66", "#ffd36b"]);
 $("#pReset").onclick = () => {
   if (!resetArmed) { resetArmed = true; $("#pResetNote").textContent = "Tap again to erase his scores, bolts and garage."; return; }
@@ -1072,6 +1202,10 @@ $("#pReset").onclick = () => {
 };
 $("#pClose").onclick = goHome;
 
+if ((S.wordsV || 1) < 2) {   // new words join the END of his list, so what he is learning now stays first
+  const L = wordList(); const add = MORE_WORDS.split(" ").filter(w => !L.includes(w)); if (add.length) S.words = S.words.trim() + " " + add.join(" ");
+  S.wordsV = 2; save();
+}
 if (!S.padMerged) {
   try { const old = JSON.parse(localStorage.getItem("krashpad") || "{}").words;
     if (old && old.trim() !== "mom, dad, car, truck, go") { const L = wordList(); const add = old.split(/[\n,\s]+/).map(norm).filter(w => w && traceWord(w) === w && !L.includes(w)); if (add.length) S.words += " " + add.join(" "); } } catch (e) {}

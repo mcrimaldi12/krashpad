@@ -40,6 +40,7 @@
   #parent input[type=range] { width:100%; height:40px; }
   .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   .note { font-size:16px; opacity:.7; }
+  .zone { display:flex; align-items:center; justify-content:center; min-height:96px; border-radius:18px; font-size:34px; font-weight:900; letter-spacing:1px; text-decoration:none; color:#22252b; background:repeating-linear-gradient(-45deg,#ffc21a 0 18px,#ffd75e 18px 36px); border:4px solid #b88500; }
 </style>
 </head>
 <body>
@@ -48,6 +49,7 @@
   <button class="gear" id="gear" aria-label="Grown-ups: press and hold">⚙<span class="fill" id="gearFill"></span></button>
   <div class="logo">Krash<span>Pad</span></div>
   <div class="modes">
+    <a class="zone" href="zone.html">KRASH ZONE &rsaquo;</a>
     <button data-mode="sight" id="m-sight"></button>
     <button data-mode="trace" id="m-trace"></button>
     <button data-mode="free" id="m-free"></button>
@@ -457,6 +459,7 @@ document.getElementById("testSound").onclick = () => SFX.dino();
 document.getElementById("testVoice").onclick = () => say("truck");
 document.getElementById("words").oninput = e => { S.words = e.target.value; save(); };
 document.getElementById("parentClose").onclick = () => show("home");
+if (location.hash === "#trace") start("trace");   // opened from Krash Zone's "Trace It"
 </script>
 </body>
 </html>

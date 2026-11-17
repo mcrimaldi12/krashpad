@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Krash Zone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Bungee&display=swap">
+<style>
+/* Layout: a one-screen arcade. Every game is a job site under a hazard-striped top bar.
+   One deliberate look (daytime construction site), so colors are set explicitly, no dark/light switch.
+   Words use Andika, a typeface made for beginning readers (single-story a and g). */
+:root{
+  --asphalt:#22252b; --asphalt2:#30343c; --hazard:#ffc21a; --hazard-dk:#b88500; --orange:#ff6a1a;
+  --sky:#8fd3ff; --dirt:#a8703c; --chalk:#fffaf0; --steel:#8a95a5; --go:#22a95e; --red:#e8443a;
+  --display:"Bungee","Arial Black","Impact",sans-serif;
+  --read:"Andika","Trebuchet MS","Comic Sans MS",sans-serif;
+  --stripes:repeating-linear-gradient(-45deg,var(--hazard) 0 18px,var(--asphalt) 18px 36px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:var(--asphalt);color:var(--chalk);font-family:var(--read)}
+button,.btn{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;text-decoration:none;touch-action:manipulation}
+button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-offset:3px}
+#app{position:fixed;inset:0;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.show{display:flex}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+#flash{position:fixed;inset:0;background:#fff7d6;opacity:0;pointer-events:none;z-index:49}
+
+/* ---------- Home ---------- */
+#home{background:radial-gradient(120% 80% at 50% 0%,#3a3f49 0,var(--asphalt) 60%);align-items:center;gap:clamp(10px,2.4vh,22px);padding:0 16px 16px;overflow-y:auto}
+.hz{height:16px;width:100vw;flex:none;background:var(--stripes)}
+.top{display:flex;align-items:center;justify-content:space-between;width:min(100%,900px);gap:12px}
+.logo{font-family:var(--display);font-size:clamp(34px,8vw,64px);line-height:1;color:var(--hazard);letter-spacing:1px;text-shadow:0 4px 0 var(--hazard-dk),0 8px 18px rgba(0,0,0,.5)}
+.logo b{color:var(--orange);font-weight:inherit;text-shadow:0 4px 0 #9b3a06,0 8px 18px rgba(0,0,0,.5)}
+.bolts{display:flex;align-items:center;gap:8px;background:var(--asphalt2);border:3px solid #474c56;border-radius:999px;padding:6px 14px 6px 8px;font-family:var(--display);font-size:clamp(18px,3.4vw,26px);color:var(--hazard)}
+.nut{width:28px;height:28px;flex:none;background:var(--steel);clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);position:relative}
+.nut::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--asphalt)}
+.go{font-family:var(--display);font-size:clamp(44px,10vw,84px);color:var(--asphalt);background:var(--hazard);border-radius:28px;padding:10px clamp(40px,10vw,90px);box-shadow:0 10px 0 var(--hazard-dk),0 18px 30px rgba(0,0,0,.45);animation:throb 1.6s ease-in-out infinite;flex:none}
+.go:active{transform:translateY(8px);box-shadow:0 2px 0 var(--hazard-dk)}
+@keyframes throb{50%{transform:scale(1.05)}}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:min(100%,1100px)}
+@media (min-width:600px){.tiles{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1000px){.tiles{grid-template-columns:repeat(6,1fr)}}
+.tile{background:var(--asphalt2);border:4px solid #474c56;border-radius:20px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--display);font-size:clamp(15px,2.6vw,20px);color:var(--chalk);box-shadow:0 6px 0 #15171b}
+.tile:active{transform:translateY(5px);box-shadow:0 1px 0 #15171b}
+.tile svg{width:100%;max-width:150px;height:auto;aspect-ratio:200/140}
+.tile.t-wreck{border-color:var(--red)} .tile.t-dig{border-color:var(--hazard)} .tile.t-race{border-color:#3b82f6} .tile.t-mem{border-color:var(--go)} .tile.t-train{border-color:var(--orange)} .tile.t-trace{border-color:#b07cf0}
+.row2{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.pill{font-family:var(--display);font-size:20px;background:var(--asphalt2);border:3px solid #474c56;border-radius:999px;padding:12px 22px;color:var(--hazard)}
+.gear{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
+.gear i{position:absolute;inset:0;border-radius:50%;border:4px solid var(--hazard);clip-path:inset(100% 0 0 0)}
+
+/* ---------- Game frame ---------- */
+#game{background:var(--asphalt)}
+.bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;background:var(--asphalt);border-bottom:6px solid transparent;border-image:var(--stripes) 1}
+.ibtn{width:58px;height:58px;border-radius:16px;background:var(--asphalt2);border:3px solid #474c56;display:grid;place-items:center;font-size:28px;color:var(--chalk);flex:none}
+.ibtn svg{width:30px;height:30px}
+.ibtn.hear{background:var(--hazard);border-color:var(--hazard-dk);color:var(--asphalt)}
+.prog{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;justify-content:center}
+.cone{width:22px;height:28px;background:#4a4f58;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);transition:background .3s,transform .3s}
+@media (max-width:500px){.cone{width:15px;height:21px}.prog{gap:4px}}
+.cone.on{background:linear-gradient(var(--orange) 0 35%,#fff 35% 50%,var(--orange) 50%);transform:scale(1.15)}
+.arena{position:relative;flex:1;min-height:0;overflow:hidden}
+.word{font-family:var(--read);font-weight:700}
+
+/* ---------- Wreck It ---------- */
+.a-wreck{background:linear-gradient(#7cc8f5,#bfe6ff 70%)}
+.a-wreck .ground{position:absolute;left:0;right:0;bottom:0;height:12%;background:linear-gradient(#b07a45,#8a5a30);border-top:6px solid #6b4423}
+.jib{position:absolute;top:10px;left:0;right:0;height:22px;background:repeating-linear-gradient(60deg,transparent 0 10px,var(--hazard) 10px 14px),repeating-linear-gradient(-60deg,transparent 0 10px,var(--hazard) 10px 14px);border-top:5px solid var(--hazard);border-bottom:5px solid var(--hazard)}
+.trolley{position:absolute;top:12px;left:50%;width:0;transition:left .38s cubic-bezier(.4,1.4,.6,1)}
+.trolley::before{content:"";position:absolute;left:-18px;top:-4px;width:36px;height:26px;background:var(--asphalt2);border-radius:6px}
+.cable{position:absolute;left:-2px;top:20px;width:4px;height:44px;background:#3a3d44;transition:height .3s cubic-bezier(.55,0,1,.45)}
+.ball{position:absolute;left:50%;bottom:calc(var(--ball) * -1);width:var(--ball);height:var(--ball);margin-left:calc(var(--ball) / -2);border-radius:50%;background:radial-gradient(circle at 35% 30%,#7a808a,#22252b 65%)}
+.a-wreck{--ball:clamp(40px,7vmin,64px)}
+.towers{position:absolute;left:0;right:0;bottom:12%;display:flex;justify-content:space-evenly;align-items:flex-end;padding:0 8px}
+.tower{display:flex;flex-direction:column;align-items:center;--bw:min(26vw,150px,20vh);animation:rise .45s cubic-bezier(.3,1.5,.5,1) backwards}
+.tower:nth-child(2){animation-delay:.08s}.tower:nth-child(3){animation-delay:.16s}.tower:nth-child(4){animation-delay:.24s}
+@keyframes rise{from{transform:translateY(110%)}}
+.sign{background:var(--chalk);color:var(--asphalt);border:5px solid var(--asphalt);border-radius:14px;padding:4px 12px;font-family:var(--read);font-weight:700;font-size:clamp(30px,min(8vw,9vh),64px);line-height:1.1;min-width:calc(var(--bw) * .8);text-align:center;margin-bottom:4px;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.blk{width:var(--bw);height:min(calc(var(--bw) * .42),7.5vh);border:3px solid rgba(0,0,0,.28);border-radius:4px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.15),inset 0 4px 0 rgba(255,255,255,.2)}
+.wobble{animation:wob .5s}
+@keyframes wob{20%{transform:rotate(-6deg)}40%{transform:rotate(5deg)}60%{transform:rotate(-3deg)}80%{transform:rotate(2deg)}}
+.hint .sign{animation:glow .8s ease-in-out infinite alternate}
+@keyframes glow{to{box-shadow:0 0 0 8px var(--hazard),0 0 30px 10px rgba(255,194,26,.8)}}
+
+/* ---------- Dig & Dump ---------- */
+.a-dig{background:linear-gradient(#8fd3ff 0 42%,#c58b4f 42%,#a8703c);--ls:clamp(40px,min(12vw,11vh),84px)}
+.truckrow{position:absolute;top:5%;left:0;right:0;display:flex;justify-content:center}
+.truck{position:relative;display:flex;align-items:flex-end;padding-bottom:calc(var(--ls) * .5)}
+.bed{display:flex;gap:8px;padding:10px 12px 14px;background:var(--hazard);border:5px solid var(--hazard-dk);border-radius:6px 6px 16px 16px;min-width:calc(var(--ls) * 2.4);justify-content:center;transform-origin:left bottom}
+.slot{width:var(--ls);height:calc(var(--ls) * 1.1);border:4px dashed rgba(0,0,0,.35);border-radius:12px;display:grid;place-items:center;font-family:var(--read);font-weight:700;font-size:calc(var(--ls) * .78);color:rgba(34,37,43,.22);background:rgba(255,255,255,.4)}
+.slot.full{background:var(--chalk);color:var(--asphalt);border:4px solid var(--asphalt)}
+.cab{width:calc(var(--ls) * 1.5);height:calc(var(--ls) * 1.55);background:var(--orange);border-radius:10px 34px 6px 6px;margin-left:6px;position:relative;border:4px solid #b84a10}
+.cab::before{content:"";position:absolute;top:12%;left:14%;right:16%;height:38%;background:#bfe6ff;border-radius:6px 22px 4px 4px}
+.chassis{position:absolute;left:-6px;right:-6px;bottom:calc(var(--ls) * .38);height:calc(var(--ls) * .2);background:#3a3d44;border-radius:4px}
+.whl{position:absolute;bottom:0;width:calc(var(--ls) * .8);height:calc(var(--ls) * .8);border-radius:50%;background:radial-gradient(#c9ced6 0 22%,#1d1f24 24%);border:4px solid #1d1f24}
+.whl.w1{left:8%}.whl.w2{left:34%}.whl.w3{right:6%}
+.pile{position:absolute;left:4%;right:4%;top:48%;bottom:4%}
+.lblk{position:absolute;width:calc(var(--ls) * 1.1);height:calc(var(--ls) * 1.1);display:grid;place-items:center;font-family:var(--read);font-weight:700;font-size:calc(var(--ls) * .8);color:var(--asphalt);background:#f1c27d;border:5px solid #8a5a30;border-radius:12px;box-shadow:inset 0 0 0 3px #e3a95a,0 6px 0 rgba(0,0,0,.3);touch-action:none;cursor:grab;animation:pop .35s backwards}
+.drag{z-index:30;cursor:grabbing;box-shadow:inset 0 0 0 3px #e3a95a,0 18px 24px rgba(0,0,0,.4)}
+@keyframes pop{from{transform:scale(0)}}
+
+/* ---------- Turbo Race ---------- */
+.a-race{background:repeating-linear-gradient(90deg,#3f9d4f 0 30px,#47a957 30px 60px)}
+.road{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(96vw,620px);background:#3a3d44;border-left:12px solid transparent;border-right:12px solid transparent;border-image:repeating-linear-gradient(var(--red) 0 30px,#fff 30px 60px) 12;--spd:.5s;touch-action:none;overflow:hidden}
+.lane-line{position:absolute;top:-80px;bottom:0;width:8px;margin-left:-4px;background:repeating-linear-gradient(#fff 0 44px,transparent 44px 80px);animation:dash var(--spd) linear infinite}
+@keyframes dash{to{transform:translateY(80px)}}
+.car{position:absolute;bottom:5%;width:var(--cw);--cw:min(17vw,110px,16vh);transition:left .18s ease-out;filter:drop-shadow(0 8px 6px rgba(0,0,0,.4))}
+.car svg{width:100%;height:auto;display:block}
+.car::after{content:"";position:absolute;left:25%;right:25%;top:96%;height:0;background:linear-gradient(#ffe27a,#ff6a1a 60%,transparent);border-radius:0 0 50% 50%;transition:height .15s}
+.car.boost::after{height:70%}
+.car.spin{animation:spin .7s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gate{position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 8px;will-change:transform}
+.gsign{background:#1f7a46;color:#fff;border:5px solid #fff;border-radius:14px;text-align:center;font-family:var(--read);font-weight:700;font-size:clamp(28px,min(8vw,8vh),58px);padding:6px 4px;box-shadow:0 6px 0 rgba(0,0,0,.35);line-height:1.1}
+.gsign.hit{background:var(--hazard);color:var(--asphalt);transform:scale(1.15);transition:transform .2s}
+.finish{position:absolute;left:0;right:0;top:0;height:60px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/40px 40px;transform:translateY(-100px);display:none}
+
+/* ---------- Memory Garage ---------- */
+.a-mem{background:#5b616b;padding:10px}
+.grid{display:grid;gap:clamp(6px,1.4vmin,14px);height:100%;width:min(100%,900px);margin:0 auto}
+.card{position:relative;overflow:hidden;border-radius:12px;background:var(--chalk);border:5px solid #2a2d33;min-height:0}
+.face{position:absolute;inset:0;display:grid;place-items:center;color:var(--asphalt);font-family:var(--read);font-weight:700;font-size:clamp(26px,min(7vw,7vh),60px)}
+.face svg{width:88%;height:88%}
+.door{position:absolute;inset:0;background:repeating-linear-gradient(#d4d8de 0 12px,#a9b0ba 12px 15px);transition:transform .38s cubic-bezier(.5,0,.3,1);display:grid;place-items:center;border-bottom:8px solid var(--hazard)}
+.door b{font-family:var(--display);font-size:clamp(20px,4vmin,34px);color:#5b616b}
+.door::after{content:"";position:absolute;bottom:10%;left:40%;right:40%;height:8px;border-radius:4px;background:#5b616b}
+.card.open .door{transform:translateY(-102%)}
+.card.done{border-color:var(--go);animation:pop2 .4s}
+.card.done .face{background:#e6f7ec}
+@keyframes pop2{50%{transform:scale(1.1)}}
+
+/* ---------- Word Train ---------- */
+.a-train{background:linear-gradient(#8fd3ff 0 52%,#78bf63 52%);--cw:min(calc((100vw - 40px) / (var(--n,4) + 1.6)),150px)}
+.trainrow{position:absolute;top:14%;left:0;right:0;display:flex;justify-content:center}
+.train{display:flex;align-items:flex-end;gap:6px;transition:transform 1.1s cubic-bezier(.2,.8,.3,1)}
+.engine{width:calc(var(--cw) * 1.35);flex:none;transform:scaleX(-1)}
+.engine svg{width:100%;height:auto;display:block}
+.tcar{width:var(--cw);height:calc(var(--cw) * .85);flex:none;background:var(--red);border:4px solid #9e2a22;border-radius:8px;position:relative;display:grid;place-items:center;margin-bottom:calc(var(--cw) * .15)}
+.tcar:nth-child(odd){background:#2f63d8;border-color:#1d3f8f}
+.tcar::before,.tcar::after{content:"";position:absolute;bottom:calc(var(--cw) * -.2);width:calc(var(--cw) * .28);height:calc(var(--cw) * .28);border-radius:50%;background:radial-gradient(#c9ced6 0 25%,#1d1f24 27%);left:12%}
+.tcar::after{left:auto;right:12%}
+.tslot{width:88%;min-height:62%;background:rgba(255,255,255,.35);border:3px dashed rgba(255,255,255,.8);border-radius:8px;display:grid;place-items:center;font-family:var(--read);font-weight:700;color:var(--asphalt);font-size:clamp(18px,calc(var(--cw) * .3),44px);padding:2px}
+.tslot.full{background:var(--chalk);border:3px solid var(--asphalt)}
+.tslot.lit{background:var(--hazard);transform:scale(1.12);transition:transform .15s}
+.rails{position:absolute;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,#6b4423 0 10px,transparent 10px 30px),linear-gradient(transparent 0 3px,#8a95a5 3px 7px,transparent 7px)}
+.platform{position:absolute;left:0;right:0;bottom:5%;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;padding:0 14px}
+.wblk{position:relative;background:var(--chalk);color:var(--asphalt);border:5px solid var(--asphalt);border-radius:14px;padding:6px 16px;font-family:var(--read);font-weight:700;font-size:clamp(28px,min(7vw,8vh),56px);box-shadow:0 6px 0 rgba(0,0,0,.3);touch-action:none;cursor:grab;animation:pop .35s backwards}
+.wblk.hint{animation:glow .8s ease-in-out infinite alternate}
+
+/* ---------- Detonator ---------- */
+#boom{background:radial-gradient(120% 90% at 50% 100%,#2c3350 0,#0d1020 70%);overflow:hidden}
+.stars{position:absolute;inset:0;background-image:radial-gradient(2px 2px at 20% 20%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 70% 12%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 45% 30%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 85% 35%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 10% 40%,#fff 50%,transparent 51%)}
+.bground{position:absolute;left:0;right:0;bottom:0;height:calc(4% + 215px);background:#2a2320;border-top:6px solid #3d332d}
+.bldg{position:absolute;bottom:calc(4% + 215px);left:50%;width:min(56vw,300px);height:min(44vh,360px,calc(100% - 4% - 215px - 90px));margin-left:calc(min(56vw,300px) / -2);background:#7b6f66;border:5px solid #4a413b;border-bottom:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:10px;padding:14px}
+.bldg i{background:#3a3532;border-radius:3px}.bldg i.lit{background:#ffd36b;box-shadow:0 0 12px #ffd36b}
+.tape{position:absolute;left:-12%;right:-12%;bottom:18%;height:26px;background:var(--stripes);transform:rotate(-6deg);display:grid;place-items:center;font-family:var(--display);font-size:14px;color:var(--asphalt)}
+.tape span{background:var(--hazard);padding:1px 10px;border-radius:3px}
+.wire{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.plunger{position:absolute;bottom:calc(4% + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:170px;height:200px}
+.pbox{position:absolute;bottom:0;left:0;right:0;height:100px;background:var(--red);border:6px solid #8f241d;border-radius:12px;display:grid;place-items:center;font-family:var(--display);font-size:38px;color:var(--chalk);z-index:2}
+.handle{position:absolute;left:0;right:0;top:0;height:150px;touch-action:none;cursor:grab;z-index:1}
+.handle .tb{position:absolute;top:0;left:10px;right:10px;height:30px;background:var(--hazard);border:5px solid var(--hazard-dk);border-radius:15px}
+.handle .rod{position:absolute;top:26px;left:50%;width:16px;margin-left:-8px;height:124px;background:linear-gradient(90deg,#8a95a5,#d4d8de,#8a95a5)}
+.push{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;font-family:var(--display);font-size:clamp(24px,5vw,40px);color:var(--hazard);animation:throb 1s infinite;pointer-events:none}
+.count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:min(40vw,40vh);color:var(--hazard);pointer-events:none;text-shadow:0 10px 0 var(--hazard-dk)}
+.reward{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;background:rgba(13,16,32,.82);z-index:5;animation:fade .4s}
+@keyframes fade{from{opacity:0}}
+.reward h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(32px,8vw,64px);color:var(--hazard);text-shadow:0 4px 0 var(--hazard-dk)}
+.reward .art{width:min(70vw,360px);animation:hop 1s cubic-bezier(.3,1.6,.5,1)}
+.reward .art svg{width:100%;height:auto}
+.reward .nm{font-family:var(--read);font-weight:700;font-size:clamp(28px,6vw,48px)}
+@keyframes hop{0%{transform:translateX(-120vw)}60%{transform:translateX(0)}75%{transform:translateY(-30px)}100%{transform:none}}
+.big{font-family:var(--display);font-size:clamp(20px,4vw,30px);border-radius:18px;padding:14px 26px;background:var(--hazard);color:var(--asphalt);box-shadow:0 7px 0 var(--hazard-dk)}
+.big.alt{background:var(--asphalt2);color:var(--chalk);box-shadow:0 7px 0 #15171b;border:3px solid #474c56}
+
+/* ---------- Garage ---------- */
+#garage{background:#2a2d33}
+.ghead{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:6px solid transparent;border-image:var(--stripes) 1}
+.ghead h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(24px,5vw,40px);color:var(--hazard)}
+.ghead span{margin-left:auto;font-family:var(--display);font-size:20px;color:var(--steel)}
+.ggrid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,44vw),1fr));gap:12px;padding:14px;align-content:start}
+.gcard{background:#3a3f48;border:4px solid #50565f;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--read);font-weight:700;font-size:20px}
+.gcard svg{width:100%;height:auto}
+.gcard.locked svg{filter:brightness(0);opacity:.35}
+.gcard.locked{color:#6b717c}
+.gcard.hop svg{animation:hop2 .6s}
+@keyframes hop2{40%{transform:translateY(-24px) rotate(-4deg)}}
+
+/* ---------- Grown-ups ---------- */
+#parent{background:#f3efe6;color:#22252b;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px));gap:16px;user-select:text;-webkit-user-select:text}
+#parent *{user-select:text;-webkit-user-select:text}
+#parent h2{margin:0;font-family:var(--display);font-weight:400;font-size:28px}
+#parent h3{margin:8px 0 0;font-size:20px}
+#parent label{display:flex;flex-direction:column;gap:6px;font-size:18px;font-weight:700}
+#parent textarea{font:inherit;font-weight:400;font-size:20px;min-height:110px;border-radius:12px;border:2px solid #c9c2b2;padding:10px;background:#fff;color:#22252b}
+#parent input[type=range]{width:100%;height:36px}
+.pbtn{font-size:18px;font-weight:700;background:#fff;border:2px solid #c9c2b2;border-radius:12px;padding:10px 16px;color:#22252b}
+.pbtn.dark{background:#22252b;color:#fff;border-color:#22252b}
+.pbtn.warn{border-color:var(--red);color:#b3261e}
+.prow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.wtable{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.wt{background:#fff;border:2px solid #e2dccf;border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:18px}
+.wt b{font-family:var(--read);font-size:22px}
+.wt.tricky{border-color:#f0a08f;background:#fff4f1}
+.wt.got{border-color:#9fd6b1;background:#f1fbf4}
+.wt small{font-size:14px;color:#5b616b;text-align:right}
+.note{font-size:15px;color:#5b616b;max-width:65ch}
+@media (prefers-reduced-motion:reduce){.go,.push{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+
+<div class="screen show" id="home">
+  <div class="hz"></div>
+  <div class="top">
+    <div class="logo">KRASH<b>ZONE</b></div>
+    <div class="bolts" title="Bolts earned"><span class="nut"></span><span class="boltN">0</span></div>
+  </div>
+  <button class="go" id="go" aria-label="Play a surprise game">GO!</button>
+  <div class="tiles" id="tiles"></div>
+  <div class="row2">
+    <button class="pill" id="garageBtn">MY GARAGE <span id="gcount"></span></button>
+  </div>
+  <button class="gear" id="gear" aria-label="Grown-ups: press and hold">⚙<i id="gearFill"></i></button>
+</div>
+
+<div class="screen" id="game">
+  <div class="bar">
+    <button class="ibtn" id="homeBtn" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button>
+    <div class="prog" id="prog"></div>
+    <div class="bolts"><span class="nut"></span><span class="boltN">0</span></div>
+    <button class="ibtn hear" id="hear" aria-label="Hear it again"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>
+  </div>
+  <div class="arena" id="arena"></div>
+</div>
+
+<div class="screen" id="boom"></div>
+
+<div class="screen" id="garage">
+  <div class="ghead"><button class="ibtn" id="gBack" aria-label="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><h2>MY GARAGE</h2><span id="gtotal"></span></div>
+  <div class="ggrid" id="ggrid"></div>
+</div>
+
+<div class="screen" id="parent">
+  <div class="prow" style="justify-content:space-between"><h2>Grown-ups</h2><button class="pbtn dark" id="pClose">Back to games</button></div>
+  <label for="pWords">Practice words (spaces, commas or new lines between them). He learns them in this order, about 7 at a time; new ones join as he masters old ones.
+    <textarea id="pWords"></textarea>
+  </label>
+  <div class="prow"><button class="pbtn" id="pDefault">Put back the starting list</button></div>
+  <label for="pVol">Sound volume
+    <input type="range" id="pVol" min="0" max="100" step="5">
+  </label>
+  <div class="prow"><button class="pbtn" id="pMute"></button><button class="pbtn" id="pVoice">Test the voice</button><button class="pbtn" id="pBoom">Test a boom</button></div>
+  <h3>How he's doing</h3>
+  <div class="note">Right / missed for each word. Red means tricky (the games show these more often). Green means mastered.</div>
+  <div class="wtable" id="pTable"></div>
+  <div class="prow"><button class="pbtn warn" id="pReset">Reset progress</button><span class="note" id="pResetNote"></span></div>
+  <div class="note">Everything stays on this device. Nothing is sent anywhere, there are no ads, and there are no accounts. The voice is the tablet's own reading voice.</div>
+</div>
+
+<div id="flash"></div>
+</div>
+<canvas id="fx"></canvas>
+
+<script>
+"use strict";
+// ================= helpers =================
+const $ = s => document.querySelector(s);
+const rand = n => Math.floor(Math.random() * n);
+const pick = a => a[rand(a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const center = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ================= settings and progress (this device only) =================
+const KEY = "krashzone";
+const DEFAULT_WORDS = "I the like we go see can he she them they tar car hair bus train plane a and is it to my you look up big stop dig truck boom";
+let S = { vol: 80, muted: false, words: DEFAULT_WORDS, stats: {}, bolts: 0, garage: [], rounds: 0 };
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function norm(w) { w = String(w).trim().toLowerCase().replace(/[^a-z']/g, ""); return w === "i" ? "I" : w; }
+function wordList() { const out = []; for (const w of S.words.split(/[\s,]+/)) { const n = norm(w); if (n && !out.includes(n)) out.push(n); } return out.length >= 3 ? out : DEFAULT_WORDS.split(" "); }
+const st = w => S.stats[w] || { r: 0, m: 0 };
+const mastered = w => { const s = st(w); return s.r >= 4 && s.r >= s.m * 3; };
+function pool() { const p = []; let fresh = 0; for (const w of wordList()) { p.push(w); if (!mastered(w) && ++fresh >= 7) break; } return p; }   // mastered words stay in for review, plus up to 7 still being learned
+function weight(w) { const s = st(w); if (!s.r && !s.m) return 2.5; return Math.max(0.35, 1 + Math.min(s.m, 4) * 1.2 - Math.min(s.r, 6) * 0.2); }
+function pickWords(n) {
+  const p = pool(), out = []; let cand = p.slice();
+  while (out.length < n) {
+    if (!cand.length) cand = p.filter(w => w !== out[out.length - 1]);
+    const tot = cand.reduce((a, w) => a + weight(w), 0); let x = Math.random() * tot, i = 0;
+    for (; i < cand.length - 1; i++) { x -= weight(cand[i]); if (x <= 0) break; }
+    out.push(cand[i]); cand.splice(i, 1);
+  }
+  return out;
+}
+function distract(t, k) { let c = shuffle(pool().filter(w => w !== t)); if (c.length < k) c = c.concat(shuffle(wordList().filter(w => w !== t && !c.includes(w)))); return c.slice(0, k); }
+function record(w, ok) { const s = Object.assign({ r: 0, m: 0 }, S.stats[w]); ok ? s.r++ : s.m++; S.stats[w] = s; save(); }
+
+// ================= sound effects, made by the tablet (no files, no internet) =================
+let AC = null;
+function audio() { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (AC && AC.state === "suspended") AC.resume(); return AC; }
+function out(v = 1) { const a = audio(); if (!a || S.muted || !S.vol) return null; const g = a.createGain(); g.gain.value = S.vol / 100 * 0.7 * v; g.connect(a.destination); return g; }
+function tone(f, d, { type = "sine", v = 0.4, to, at = 0 } = {}) {
+  const o_ = out(); if (!o_) return; const a = AC, t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + d);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+  o.connect(g).connect(o_); o.start(t); o.stop(t + d + 0.05);
+}
+function hiss(d, { v = 0.6, f0 = 2000, f1 = 200, type = "lowpass", at = 0 } = {}) {
+  const o_ = out(); if (!o_) return; const a = AC, t = a.currentTime + at;
+  const b = a.createBuffer(1, Math.ceil(a.sampleRate * d), a.sampleRate), ch = b.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1;
+  const s = a.createBufferSource(); s.buffer = b; const fl = a.createBiquadFilter(); fl.type = type; fl.frequency.setValueAtTime(f0, t); fl.frequency.exponentialRampToValueAtTime(Math.max(40, f1), t + d);
+  const g = a.createGain(); g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d); s.connect(fl).connect(g).connect(o_); s.start(t);
+}
+const SFX = {
+  ding() { tone(880, 0.15, { type: "triangle", v: 0.35 }); tone(1320, 0.3, { type: "triangle", v: 0.35, at: 0.1 }); },
+  bonk() { tone(240, 0.25, { v: 0.4, to: 110 }); },
+  pop() { tone(500, 0.12, { v: 0.35, to: 1200 }); },
+  coin() { tone(988, 0.08, { type: "square", v: 0.1 }); tone(1319, 0.25, { type: "square", v: 0.1, at: 0.08 }); },
+  boom(p = 1) { hiss(1.2 + p * 0.8, { v: Math.min(1, 0.6 + p * 0.2), f0: 1800, f1: 60 }); tone(90, 0.8 + p * 0.4, { v: 0.8, to: 30 }); tone(55, 1 + p * 0.5, { type: "triangle", v: 0.5, to: 25, at: 0.05 }); },
+  honk() { [0, 0.3].forEach(at => { tone(392, 0.25, { type: "square", v: 0.1, at }); tone(494, 0.25, { type: "square", v: 0.1, at }); }); },
+  zoom() { tone(120, 0.9, { type: "sawtooth", v: 0.16, to: 700 }); hiss(0.8, { v: 0.25, f0: 600, f1: 4000, type: "bandpass" }); },
+  engine() { tone(60, 1.3, { type: "sawtooth", v: 0.18, to: 150 }); },
+  whistle() { tone(1050, 0.7, { v: 0.22 }); tone(1260, 0.7, { v: 0.18 }); },
+  chug() { for (let i = 0; i < 8; i++) hiss(0.12, { v: 0.35, f0: 900, f1: 300, at: i * 0.22 }); },
+  click() { tone(1200, 0.04, { type: "square", v: 0.08 }); },
+  door() { hiss(0.35, { v: 0.25, f0: 500, f1: 1800, type: "bandpass" }); },
+  beep(f = 660) { tone(f, 0.2, { type: "square", v: 0.14 }); },
+  thud() { tone(140, 0.3, { v: 0.6, to: 40 }); },
+  tada() { [523, 659, 784, 1047].forEach((f, i) => tone(f, i === 3 ? 0.8 : 0.22, { type: "square", v: 0.12, at: i * 0.12 })); },
+};
+
+// ================= the voice: the tablet's clearest English voice, a little slow =================
+let VOICE = null;
+function pickVoice() {
+  let vs = []; try { vs = speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang)); } catch (e) {}
+  for (const re of [/natural/i, /premium|enhanced/i, /samantha/i, /google us english/i, /aria|jenny|ava|allison|zira/i]) { const v = vs.find(v => re.test(v.name) && /en[-_]us/i.test(v.lang)) || vs.find(v => re.test(v.name)); if (v) return v; }
+  return vs.find(v => /en[-_]us/i.test(v.lang)) || vs[0] || null;
+}
+try { VOICE = pickVoice(); speechSynthesis.onvoiceschanged = () => { VOICE = pickVoice(); }; } catch (e) {}
+function say(text, rate = 0.8) {
+  return new Promise(res => {
+    if (S.muted || !window.speechSynthesis) return res();
+    let done = false; const fin = () => { if (!done) { done = true; res(); } };
+    try {
+      speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text);
+      if (VOICE) u.voice = VOICE; u.lang = (VOICE && VOICE.lang) || "en-US"; u.rate = rate; u.pitch = 1.05; u.volume = Math.min(1, S.vol / 70);
+      u.onend = fin; u.onerror = fin; setTimeout(fin, 900 + text.length * 110); speechSynthesis.speak(u);
+    } catch (e) { fin(); }
+  });
+}
+const letterName = c => c.toUpperCase() + ".";
+const PRAISE = ["Boom!", "Yes!", "Nice!", "You got it!", "Awesome!", "Smashed it!", "Great job!", "Wow!", "Kaboom!", "Big win!"];
+
+// ================= effects layer: explosions, sparks, smoke, confetti =================
+const fx = $("#fx"), fc = fx.getContext("2d"); let P = [], RINGS = [], fxOn = false, DPR = 1;
+function sizeFx() { DPR = Math.min(2, window.devicePixelRatio || 1); fx.width = innerWidth * DPR; fx.height = innerHeight * DPR; }
+addEventListener("resize", sizeFx); sizeFx();
+function ensure() { if (!fxOn) { fxOn = true; requestAnimationFrame(tick); } }
+function add(p) { if (p.life === undefined) p.life = 1; if (P.length < 650) P.push(p); ensure(); }
+function tick() {
+  fc.setTransform(DPR, 0, 0, DPR, 0, 0); fc.clearRect(0, 0, innerWidth, innerHeight);
+  for (const r of RINGS) { r.r += (r.max - r.r) * 0.12 + 2; r.life -= 0.035; if (r.life > 0) { fc.strokeStyle = `rgba(255,240,200,${r.life})`; fc.lineWidth = r.w * r.life; fc.beginPath(); fc.arc(r.x, r.y, r.r, 0, 7); fc.stroke(); } }
+  RINGS = RINGS.filter(r => r.life > 0);
+  for (const p of P) { const dr = p.drag ?? 0.98; p.vx *= dr; p.vy = p.vy * dr + (p.g ?? 0); p.x += p.vx; p.y += p.vy; p.r *= p.grow ?? 1; p.life -= p.decay ?? 0.02; p.rot = (p.rot || 0) + (p.vr || 0); }
+  const order = P.filter(p => p.k === "smoke").concat(P.filter(p => p.k !== "smoke"));   // smoke behind, fire and debris in front
+  for (const p of order) {
+    const a = Math.max(0, Math.min(1, p.life));
+    if (p.k === "fire") {
+      fc.globalCompositeOperation = "lighter"; const g = fc.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      g.addColorStop(0, `rgba(255,245,200,${a})`); g.addColorStop(0.4, `rgba(${p.c},${a * 0.8})`); g.addColorStop(1, `rgba(${p.c},0)`);
+      fc.fillStyle = g; fc.beginPath(); fc.arc(p.x, p.y, p.r, 0, 7); fc.fill(); fc.globalCompositeOperation = "source-over";
+    } else if (p.k === "smoke") { fc.fillStyle = `rgba(${p.c},${a * 0.5})`; fc.beginPath(); fc.arc(p.x, p.y, p.r, 0, 7); fc.fill(); }
+    else if (p.k === "spark") { fc.strokeStyle = `rgba(${p.c},${a})`; fc.lineWidth = p.r; fc.lineCap = "round"; fc.beginPath(); fc.moveTo(p.x, p.y); fc.lineTo(p.x - p.vx * 2.5, p.y - p.vy * 2.5); fc.stroke(); }
+    else { fc.save(); fc.translate(p.x, p.y); fc.rotate(p.rot); fc.globalAlpha = a; fc.fillStyle = p.col; fc.fillRect(-p.r, -p.r * 0.6, p.r * 2, p.r * 1.2); fc.restore(); }
+  }
+  P = P.filter(p => p.life > 0 && p.y < innerHeight + 200);
+  if (P.length || RINGS.length) requestAnimationFrame(tick); else { fxOn = false; fc.clearRect(0, 0, innerWidth, innerHeight); }
+}
+function shake(pw) { if (REDUCED) return; const k = []; for (let i = 0; i < 10; i++) k.push({ transform: `translate(${(Math.random() - 0.5) * 18 * pw}px,${(Math.random() - 0.5) * 18 * pw}px)` }); k.push({ transform: "none" }); $("#app").animate(k, { duration: 380 + pw * 180 }); }
+function flash(pw) { $("#flash").animate([{ opacity: REDUCED ? 0.15 : Math.min(0.9, 0.3 * pw) }, { opacity: 0 }], { duration: 350 + pw * 150 }); }
+function explode(x, y, pw = 1, colors) {
+  const n = Math.round(28 * pw);
+  for (let i = 0; i < n; i++) { const a = Math.random() * 7, s = Math.random() * 7 * pw + 2; add({ k: "fire", x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, r: 22 * pw + Math.random() * 24 * pw, grow: 1.012, drag: 0.92, decay: 0.014 + Math.random() * 0.014, c: pick(["255,120,30", "255,170,40", "255,80,20", "255,210,80"]) }); }
+  for (let i = 0; i < n * 0.6; i++) { const a = Math.random() * 7, s = Math.random() * 3 * pw; add({ k: "smoke", x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.2, r: 18 * pw + Math.random() * 18, grow: 1.015, drag: 0.95, decay: 0.009 + Math.random() * 0.008, c: pick(["70,70,78", "95,92,90", "55,55,60"]) }); }
+  for (let i = 0; i < n; i++) { const a = Math.random() * 7, s = Math.random() * 12 * pw + 4; add({ k: "spark", x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 3, r: 3, g: 0.25, drag: 0.97, decay: 0.02, c: "255,230,150" }); }
+  if (colors && colors.length) for (let i = 0; i < n * 0.9; i++) { const a = -Math.random() * Math.PI, s = Math.random() * 11 * pw + 3; add({ k: "debris", x: x + (Math.random() - 0.5) * 40 * pw, y: y + (Math.random() - 0.5) * 40 * pw, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, r: 5 + Math.random() * 10, g: 0.45, drag: 0.99, decay: 0.008, vr: (Math.random() - 0.5) * 0.4, col: pick(colors) }); }
+  RINGS.push({ x, y, r: 10, max: 220 * pw, life: 1, w: 14 * pw }); ensure();
+  flash(pw); shake(pw); SFX.boom(pw);
+}
+function confetti(x, y, n = 30) { const cols = ["#ffc21a", "#ff6a1a", "#e8443a", "#3b82f6", "#22a95e", "#fff"]; for (let i = 0; i < n; i++) { const a = Math.random() * 7, s = Math.random() * 9 + 3; add({ k: "conf", x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 5, r: 4 + Math.random() * 5, g: 0.3, drag: 0.97, decay: 0.012, vr: (Math.random() - 0.5) * 0.5, col: pick(cols) }); } }
+function dust(x, y) { add({ k: "smoke", x, y, vx: -Math.random() * 3 - 1, vy: -Math.random() * 1.5, r: 10 + Math.random() * 12, grow: 1.03, drag: 0.96, decay: 0.02, c: "190,150,105" }); }
+function boltFly(x, y) {
+  const tgt = [...document.querySelectorAll(".boltN")].find(e => e.offsetParent); if (!tgt) return;
+  const [tx, ty] = center(tgt), n = document.createElement("div"); n.className = "nut"; n.style.cssText = `position:fixed;left:${x - 14}px;top:${y - 14}px;z-index:60;pointer-events:none`;
+  document.body.appendChild(n); SFX.coin();
+  const an = n.animate([{ transform: "scale(1.6)" }, { transform: `translate(${tx - x}px,${ty - y}px) scale(.8)` }], { duration: 650, easing: "cubic-bezier(.5,-0.4,.7,1)" });
+  an.onfinish = () => { n.remove(); updBolts(); };
+}
+function updBolts() { document.querySelectorAll(".boltN").forEach(e => e.textContent = S.bolts); }
+
+// ================= the art: original vehicles drawn for this app =================
+const WIN = "#bfe6ff";
+const Wh = (x, y, r = 15) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#1d1f24"/><circle cx="${x}" cy="${y}" r="${r * 0.5}" fill="#c9ced6"/><circle cx="${x}" cy="${y}" r="${r * 0.18}" fill="#1d1f24"/>`;
+const TRACK = (x1, x2, y) => `<rect x="${x1}" y="${y}" width="${x2 - x1}" height="26" rx="13" fill="#2a2d33"/>` + [0, 1, 2, 3, 4].map(i => `<circle cx="${x1 + 13 + i * (x2 - x1 - 26) / 4}" cy="${y + 13}" r="8" fill="#6b7280"/>`).join("");
+const VEH = [
+  { id: "dump", name: "Dump Truck", svg: `<path d="M14 48 L118 48 L108 98 L24 98Z" fill="#ffc21a" stroke="#b88500" stroke-width="4" stroke-linejoin="round"/><path d="M30 62 H104 M32 78 H100" stroke="#e0a800" stroke-width="5"/><path d="M122 56 H162 Q172 56 176 66 L186 86 V104 H122Z" fill="#ff8a1a"/><path d="M134 64 H160 Q166 64 169 70 L175 84 H134Z" fill="${WIN}"/><rect x="12" y="98" width="176" height="10" rx="3" fill="#3a3d44"/>${Wh(44, 114)}${Wh(80, 114)}${Wh(160, 114)}` },
+  { id: "excavator", name: "Excavator", svg: `${TRACK(40, 170, 96)}<rect x="56" y="66" width="104" height="32" rx="6" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="118" y="34" width="38" height="34" rx="5" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="125" y="40" width="24" height="20" rx="3" fill="${WIN}"/><path d="M84 70 L54 24 L24 56" stroke="#ffb000" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 50 L38 60 L32 86 Q14 88 8 72Z" fill="#6b7280"/><circle cx="54" cy="24" r="6" fill="#3a3d44"/>` },
+  { id: "dozer", name: "Bulldozer", svg: `${TRACK(34, 166, 96)}<rect x="60" y="62" width="96" height="36" rx="5" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="104" y="30" width="44" height="34" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="111" y="36" width="30" height="20" fill="${WIN}"/><rect x="76" y="40" width="7" height="24" fill="#3a3d44"/><path d="M60 84 L28 92" stroke="#3a3d44" stroke-width="8"/><path d="M10 58 Q24 86 14 122 L30 122 Q38 90 26 58Z" fill="#8a95a5" stroke="#5c6573" stroke-width="3"/>` },
+  { id: "mixer", name: "Cement Mixer", svg: `<rect x="14" y="94" width="172" height="10" rx="3" fill="#3a3d44"/><path d="M134 54 H164 Q172 54 176 62 L186 82 V100 H134Z" fill="#e8443a"/><path d="M144 62 H162 L171 80 H144Z" fill="${WIN}"/><g transform="rotate(-12 72 70)"><ellipse cx="72" cy="70" rx="58" ry="30" fill="#f2f2ee" stroke="#8a95a5" stroke-width="4"/><path d="M44 48 L50 92 M70 42 L74 98 M98 45 L102 95" stroke="#ff6a1a" stroke-width="9"/></g><rect x="118" y="70" width="12" height="26" fill="#8a95a5"/>${Wh(40, 112)}${Wh(76, 112)}${Wh(160, 112)}` },
+  { id: "crane", name: "Crane", svg: `<rect x="20" y="88" width="160" height="16" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="132" y="60" width="40" height="30" rx="4" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><rect x="140" y="66" width="24" height="16" fill="${WIN}"/><path d="M120 86 L40 10" stroke="#ff6a1a" stroke-width="10" stroke-linecap="round"/><path d="M110 82 L46 20" stroke="#b84a10" stroke-width="3" stroke-dasharray="6 6"/><line x1="40" y1="12" x2="40" y2="66" stroke="#3a3d44" stroke-width="2"/><path d="M40 66 q-8 0 -8 8 q0 8 8 8" stroke="#3a3d44" stroke-width="4" fill="none"/>${Wh(46, 112)}${Wh(82, 112)}${Wh(118, 112)}${Wh(156, 112)}` },
+  { id: "roller", name: "Steamroller", svg: `<rect x="60" y="64" width="110" height="36" rx="6" fill="#ffc21a" stroke="#b88500" stroke-width="3"/><path d="M100 64 V30 H160 V64" fill="none" stroke="#3a3d44" stroke-width="5"/><rect x="96" y="26" width="70" height="8" rx="3" fill="#e8443a"/><rect x="118" y="44" width="40" height="20" fill="${WIN}"/><rect x="18" y="72" width="62" height="50" rx="25" fill="#8a95a5" stroke="#5c6573" stroke-width="4"/><path d="M28 86 H70 M28 100 H70" stroke="#6b7480" stroke-width="3"/>${Wh(150, 106, 18)}<rect x="0" y="122" width="200" height="8" fill="#2a2d33"/>` },
+  { id: "race", name: "Race Car", svg: `<path d="M14 98 Q14 84 30 82 L66 76 L92 58 H132 L150 76 L182 82 Q192 86 190 100 L186 104 H18Z" fill="#e8443a"/><path d="M98 64 H128 L140 76 H90Z" fill="${WIN}"/><rect x="8" y="64" width="22" height="7" fill="#22252b"/><rect x="16" y="70" width="5" height="14" fill="#22252b"/><circle cx="112" cy="90" r="11" fill="#fff"/><text x="112" y="95" font-size="14" font-weight="900" text-anchor="middle" fill="#22252b" font-family="Arial">1</text><path d="M30 92 H92" stroke="#ffc21a" stroke-width="4"/>${Wh(50, 106, 16)}${Wh(156, 106, 16)}` },
+  { id: "monster", name: "Monster Truck", svg: `<path d="M40 52 L60 30 H118 L134 52 H170 Q180 52 180 62 V80 H30 V62 Q30 52 40 52Z" fill="#22a95e"/><path d="M66 36 H96 V52 H54Z M102 36 H116 L128 52 H102Z" fill="${WIN}"/><rect x="50" y="80" width="100" height="8" fill="#3a3d44"/>${[52, 150].map(x => `<circle cx="${x}" cy="106" r="28" fill="#1d1f24"/><circle cx="${x}" cy="106" r="20" fill="none" stroke="#4a4f58" stroke-width="5" stroke-dasharray="7 6"/><circle cx="${x}" cy="106" r="9" fill="#c9ced6"/>`).join("")}` },
+  { id: "fire", name: "Fire Truck", svg: `<rect x="14" y="56" width="124" height="48" rx="5" fill="#e8443a"/><path d="M138 60 H164 L184 86 V104 H138Z" fill="#e8443a"/><path d="M144 66 H161 L174 84 H144Z" fill="${WIN}"/><g stroke="#c9ced6" stroke-width="4"><line x1="20" y1="46" x2="132" y2="38"/><line x1="20" y1="54" x2="132" y2="46"/>${[34, 54, 74, 94, 114].map(x => `<line x1="${x}" y1="${53 - (x - 20) * 0.07}" x2="${x}" y2="${45 - (x - 20) * 0.07}"/>`).join("")}</g><rect x="14" y="80" width="170" height="6" fill="#fff"/><rect x="150" y="52" width="14" height="8" rx="2" fill="#3b82f6"/>${Wh(44, 108)}${Wh(84, 108)}${Wh(156, 108)}` },
+  { id: "bus", name: "School Bus", svg: `<rect x="10" y="40" width="180" height="64" rx="10" fill="#ffc21a" stroke="#b88500" stroke-width="3"/>${[22, 52, 82, 112, 142].map(x => `<rect x="${x}" y="50" width="24" height="22" rx="3" fill="${WIN}"/>`).join("")}<rect x="170" y="50" width="14" height="40" rx="2" fill="${WIN}"/><rect x="10" y="80" width="180" height="5" fill="#22252b"/>${Wh(44, 108)}${Wh(156, 108)}` },
+  { id: "train", name: "Train", svg: `<rect x="10" y="40" width="50" height="62" rx="4" fill="#e8443a"/><rect x="18" y="48" width="34" height="22" fill="${WIN}"/><rect x="4" y="34" width="62" height="10" rx="3" fill="#22252b"/><rect x="58" y="56" width="110" height="44" rx="20" fill="#2f63d8"/><rect x="128" y="30" width="18" height="28" fill="#22252b"/><rect x="122" y="24" width="30" height="10" rx="3" fill="#22252b"/><circle cx="168" cy="78" r="8" fill="#ffd36b"/><path d="M166 100 L192 120 H160Z" fill="#8a95a5"/><rect x="6" y="100" width="170" height="8" fill="#22252b"/>${Wh(34, 116, 13)}${Wh(78, 114, 16)}${Wh(116, 114, 16)}${Wh(150, 116, 12)}` },
+  { id: "plane", name: "Plane", svg: `<path d="M18 74 Q18 62 34 62 H160 Q190 64 194 76 Q190 88 160 88 H34 Q18 86 18 74Z" fill="#f2f2ee" stroke="#8a95a5" stroke-width="3"/><path d="M28 62 L14 30 H32 L60 62Z" fill="#e8443a"/><path d="M80 80 L118 80 L84 122 H66Z" fill="#2f63d8"/><path d="M90 66 L114 66 L94 44 H82Z" fill="#2f63d8" opacity=".7"/>${[60, 76, 92, 108, 124, 140].map(x => `<circle cx="${x}" cy="72" r="4" fill="#5aa9e6"/>`).join("")}<path d="M172 68 Q184 70 186 76 H172Z" fill="#22252b"/>` },
+  { id: "rocket", name: "Rocket", svg: `<g transform="rotate(45 100 70)"><path d="M86 92 L100 132 L114 92Z" fill="#ff8a1a"/><path d="M100 4 Q124 30 124 92 H76 Q76 30 100 4Z" fill="#f2f2ee" stroke="#22252b" stroke-width="3"/><circle cx="100" cy="50" r="11" fill="${WIN}" stroke="#22252b" stroke-width="3"/><path d="M76 74 L58 106 L76 98Z M124 74 L142 106 L124 98Z" fill="#e8443a"/></g>` },
+];
+const ART = Object.fromEntries(VEH.map(v => [v.id, v.svg]));
+const svg = id => `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${ART[id]}</svg>`;
+const TOPCAR = `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="2" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="46" y="14" width="12" height="20" rx="3" fill="#111"/><rect x="2" y="66" width="12" height="22" rx="3" fill="#111"/><rect x="46" y="66" width="12" height="22" rx="3" fill="#111"/><path d="M30 2 Q48 6 48 30 V86 Q48 96 30 96 Q12 96 12 86 V30 Q12 6 30 2Z" fill="#e8443a"/><path d="M18 38 Q30 30 42 38 L40 52 H20Z" fill="${WIN}"/><rect x="27" y="4" width="6" height="90" fill="#fff" opacity=".85"/><rect x="8" y="90" width="44" height="8" rx="2" fill="#22252b"/></svg>`;
+const PIC = { car: "race", bus: "bus", train: "train", plane: "plane", truck: "dump" };   // words that also have a picture card in Memory Garage
+
+// ================= dragging (fine motor practice) =================
+function draggable(el, { onPick, onDrop }) {
+  el.addEventListener("pointerdown", e => {
+    e.preventDefault(); audio(); try { el.setPointerCapture(e.pointerId); } catch (er) {}
+    const sx = e.clientX, sy = e.clientY; el.classList.add("drag"); el.style.transition = ""; onPick && onPick();
+    const move = ev => { el.style.transform = `translate(${ev.clientX - sx}px,${ev.clientY - sy}px) scale(1.12)`; };
+    const up = ev => {
+      el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up); el.classList.remove("drag");
+      if (!onDrop(ev.clientX, ev.clientY)) { el.style.transition = "transform .35s cubic-bezier(.3,1.6,.5,1)"; el.style.transform = ""; }
+    };
+    el.addEventListener("pointermove", move); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+  });
+}
+const over = (x, y, el, pad = 30) => { const r = el.getBoundingClientRect(); return x > r.left - pad && x < r.right + pad && y > r.top - pad && y < r.bottom + pad; };
+
+// ================= game runner =================
+let GEN = 0, TIMERS = [], CUR = null, LAST = null, LASTPROMPT = "", STREAK = 0;
+function later(fn, ms) { const g = GEN; TIMERS.push(setTimeout(() => { if (g === GEN) fn(); }, ms)); }
+function stopAll() { GEN++; TIMERS.forEach(clearTimeout); TIMERS = []; try { speechSynthesis.cancel(); } catch (e) {} CUR = null; }
+function ask(text) { LASTPROMPT = text; return say(text); }
+function show(id) { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("show", s.id === id)); }
+const arena = $("#arena");
+function progress(i) { const n = GAMES[CUR] ? GAMES[CUR].total : 0; $("#prog").innerHTML = Array.from({ length: n }, (_, k) => `<div class="cone ${k < i ? "on" : ""}"></div>`).join(""); }
+const API = {
+  progress,
+  right(w, x, y) { record(w, true); STREAK++; S.bolts++; save(); boltFly(x, y); },
+  reward(x, y) { S.bolts++; save(); boltFly(x, y); },
+  wrong(w) { record(w, false); STREAK = 0; },
+  praise(w = "") { return say(`${pick(PRAISE)} ${w}`); },
+  finish() { S.rounds++; save(); later(openBoom, 900); },
+};
+function startGame(id) {
+  stopAll(); CUR = id; LAST = id; STREAK = 0; LASTPROMPT = "";
+  show("game"); arena.className = "arena a-" + id; arena.innerHTML = ""; progress(0); updBolts();
+  const g = GEN; requestAnimationFrame(() => { if (g === GEN) GAMES[id].start(arena, API); });
+}
+const randomGame = () => { const ids = Object.keys(GAMES).filter(k => k !== LAST); return pick(ids); };
+
+const GAMES = {};
+
+// ---------- 1. Wreck It: hear a word, drop the wrecking ball on the tower that says it ----------
+GAMES.wreck = { name: "Wreck It", art: "crane", total: 5, start(A, api) {
+  A.innerHTML = `<div class="jib"></div><div class="trolley" id="trol"><div class="cable" id="cable"><div class="ball"></div></div></div><div class="towers" id="towers"></div><div class="ground"></div>`;
+  const words = pickWords(5), towers = A.querySelector("#towers"), trol = A.querySelector("#trol"), cable = A.querySelector("#cable");
+  const COLS = ["#e8443a", "#ff6a1a", "#ffc21a", "#8a95a5", "#c46b3a", "#3b82f6"];
+  let i = 0, miss = 0, busy = false;
+  function next() {
+    api.progress(i); if (i >= words.length) return api.finish();
+    miss = 0; busy = false; const t = words[i], k = STREAK >= 4 ? 4 : 3, ch = shuffle([t, ...distract(t, k - 1)]);
+    towers.innerHTML = ch.map(w => { let b = ""; const n = 2 + rand(3); for (let j = 0; j < n; j++) { const c = pick(COLS); b += `<div class="blk" data-c="${c}" style="background:${c}"></div>`; } return `<button class="tower" data-w="${w}"><div class="sign">${w}</div>${b}</button>`; }).join("");
+    towers.querySelectorAll(".tower").forEach(b => b.onclick = () => tap(b, t));
+    trol.style.left = "50%"; cable.style.height = "44px";
+    later(() => ask(`Smash... ${t}`), 500);
+  }
+  function tap(b, t) {
+    if (busy) return; audio(); const w = b.dataset.w;
+    if (w === t) { busy = true; api.right(t, ...center(b.querySelector(".sign"))); drop(b, t); return; }
+    miss++; if (miss === 1) api.wrong(t); SFX.bonk();
+    b.classList.remove("wobble"); void b.offsetWidth; b.classList.add("wobble");
+    say(`That says ${w}. Find... ${t}`);
+    if (miss >= 2) towers.querySelectorAll(".tower").forEach(x => { if (x.dataset.w === t) x.classList.add("hint"); });
+  }
+  function drop(b, t) {
+    const ar = A.getBoundingClientRect(), br = b.getBoundingClientRect(), ball = A.querySelector(".ball").offsetHeight;
+    trol.style.left = (br.left + br.width / 2 - ar.left) + "px";
+    later(() => { cable.style.height = Math.max(44, br.top - ar.top - 20 - ball * 0.6) + "px"; }, 400);
+    later(() => {
+      const cols = [...b.querySelectorAll(".blk")].map(e => e.dataset.c).concat(["#fffaf0"]), [cx, cy] = center(b);
+      explode(cx, cy, 1.5, cols); b.style.visibility = "hidden"; api.praise(t); cable.style.height = "44px"; i++;
+    }, 720);
+    later(next, 2300);
+  }
+  next();
+} };
+
+// ---------- 2. Dig & Dump: drag letter crates into the truck to spell the word (fine motor) ----------
+GAMES.dig = { name: "Dig & Dump", art: "excavator", total: 4, start(A, api) {
+  A.innerHTML = `<div class="truckrow"><div class="truck" id="truck"><div class="chassis"></div><div class="bed" id="bed"></div><div class="cab"></div><span class="whl w1"></span><span class="whl w2"></span><span class="whl w3"></span></div></div><div class="pile" id="pile"></div>`;
+  const words = pickWords(4), truck = A.querySelector("#truck"), bed = A.querySelector("#bed"), pile = A.querySelector("#pile");
+  let i = 0;
+  function next() {
+    api.progress(i); if (i >= words.length) return api.finish();
+    const t = words[i], letters = [...t]; let pos = 0, errs = 0;
+    bed.innerHTML = letters.map(c => `<div class="slot">${c}</div>`).join("");
+    truck.style.transition = "none"; truck.style.transform = "translateX(-120vw)"; void truck.offsetWidth;
+    truck.style.transition = "transform 1s cubic-bezier(.2,.9,.3,1.05)"; truck.style.transform = ""; SFX.engine();
+    const extra = shuffle("abcdefghknoprstuwxyz".split("").filter(c => !t.toLowerCase().includes(c))).slice(0, letters.length <= 2 ? 1 : 2);
+    pile.innerHTML = ""; const pr = pile.getBoundingClientRect(), placed = [];
+    shuffle([...letters, ...extra]).forEach((c, k) => {
+      const el = document.createElement("div"); el.className = "lblk"; el.textContent = c; el.style.animationDelay = (0.9 + k * 0.08) + "s"; pile.appendChild(el);
+      const bw = el.offsetWidth; let x, y, tries = 0;
+      do { x = Math.random() * Math.max(1, pr.width - bw); y = Math.random() * Math.max(1, pr.height - bw); tries++; } while (tries < 80 && placed.some(([px, py]) => Math.abs(px - x) < bw * 1.2 && Math.abs(py - y) < bw * 1.2));
+      placed.push([x, y]); el.style.left = x + "px"; el.style.top = y + "px";
+      draggable(el, {
+        onPick() { SFX.click(); say(letterName(c), 0.9); },
+        onDrop(cx, cy) {
+          if (!over(cx, cy, truck, 50)) return false;
+          if (c === letters[pos]) {
+            const slot = bed.children[pos]; slot.classList.add("full"); slot.animate([{ transform: "scale(1.4)" }, { transform: "scale(1)" }], { duration: 300 });
+            el.remove(); SFX.pop(); confetti(...center(slot), 14); pos++;
+            if (pos === letters.length) done(t, errs);
+            return true;
+          }
+          errs++; SFX.bonk(); say(`That's ${letterName(c)} We need ${letterName(letters[pos])}`); return false;
+        },
+      });
+    });
+    later(() => ask(`Build... ${t}`), 1000);
+  }
+  function done(t, errs) {
+    if (errs <= 1) api.right(t, ...center(bed)); else api.wrong(t);
+    later(() => say(`${t}!`), 200);
+    later(() => { SFX.engine(); truck.style.transition = "transform 1.4s cubic-bezier(.6,0,.9,.6)"; truck.style.transform = "translateX(130vw)";
+      for (let k = 0; k < 18; k++) later(() => { const r = truck.getBoundingClientRect(); dust(r.left + 20, r.bottom - 10); }, k * 70); }, 1300);
+    later(() => { i++; next(); }, 2900);
+  }
+  next();
+} };
+
+// ---------- 3. Turbo Race: steer into the lane with the word you hear ----------
+GAMES.race = { name: "Turbo Race", art: "race", total: 6, start(A, api) {
+  A.innerHTML = `<div class="road" id="road"><div class="lane-line" style="left:33.33%"></div><div class="lane-line" style="left:66.66%"></div><div class="gate" id="gate"></div><div class="finish" id="fin"></div><div class="car" id="car">${TOPCAR}</div></div>`;
+  const road = A.querySelector("#road"), car = A.querySelector("#car"), gate = A.querySelector("#gate"), words = pickWords(6);
+  let lane = 1, i = 0, t = null, running = false, dur = 5600, t0 = 0, dragging = false, misses = 0; const gen = GEN;
+  const setLane = l => { lane = Math.max(0, Math.min(2, l)); car.style.left = `calc(${(lane + 0.5) * 100 / 3}% - var(--cw) / 2)`; };
+  const steer = e => { const r = road.getBoundingClientRect(); setLane(Math.floor((e.clientX - r.left) / (r.width / 3))); };
+  road.addEventListener("pointerdown", e => { audio(); dragging = true; try { road.setPointerCapture(e.pointerId); } catch (er) {} steer(e); });
+  road.addEventListener("pointermove", e => { if (dragging) steer(e); });
+  ["pointerup", "pointercancel"].forEach(ev => road.addEventListener(ev, () => dragging = false));
+  setLane(1);
+  function next() {
+    api.progress(i); if (i >= words.length) return finishLine();
+    t = words[i]; const ch = shuffle([t, ...distract(t, 2)]);
+    gate.innerHTML = ch.map(w => `<div class="gsign" data-w="${w}">${w}</div>`).join("");
+    gate.style.transform = "translateY(-200px)";
+    later(() => ask(`Drive to... ${t}`), 250);
+    later(() => { t0 = performance.now(); running = true; requestAnimationFrame(frame); }, 1500);
+  }
+  function frame(now) {
+    if (!running || gen !== GEN) return;
+    const gh = gate.offsetHeight, target = car.offsetTop - gh, p = Math.min(1, (now - t0) / dur);
+    gate.style.transform = `translateY(${-gh + (target + gh) * p}px)`;
+    if (p >= 1) { running = false; judge(); } else requestAnimationFrame(frame);
+  }
+  function judge() {
+    const sign = gate.children[lane], w = sign.dataset.w;
+    if (w === t) {
+      sign.classList.add("hit"); api.right(t, ...center(sign)); SFX.zoom(); car.classList.add("boost"); road.style.setProperty("--spd", ".16s");
+      confetti(...center(sign), 24); api.praise(t); dur = Math.max(3600, dur - 350); i++; misses = 0;
+      later(() => { car.classList.remove("boost"); road.style.setProperty("--spd", ".5s"); }, 1300);
+      later(next, 1700);
+    } else {
+      if (!misses++) api.wrong(t); SFX.bonk(); car.classList.add("spin"); dur += 500;
+      say(`Oops! That was ${w}. Again... ${t}`); later(() => car.classList.remove("spin"), 750);
+      later(next, 2600);
+    }
+  }
+  function finishLine() {
+    const fin = A.querySelector("#fin"); fin.style.display = "block"; gate.innerHTML = "";
+    fin.animate([{ transform: "translateY(-100px)" }, { transform: `translateY(${car.offsetTop}px)` }], { duration: 1200, fill: "forwards" });
+    SFX.zoom(); later(() => { SFX.tada(); say("You won the race!"); const r = road.getBoundingClientRect();
+      for (let k = 0; k < 5; k++) later(() => confetti(r.left + Math.random() * r.width, r.top + Math.random() * r.height * 0.6, 40), k * 200); }, 1200);
+    later(() => api.finish(), 1500);
+  }
+  next();
+} };
+
+// ---------- 4. Memory Garage: open garage doors, find the matching words ----------
+GAMES.mem = { name: "Memory Garage", art: "fire", total: 6, start(A, api) {
+  const words = pickWords(6), cards = shuffle(words.flatMap(w => [{ w, pic: false }, { w, pic: !!PIC[w] }]));
+  const land = A.clientWidth > A.clientHeight * 1.1, cols = land ? 4 : 3, rows = 12 / cols;
+  A.innerHTML = `<div class="grid" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${rows},1fr)">${cards.map((c, j) => `<button class="card" data-w="${c.w}" aria-label="Garage ${j + 1}"><div class="face">${c.pic ? svg(PIC[c.w]) : `<span>${c.w}</span>`}</div><div class="door"><b>${j + 1}</b></div></button>`).join("")}</div>`;
+  let first = null, lock = false, got = 0;
+  A.querySelectorAll(".card").forEach(b => b.onclick = () => {
+    if (lock || b.classList.contains("open")) return; audio(); b.classList.add("open"); SFX.door(); say(b.dataset.w);
+    if (!first) { first = b; return; }
+    const a = first; first = null; lock = true;
+    if (a.dataset.w === b.dataset.w) {
+      later(() => {
+        a.classList.add("done"); b.classList.add("done"); confetti(...center(a), 26); confetti(...center(b), 26); SFX.honk();
+        api.reward(...center(b)); got++; api.progress(got); lock = false;
+        if (got === words.length) { later(() => { SFX.tada(); say("You found them all!"); }, 500); api.finish(); }
+      }, 700);
+    } else later(() => { a.classList.remove("open"); b.classList.remove("open"); lock = false; }, 1500);
+  });
+  later(() => ask("Open the garages. Find two that match!"), 300);
+} };
+
+// ---------- 5. Word Train: drag the words onto the train in the right order to build a sentence ----------
+const SENTENCES = ["I can see the bus.", "We like the train.", "He can go.", "She can see the plane.", "They like the car.", "We can see them.", "I like my truck.", "He can dig.", "She can see the big truck.", "The bus can go.", "The car can stop.", "I see a big plane.", "They can go up.", "You can see my car.", "The train can go and stop.", "Look, a big truck!", "The truck can dig.", "I like my hair.", "He can see the tar.", "She can go to the bus.", "They like to dig.", "We can go see the train.", "Look at my car!", "I like it.", "Boom! It can go!"];
+function pickSentences(n) {
+  const L = wordList(), ok = SENTENCES.filter(s => s.split(" ").every(tk => L.includes(norm(tk))));
+  const src = ok.length >= n ? ok : SENTENCES;
+  const score = s => s.split(" ").reduce((a, tk) => a + weight(norm(tk)), 0) / s.split(" ").length + Math.random();
+  return src.map(s => [s, score(s)]).sort((a, b) => b[1] - a[1]).slice(0, n).map(x => x[0]);
+}
+GAMES.train = { name: "Word Train", art: "train", total: 3, start(A, api) {
+  A.innerHTML = `<div class="trainrow"><div class="train" id="train"></div></div><div class="rails" id="rails"></div><div class="platform" id="plat"></div>`;
+  const train = A.querySelector("#train"), plat = A.querySelector("#plat"), rails = A.querySelector("#rails"), sents = pickSentences(3);
+  let i = 0;
+  function next() {
+    api.progress(i); if (i >= sents.length) return api.finish();
+    const s = sents[i], toks = s.split(" "), keys = toks.map(norm); let pos = 0, wrongs = 0;
+    A.style.setProperty("--n", toks.length);
+    train.innerHTML = `<div class="engine">${svg("train")}</div>` + toks.map(() => `<div class="tcar"><div class="tslot"></div></div>`).join("");
+    train.style.transition = "none"; train.style.transform = "translateX(110vw)"; void train.offsetWidth;
+    train.style.transition = ""; train.style.transform = ""; SFX.chug();
+    later(() => { const r = train.getBoundingClientRect(), ar = A.getBoundingClientRect(); rails.style.top = (r.bottom - ar.top - 4) + "px"; }, 30);
+    const slots = () => train.querySelectorAll(".tslot");
+    plat.innerHTML = "";
+    shuffle(toks.map((tk, j) => ({ tk, key: keys[j] }))).forEach((o, k) => {
+      const el = document.createElement("div"); el.className = "wblk"; el.textContent = o.tk.replace(/[.,!?]/g, ""); el.style.animationDelay = (0.8 + k * 0.08) + "s"; el.dataset.key = o.key; plat.appendChild(el);
+      draggable(el, {
+        onPick() { SFX.click(); },
+        onDrop(x, y) {
+          if (!over(x, y, train, 60)) return false;
+          if (o.key === keys[pos]) {
+            const sl = slots()[pos]; sl.textContent = toks[pos]; sl.classList.add("full"); sl.animate([{ transform: "scale(1.4)" }, { transform: "scale(1)" }], { duration: 300 });
+            el.remove(); SFX.pop(); say(o.tk.replace(/[.,!?]/g, ""), 0.9); pos++; wrongs = 0; plat.querySelectorAll(".hint").forEach(h => h.classList.remove("hint"));
+            if (pos === toks.length) done(s, keys);
+            return true;
+          }
+          SFX.bonk(); wrongs++; say(`That says ${o.tk.replace(/[.,!?]/g, "")}.`);
+          if (wrongs >= 2) plat.querySelectorAll(".wblk").forEach(b => { if (b.dataset.key === keys[pos]) b.classList.add("hint"); });
+          return false;
+        },
+      });
+    });
+    later(() => ask(s), 1200);
+  }
+  function done(s, keys) {
+    [...new Set(keys)].forEach(k => record(k, true)); api.reward(...center(train));
+    const sl = [...train.querySelectorAll(".tslot")];
+    later(() => { say(s, 0.75); sl.forEach((e, k) => later(() => { sl.forEach(x => x.classList.remove("lit")); e.classList.add("lit"); }, k * 520)); }, 500);
+    const readT = 700 + sl.length * 520;
+    later(() => { sl.forEach(x => x.classList.remove("lit")); SFX.whistle(); SFX.chug(); train.style.transition = "transform 2.2s cubic-bezier(.6,0,.9,.6)"; train.style.transform = "translateX(-160vw)";
+      for (let k = 0; k < 14; k++) later(() => { const e = train.querySelector(".engine"); if (e) { const r = e.getBoundingClientRect(); add({ k: "smoke", x: r.left + r.width * 0.3, y: r.top + r.height * 0.15, vx: 1, vy: -2, r: 12, grow: 1.03, drag: 0.98, decay: 0.012, c: "235,235,240" }); } }, k * 110); }, readT);
+    later(() => { i++; next(); }, readT + 2300);
+  }
+  next();
+} };
+
+// ================= the big reward: push the detonator, blow up the old building =================
+function openBoom() {
+  stopAll(); show("boom"); const B = $("#boom");
+  let wins = ""; for (let k = 0; k < 20; k++) wins += `<i class="${Math.random() < 0.45 ? "lit" : ""}"></i>`;
+  B.innerHTML = `<div class="stars"></div><div class="bground"></div><div class="bldg" id="bldg">${wins}<div class="tape"><span>KEEP OUT</span></div></div>
+    <svg class="wire"><path id="wirePath" fill="none" stroke="#e8443a" stroke-width="5" stroke-linecap="round"/></svg>
+    <div class="push" id="push">PUSH IT DOWN!</div>
+    <div class="plunger" id="plunger"><div class="handle" id="handle"><div class="tb"></div><div class="rod"></div></div><div class="pbox">TNT</div></div>`;
+  const bldg = $("#bldg"), handle = $("#handle"), plunger = $("#plunger");
+  const b = bldg.getBoundingClientRect(), p = plunger.getBoundingClientRect();
+  $("#wirePath").setAttribute("d", `M${p.right - 10} ${p.bottom - 40} C ${p.right + 80} ${p.bottom - 40}, ${b.right + 40} ${b.bottom + 30}, ${b.right - 30} ${b.bottom - 4}`);
+  const MAX = 92; let fired = false;
+  handle.addEventListener("pointerdown", e => {
+    if (fired) return; e.preventDefault(); audio(); try { handle.setPointerCapture(e.pointerId); } catch (er) {} const sy = e.clientY; handle.style.transition = "";
+    const move = ev => { if (fired) return; const d = Math.max(0, Math.min(MAX, ev.clientY - sy)); handle.style.transform = `translateY(${d}px)`; if (d >= MAX * 0.88) { fired = true; handle.style.transform = `translateY(${MAX}px)`; detonate(); } };
+    const up = () => { handle.removeEventListener("pointermove", move); handle.removeEventListener("pointerup", up); handle.removeEventListener("pointercancel", up); if (!fired) { handle.style.transition = "transform .3s cubic-bezier(.3,1.6,.5,1)"; handle.style.transform = ""; } };
+    handle.addEventListener("pointermove", move); handle.addEventListener("pointerup", up); handle.addEventListener("pointercancel", up);
+  });
+  later(() => say("You did it! Push the handle down!"), 300);
+  function detonate() {
+    SFX.thud(); $("#push").remove(); const cd = document.createElement("div"); cd.className = "count"; B.appendChild(cd);
+    [3, 2, 1].forEach((n, k) => later(() => { cd.textContent = n; SFX.beep(520 + k * 120); say(String(n), 1); cd.animate([{ transform: "scale(1.6)", opacity: 0.2 }, { transform: "scale(1)", opacity: 1 }], { duration: 300 }); }, k * 850));
+    later(() => {
+      cd.remove(); const [cx, cy] = center(bldg), r = bldg.getBoundingClientRect(), cols = ["#7b6f66", "#5d534c", "#a39488", "#ffd36b", "#4a413b"];
+      explode(cx, cy, 3, cols);
+      later(() => explode(r.left + r.width * 0.25, r.top + r.height * 0.3, 1.6, cols), 220);
+      later(() => explode(r.left + r.width * 0.75, r.top + r.height * 0.6, 1.6, cols), 420);
+      later(() => explode(cx, r.bottom - 20, 2, cols), 650);
+      bldg.animate([{ transform: "none" }, { transform: "translateY(15%) skewX(-4deg)", opacity: 0.6 }, { transform: "translateY(110%) skewX(6deg)", opacity: 0 }], { duration: 1100, easing: "ease-in", fill: "forwards" });
+      later(() => { for (let k = 0; k < 24; k++) add({ k: "smoke", x: r.left + Math.random() * r.width, y: r.bottom, vx: (Math.random() - 0.5) * 6, vy: -Math.random() * 1.5, r: 24 + Math.random() * 20, grow: 1.02, drag: 0.97, decay: 0.008, c: "120,110,100" }); }, 500);
+      later(() => say("Kaboom!", 0.9), 300);
+      later(showReward, 3000);
+    }, 2600);
+  }
+}
+function showReward() {
+  const next = VEH.find(v => !S.garage.includes(v.id)); let v, title;
+  if (next) { v = next; S.garage.push(v.id); title = "NEW RIDE!"; } else { v = pick(VEH); S.bolts += 5; title = "+5 BOLTS!"; }
+  save(); updBolts(); P = P.filter(p => p.k !== "smoke"); RINGS = [];   // clear the smoke so he can see his new ride
+  const R = document.createElement("div"); R.className = "reward";
+  R.innerHTML = `<h2>${title}</h2><div class="art">${svg(v.id)}</div><div class="nm">${v.name}</div><div class="row2"><button class="big" id="again">PLAY AGAIN</button><button class="big alt" id="toGarage">MY GARAGE</button><button class="big alt" id="toHome" aria-label="Home">HOME</button></div>`;
+  $("#boom").appendChild(R); SFX.tada(); later(() => { SFX.honk(); say(next ? `You got the ${v.name}!` : `${v.name}! Plus five bolts!`); }, 700);
+  R.querySelector("#again").onclick = () => startGame(randomGame());
+  R.querySelector("#toGarage").onclick = openGarage;
+  R.querySelector("#toHome").onclick = goHome;
+}
+
+// ================= garage =================
+function openGarage() {
+  stopAll(); show("garage");
+  $("#gtotal").textContent = `${S.garage.length} of ${VEH.length}`;
+  $("#ggrid").innerHTML = VEH.map(v => { const has = S.garage.includes(v.id); return `<button class="gcard ${has ? "" : "locked"}" data-id="${v.id}">${svg(v.id)}<span>${has ? v.name : "?"}</span></button>`; }).join("");
+  $("#ggrid").querySelectorAll(".gcard").forEach(c => c.onclick = () => {
+    audio(); const v = VEH.find(x => x.id === c.dataset.id);
+    if (c.classList.contains("locked")) { SFX.bonk(); say("Win a game to unlock it!"); return; }
+    c.classList.remove("hop"); void c.offsetWidth; c.classList.add("hop"); SFX.honk(); say(v.name);
+  });
+}
+
+// ================= home =================
+function goHome() {
+  stopAll(); show("home"); updBolts(); $("#gcount").textContent = `${S.garage.length}/${VEH.length}`;
+}
+$("#tiles").innerHTML = Object.entries(GAMES).map(([id, g]) => `<button class="tile t-${id}" data-g="${id}">${svg(g.art)}${g.name}</button>`).join("")
+  + `<a class="tile t-trace btn" id="traceTile" href="index.html#trace">${svg("roller")}Trace It</a>`;
+$("#tiles").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { audio(); startGame(b.dataset.g); });
+// "Trace It" opens the writing pad with three of his current practice words
+$("#traceTile").onclick = () => { try { const k = JSON.parse(localStorage.getItem("krashpad") || "{}"); k.words = pickWords(3).join(", "); localStorage.setItem("krashpad", JSON.stringify(k)); } catch (e) {} };
+$("#go").onclick = () => { audio(); SFX.engine(); startGame(randomGame()); };
+$("#garageBtn").onclick = () => { audio(); openGarage(); };
+$("#gBack").onclick = goHome;
+$("#homeBtn").onclick = goHome;
+$("#hear").onclick = () => { if (LASTPROMPT) say(LASTPROMPT); };
+document.addEventListener("gesturestart", e => e.preventDefault());
+
+// ================= grown-ups (press and hold the gear for 2 seconds) =================
+let holdT = null; const gear = $("#gear"), gearFill = $("#gearFill");
+gear.addEventListener("pointerdown", e => { e.preventDefault(); const t0 = performance.now(); clearInterval(holdT);
+  holdT = setInterval(() => { const p = (performance.now() - t0) / 2000; gearFill.style.clipPath = `inset(${100 - p * 100}% 0 0 0)`; if (p >= 1) { holdEnd(); openParent(); } }, 30); });
+function holdEnd() { clearInterval(holdT); gearFill.style.clipPath = "inset(100% 0 0 0)"; }
+["pointerup", "pointerleave", "pointercancel"].forEach(t => gear.addEventListener(t, holdEnd));
+let resetArmed = false;
+function openParent() {
+  stopAll(); show("parent"); $("#pWords").value = S.words; $("#pVol").value = S.vol; muteLabel(); table(); resetArmed = false; $("#pResetNote").textContent = "";
+}
+function table() {
+  const L = wordList(), p = pool();
+  $("#pTable").innerHTML = L.map(w => { const s = st(w), cls = mastered(w) ? "got" : (s.m >= 2 && s.m > s.r / 2 ? "tricky" : "");
+    return `<div class="wt ${cls}"><b>${w}</b><small>${s.r} right / ${s.m} missed${p.includes(w) ? "" : "<br>not started"}</small></div>`; }).join("");
+}
+function muteLabel() { $("#pMute").textContent = S.muted ? "Sound is OFF (tap to turn on)" : "Sound is ON (tap to mute)"; }
+$("#pWords").oninput = e => { S.words = e.target.value; save(); table(); };
+$("#pDefault").onclick = () => { S.words = DEFAULT_WORDS; save(); $("#pWords").value = S.words; table(); };
+$("#pVol").oninput = e => { S.vol = +e.target.value; save(); };
+$("#pMute").onclick = () => { S.muted = !S.muted; save(); muteLabel(); };
+$("#pVoice").onclick = () => say("I can see the bus.");
+$("#pBoom").onclick = () => explode(innerWidth / 2, innerHeight / 2, 1.5, ["#7b6f66", "#ffd36b"]);
+$("#pReset").onclick = () => {
+  if (!resetArmed) { resetArmed = true; $("#pResetNote").textContent = "Tap again to erase his scores, bolts and garage."; return; }
+  S.stats = {}; S.bolts = 0; S.garage = []; S.rounds = 0; save(); table(); resetArmed = false; $("#pResetNote").textContent = "Progress erased.";
+};
+$("#pClose").onclick = goHome;
+
+goHome();
+</script>
+</body>
+</html>

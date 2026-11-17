@@ -31,7 +31,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 #flash{position:fixed;inset:0;background:#fff7d6;opacity:0;pointer-events:none;z-index:49}
 
 /* ---------- Home ---------- */
-#home{background:radial-gradient(120% 80% at 50% 0%,#3a3f49 0,var(--asphalt) 60%);align-items:center;gap:clamp(10px,2.4vh,22px);padding:0 16px 16px;overflow-y:auto}
+#home{background:radial-gradient(120% 80% at 50% 0%,#3a3f49 0,var(--asphalt) 60%);align-items:center;gap:clamp(10px,2.4vh,22px);padding:0 16px 76px;overflow-y:auto}
 .hz{height:16px;width:100vw;flex:none;background:var(--stripes)}
 .top{display:flex;align-items:center;justify-content:space-between;width:min(100%,900px);gap:12px}
 .logo{font-family:var(--display);font-size:clamp(34px,8vw,64px);line-height:1;color:var(--hazard);letter-spacing:1px;text-shadow:0 4px 0 var(--hazard-dk),0 8px 18px rgba(0,0,0,.5)}
@@ -42,16 +42,15 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .go{font-family:var(--display);font-size:clamp(44px,10vw,84px);color:var(--asphalt);background:var(--hazard);border-radius:28px;padding:10px clamp(40px,10vw,90px);box-shadow:0 10px 0 var(--hazard-dk),0 18px 30px rgba(0,0,0,.45);animation:throb 1.6s ease-in-out infinite;flex:none}
 .go:active{transform:translateY(8px);box-shadow:0 2px 0 var(--hazard-dk)}
 @keyframes throb{50%{transform:scale(1.05)}}
-.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:min(100%,1100px)}
-@media (min-width:600px){.tiles{grid-template-columns:repeat(3,1fr)}}
-@media (min-width:1000px){.tiles{grid-template-columns:repeat(6,1fr)}}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:min(100%,900px)}
+@media (min-width:600px){.tiles{grid-template-columns:repeat(4,1fr)}}
 .tile{background:var(--asphalt2);border:4px solid #474c56;border-radius:20px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--display);font-size:clamp(15px,2.6vw,20px);color:var(--chalk);box-shadow:0 6px 0 #15171b}
 .tile:active{transform:translateY(5px);box-shadow:0 1px 0 #15171b}
 .tile svg{width:100%;max-width:150px;height:auto;aspect-ratio:200/140}
-.tile.t-wreck{border-color:var(--red)} .tile.t-dig{border-color:var(--hazard)} .tile.t-race{border-color:#3b82f6} .tile.t-mem{border-color:var(--go)} .tile.t-train{border-color:var(--orange)} .tile.t-trace{border-color:#b07cf0}
+.tile.t-wreck{border-color:var(--red)} .tile.t-dig{border-color:var(--hazard)} .tile.t-race{border-color:#3b82f6} .tile.t-mem{border-color:var(--go)} .tile.t-train{border-color:var(--orange)} .tile.t-trace{border-color:#b07cf0} .tile.t-cards{border-color:#5aa9e6} .tile.t-match{border-color:#ff8fb1}
 .row2{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .pill{font-family:var(--display);font-size:20px;background:var(--asphalt2);border:3px solid #474c56;border-radius:999px;padding:12px 22px;color:var(--hazard)}
-.gear{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
+.gear{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
 .gear i{position:absolute;inset:0;border-radius:50%;border:4px solid var(--hazard);clip-path:inset(100% 0 0 0)}
 
 /* ---------- Game frame ---------- */
@@ -60,9 +59,9 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .ibtn{width:58px;height:58px;border-radius:16px;background:var(--asphalt2);border:3px solid #474c56;display:grid;place-items:center;font-size:28px;color:var(--chalk);flex:none}
 .ibtn svg{width:30px;height:30px}
 .ibtn.hear{background:var(--hazard);border-color:var(--hazard-dk);color:var(--asphalt)}
-.prog{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;justify-content:center}
-.cone{width:22px;height:28px;background:#4a4f58;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);transition:background .3s,transform .3s}
-@media (max-width:500px){.cone{width:15px;height:21px}.prog{gap:4px}}
+.prog{display:flex;gap:5px;align-items:flex-end;justify-content:center;min-width:0;flex:1 1 auto}
+.cone{flex:0 1 22px;min-width:7px;height:28px;background:#4a4f58;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);transition:background .3s,transform .3s}
+@media (max-width:500px){.cone{flex-basis:14px;height:20px}.prog{gap:3px}}
 .cone.on{background:linear-gradient(var(--orange) 0 35%,#fff 35% 50%,var(--orange) 50%);transform:scale(1.15)}
 .arena{position:relative;flex:1;min-height:0;overflow:hidden}
 .word{font-family:var(--read);font-weight:700}
@@ -210,6 +209,55 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .wt.got{border-color:#9fd6b1;background:#f1fbf4}
 .wt small{font-size:14px;color:#5b616b;text-align:right}
 .note{font-size:15px;color:#5b616b;max-width:65ch}
+/* ---------- Flash Cards ---------- */
+.a-cards{background:radial-gradient(120% 90% at 50% 20%,#3a5f8f 0,#1f2f4a 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(16px,3.4vh,30px);padding:12px}
+.fcstack{position:relative;width:min(90vw,560px);height:min(50vh,360px)}
+.fc{position:absolute;inset:0;perspective:1400px;touch-action:none;cursor:grab}
+.fcin{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.3,1.3,.5,1);transform-style:preserve-3d}
+.fc.flipped .fcin{transform:rotateY(180deg)}
+.fcf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:26px;background:var(--chalk);color:var(--asphalt);border:6px solid var(--asphalt);box-shadow:0 14px 0 rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:44px 14px 14px}
+.fcf.back{transform:rotateY(180deg)}
+.fctag{position:absolute;top:0;left:0;right:0;height:34px;background:var(--stripes);display:grid;place-items:center}
+.fctag b{background:var(--hazard);color:var(--asphalt);font-family:var(--display);font-weight:400;font-size:16px;padding:0 10px;border-radius:4px}
+.fcw{font-family:var(--read);font-weight:700;font-size:clamp(70px,min(20vw,17vh),170px);line-height:1}
+.fchint{font-family:var(--display);font-size:14px;color:var(--steel)}
+.fcs{font-family:var(--read);font-weight:700;font-size:clamp(26px,min(6.4vw,6vh),50px);text-align:center;line-height:1.25}
+.fcs mark{background:var(--hazard);color:var(--asphalt);border-radius:8px;padding:0 6px}
+.fcf.back svg{width:min(55%,230px);height:auto;flex:none}
+.fcbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.fcb{font-family:var(--display);font-size:clamp(20px,4.4vw,30px);border-radius:20px;padding:12px 22px;min-height:70px;box-shadow:0 7px 0 rgba(0,0,0,.35)}
+.fcb:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.fcb.again{background:var(--orange);color:#fff}
+.fcb.gotit{background:var(--go);color:#fff}
+.fcb.hearb{background:var(--hazard);color:var(--asphalt);width:70px;padding:0;display:grid;place-items:center}
+.fcb.hearb svg{width:34px;height:34px}
+.stamp{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);font-family:var(--display);font-size:clamp(34px,8vw,64px);color:var(--go);border:6px solid var(--go);border-radius:14px;padding:2px 16px;background:rgba(255,250,240,.9);z-index:3}
+
+/* ---------- Match Up ---------- */
+.a-match{background:linear-gradient(#5f6a78,#454c57)}
+.ropes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.mcols{position:absolute;inset:14px 12px;display:flex;justify-content:space-between}
+.mcol{display:flex;flex-direction:column;justify-content:space-around;width:min(36vw,280px)}
+.mplate{background:var(--chalk);color:var(--asphalt);border:5px solid var(--asphalt);border-radius:16px;font-family:var(--read);font-weight:700;font-size:clamp(28px,min(7vw,7vh),56px);padding:4px 10px;height:var(--mh,80px);box-shadow:0 6px 0 rgba(0,0,0,.35);touch-action:none;display:grid;place-items:center;animation:pop .35s backwards}
+.mplate svg{height:calc(var(--mh,80px) - 14px);width:auto;max-width:100%}
+.mplate.on{border-color:var(--hazard);box-shadow:0 0 0 6px var(--hazard)}
+.mplate.ok{background:#e6f7ec;border-color:var(--go)}
+
+/* ---------- Trace It ---------- */
+.a-trace{background:var(--stripes)}
+.tboard{position:absolute;inset:12px;background:var(--chalk);border-radius:22px;box-shadow:inset 0 0 0 5px var(--asphalt)}
+.tboard canvas{display:block;width:100%;height:100%;touch-action:none}
+
+/* ---------- type a new word ---------- */
+.kb{position:fixed;inset:0;z-index:45;background:rgba(13,16,32,.78);display:grid;place-items:center;padding:16px}
+.kbcard{background:var(--chalk);color:var(--asphalt);border-radius:22px;padding:20px;width:min(100%,460px);display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 6px var(--hazard)}
+.kbcard h3{margin:0;font-family:var(--display);font-weight:400;font-size:24px}
+.kbcard input{font-family:var(--read);font-weight:700;font-size:44px;padding:8px 14px;border:4px solid var(--asphalt);border-radius:14px;width:100%;user-select:text;-webkit-user-select:text;background:#fff;color:var(--asphalt)}
+.kbmsg{min-height:22px;color:#b3261e;font-size:18px;font-weight:700}
+.kbcard p{margin:0;font-size:15px;color:#5b616b}
+.pill.icon{padding:8px 16px;display:grid;place-items:center}
+.pill.icon svg,.ibtn.kbb svg{width:30px;height:30px}
+[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.go,.push{animation:none}}
 </style>
 </head>
@@ -226,6 +274,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
   <div class="tiles" id="tiles"></div>
   <div class="row2">
     <button class="pill" id="garageBtn">MY GARAGE <span id="gcount"></span></button>
+    <button class="pill icon" id="homeKb" aria-label="Type a new word to trace"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zM11 8h2v2h-2zm0 3h2v2h-2zM8 8h2v2H8zm0 3h2v2H8zM5 11h2v2H5zm0-3h2v2H5zm11 8H8v-2h8zm0-5h-2v-2h2zm0-3h-2V8h2zm3 3h-2v-2h2zm0-3h-2V8h2z"/></svg></button>
   </div>
   <button class="gear" id="gear" aria-label="Grown-ups: press and hold">⚙<i id="gearFill"></i></button>
 </div>
@@ -235,6 +284,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
     <button class="ibtn" id="homeBtn" aria-label="Home"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button>
     <div class="prog" id="prog"></div>
     <div class="bolts"><span class="nut"></span><span class="boltN">0</span></div>
+    <button class="ibtn kbb" id="kbBtn" aria-label="Type a new word to trace" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zM11 8h2v2h-2zm0 3h2v2h-2zM8 8h2v2H8zm0 3h2v2H8zM5 11h2v2H5zm0-3h2v2H5zm11 8H8v-2h8zm0-5h-2v-2h2zm0-3h-2V8h2zm3 3h-2v-2h2zm0-3h-2V8h2z"/></svg></button>
     <button class="ibtn hear" id="hear" aria-label="Hear it again"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>
   </div>
   <div class="arena" id="arena"></div>
@@ -249,7 +299,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 
 <div class="screen" id="parent">
   <div class="prow" style="justify-content:space-between"><h2>Grown-ups</h2><button class="pbtn dark" id="pClose">Back to games</button></div>
-  <label for="pWords">Practice words (spaces, commas or new lines between them). He learns them in this order, about 7 at a time; new ones join as he masters old ones.
+  <label for="pWords">Practice words (spaces, commas or new lines between them). Every game and the tracing use this list. He learns them in this order, about 7 at a time; new ones join as he masters old ones. Words typed with the keyboard button are added at the top.
     <textarea id="pWords"></textarea>
   </label>
   <div class="prow"><button class="pbtn" id="pDefault">Put back the starting list</button></div>
@@ -262,6 +312,16 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
   <div class="wtable" id="pTable"></div>
   <div class="prow"><button class="pbtn warn" id="pReset">Reset progress</button><span class="note" id="pResetNote"></span></div>
   <div class="note">Everything stays on this device. Nothing is sent anywhere, there are no ads, and there are no accounts. The voice is the tablet's own reading voice.</div>
+</div>
+
+<div class="kb" id="kb" hidden>
+  <div class="kbcard">
+    <h3>TYPE A WORD TO TRACE</h3>
+    <input id="kbIn" maxlength="12" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-label="New word">
+    <div class="kbmsg" id="kbMsg"></div>
+    <div class="row2"><button class="big" id="kbAdd">TRACE IT</button><button class="big alt" id="kbCancel">CANCEL</button></div>
+    <p>The word is saved to his word list for good. It also shows up in the other games.</p>
+  </div>
 </div>
 
 <div id="flash"></div>
@@ -331,6 +391,7 @@ const SFX = {
   whistle() { tone(1050, 0.7, { v: 0.22 }); tone(1260, 0.7, { v: 0.18 }); },
   chug() { for (let i = 0; i < 8; i++) hiss(0.12, { v: 0.35, f0: 900, f1: 300, at: i * 0.22 }); },
   click() { tone(1200, 0.04, { type: "square", v: 0.08 }); },
+  woosh() { hiss(0.3, { v: 0.3, f0: 400, f1: 2500, type: "bandpass" }); },
   door() { hiss(0.35, { v: 0.25, f0: 500, f1: 1800, type: "bandpass" }); },
   beep(f = 660) { tone(f, 0.2, { type: "square", v: 0.14 }); },
   thud() { tone(140, 0.3, { v: 0.6, to: 40 }); },
@@ -448,7 +509,7 @@ const over = (x, y, el, pad = 30) => { const r = el.getBoundingClientRect(); ret
 // ================= game runner =================
 let GEN = 0, TIMERS = [], CUR = null, LAST = null, LASTPROMPT = "", STREAK = 0;
 function later(fn, ms) { const g = GEN; TIMERS.push(setTimeout(() => { if (g === GEN) fn(); }, ms)); }
-function stopAll() { GEN++; TIMERS.forEach(clearTimeout); TIMERS = []; try { speechSynthesis.cancel(); } catch (e) {} CUR = null; }
+function stopAll() { GEN++; TIMERS.forEach(clearTimeout); TIMERS = []; try { speechSynthesis.cancel(); } catch (e) {} CUR = null; TRACE = null; }
 function ask(text) { LASTPROMPT = text; return say(text); }
 function show(id) { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("show", s.id === id)); }
 const arena = $("#arena");
@@ -463,7 +524,7 @@ const API = {
 };
 function startGame(id) {
   stopAll(); CUR = id; LAST = id; STREAK = 0; LASTPROMPT = "";
-  show("game"); arena.className = "arena a-" + id; arena.innerHTML = ""; progress(0); updBolts();
+  show("game"); $("#kbBtn").hidden = id !== "trace"; arena.className = "arena a-" + id; arena.innerHTML = ""; progress(0); updBolts();
   const g = GEN; requestAnimationFrame(() => { if (g === GEN) GAMES[id].start(arena, API); });
 }
 const randomGame = () => { const ids = Object.keys(GAMES).filter(k => k !== LAST); return pick(ids); };
@@ -619,7 +680,7 @@ GAMES.mem = { name: "Memory Garage", art: "fire", total: 6, start(A, api) {
 } };
 
 // ---------- 5. Word Train: drag the words onto the train in the right order to build a sentence ----------
-const SENTENCES = ["I can see the bus.", "We like the train.", "He can go.", "She can see the plane.", "They like the car.", "We can see them.", "I like my truck.", "He can dig.", "She can see the big truck.", "The bus can go.", "The car can stop.", "I see a big plane.", "They can go up.", "You can see my car.", "The train can go and stop.", "Look, a big truck!", "The truck can dig.", "I like my hair.", "He can see the tar.", "She can go to the bus.", "They like to dig.", "We can go see the train.", "Look at my car!", "I like it.", "Boom! It can go!"];
+const SENTENCES = ["I can see the bus.", "We like the train.", "He can go.", "She can see the plane.", "They like the car.", "We can see them.", "I like my truck.", "He can dig.", "She can see the big truck.", "The bus can go.", "The car can stop.", "I see a big plane.", "They can go up.", "You can see my car.", "The train can go and stop.", "Look, a big truck!", "The truck can dig.", "I like my hair.", "He can see the tar.", "She can go to the bus.", "They like to dig.", "We can go see the train.", "Look at my car!", "I like it.", "Boom! It can go!", "It is a big truck.", "The bus is big."];
 function pickSentences(n) {
   const L = wordList(), ok = SENTENCES.filter(s => s.split(" ").every(tk => L.includes(norm(tk))));
   const src = ok.length >= n ? ok : SENTENCES;
@@ -671,6 +732,244 @@ GAMES.train = { name: "Word Train", art: "train", total: 3, start(A, api) {
   }
   next();
 } };
+
+// ---------- 6. Flash Cards: read the card, flip it to hear it in a sentence, swipe or tap GOT IT / AGAIN ----------
+function sentenceFor(w) { const L = wordList(); const all = SENTENCES.filter(s => s.split(" ").some(tk => norm(tk) === w)); return all.find(s => s.split(" ").every(tk => L.includes(norm(tk)))) || all[0] || null; }
+const markWord = (s, w) => s.split(" ").map(tk => norm(tk) === w ? `<mark>${tk}</mark>` : tk).join(" ");
+GAMES.cards = { name: "Flash Cards", art: "bus", total: 8, start(A, api) {
+  const queue = pickWords(8); let got = 0, card = null, heard = false, busy = false; const missed = new Set();
+  A.innerHTML = `<div class="fcstack" id="stack"></div><div class="fcbtns"><button class="fcb again" id="fcAgain">AGAIN</button><button class="fcb hearb" id="fcHear" aria-label="Hear the word"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button><button class="fcb gotit" id="fcGot">GOT IT!</button></div>`;
+  const stack = A.querySelector("#stack");
+  function deal() {
+    api.progress(got); if (!queue.length) return api.finish();
+    const w = queue[0], s = sentenceFor(w); heard = false; busy = false; LASTPROMPT = w;
+    const back = s ? `${PIC[w] ? svg(PIC[w]) : ""}<div class="fcs">${markWord(s, w)}</div>` : `${PIC[w] ? svg(PIC[w]) : ""}<div class="fcs"><mark>${w}</mark><br>${[...w].join(" - ")}</div>`;
+    stack.innerHTML = `<div class="fc" id="fc"><div class="fcin"><div class="fcf front"><div class="fctag"><b>WORD CARD ${got + 1}</b></div><div class="fcw">${w}</div><div class="fchint">TAP TO FLIP</div></div><div class="fcf back"><div class="fctag"><b>WORD CARD ${got + 1}</b></div>${back}</div></div></div>`;
+    card = stack.firstChild;
+    card.animate([{ transform: "translateX(110vw) rotate(8deg)" }, { transform: "none" }], { duration: 450, easing: "cubic-bezier(.2,.9,.3,1.1)" }); SFX.door();
+    let sx = 0, dx = 0, down = false;
+    card.addEventListener("pointerdown", e => { if (busy) return; audio(); down = true; sx = e.clientX; dx = 0; try { card.setPointerCapture(e.pointerId); } catch (er) {} });
+    card.addEventListener("pointermove", e => { if (!down) return; dx = e.clientX - sx; card.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`; });
+    const up = () => { if (!down) return; down = false;
+      if (dx > 110) return gotIt(); if (dx < -110) return again();
+      card.style.transition = "transform .3s cubic-bezier(.3,1.6,.5,1)"; card.style.transform = ""; later(() => { if (card) card.style.transition = ""; }, 320);
+      if (Math.abs(dx) < 12) flip(); };
+    card.addEventListener("pointerup", up); card.addEventListener("pointercancel", up);
+    if (got === 0 && queue.length === 8) later(() => say("Read the card! Tap it to flip it."), 500);
+  }
+  function flip() { if (busy) return; const w = queue[0], s = sentenceFor(w); heard = true; card.classList.toggle("flipped"); SFX.woosh();
+    if (card.classList.contains("flipped")) say(s ? s : `${w}. ${[...w].map(letterName).join(" ")} ${w}.`); else say(w); }
+  function gotIt() {
+    if (busy || !card) return; busy = true; audio(); const w = queue.shift(), [cx, cy] = center(card);
+    if (!heard && !missed.has(w)) api.right(w, cx, cy); else api.reward(cx, cy);
+    got++; api.progress(got);
+    const st = document.createElement("div"); st.className = "stamp"; st.textContent = "GOT IT!"; card.querySelector(".fcin").appendChild(st);
+    st.animate([{ transform: "translate(-50%,-50%) rotate(-14deg) scale(2.5)", opacity: 0 }, { transform: "translate(-50%,-50%) rotate(-14deg) scale(1)", opacity: 1 }], { duration: 250 });
+    SFX.thud(); say(pick(["Yes!", "Got it!", "Nice!", "Boom!"]) + " " + w);
+    later(() => { explode(cx, cy, 0.8, ["#fffaf0", "#ffc21a"]); card.animate([{ transform: card.style.transform || "none" }, { transform: "translateY(-120vh) rotate(-20deg)" }], { duration: 500, easing: "ease-in", fill: "forwards" }); }, 650);
+    later(deal, 1300);
+  }
+  function again() {
+    if (busy || !card) return; busy = true; audio(); const w = queue.shift();
+    if (!missed.has(w)) { missed.add(w); api.wrong(w); }
+    queue.splice(Math.min(2, queue.length), 0, w);     // the card comes back in a moment
+    card.style.transition = "transform .3s"; card.style.transform = ""; card.classList.add("flipped");
+    say(`This says ${w}. ${w}!`);
+    later(() => { if (card) card.animate([{ transform: "none" }, { transform: "translateX(-120vw) rotate(-10deg)" }], { duration: 450, easing: "ease-in", fill: "forwards" }); }, 2300);
+    later(deal, 2800);
+  }
+  A.querySelector("#fcGot").onclick = gotIt;
+  A.querySelector("#fcAgain").onclick = again;
+  A.querySelector("#fcHear").onclick = () => { if (busy) return; heard = true; say(queue[0]); };
+  deal();
+} };
+
+// ---------- 7. Match Up: drag a tow chain from a word to its twin ----------
+GAMES.match = { name: "Match Up", art: "monster", total: 8, start(A, api) {
+  let board = 0, done = 0; const n = 4;
+  A.innerHTML = `<svg class="ropes" id="ropes"></svg><div class="mcols"><div class="mcol" id="mL"></div><div class="mcol" id="mR"></div></div>`;
+  const ropes = A.querySelector("#ropes"), mL = A.querySelector("#mL"), mR = A.querySelector("#mR");
+  const rel = (x, y) => { const r = A.getBoundingClientRect(); return [x - r.left, y - r.top]; };
+  const anchor = el => { const r = el.getBoundingClientRect(), side = el.parentElement === mL ? r.right : r.left; return rel(side, r.top + r.height / 2); };
+  const chain = (x1, y1, x2, y2, live) => { const mx = (x1 + x2) / 2, my = Math.max(y1, y2) + 40;
+    return `<path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${live ? "#ffc21a" : "#22252b"}" stroke-width="12" stroke-linecap="round"/><path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${live ? "#22252b" : "#c9ced6"}" stroke-width="5" stroke-dasharray="12 8" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="9" fill="#8a95a5" stroke="#22252b" stroke-width="3"/>`; };
+  let fixed = "";
+  function deal() {
+    api.progress(done); if (board >= 2) return api.finish();
+    const words = pickWords(n); let right = shuffle(words); while (n > 1 && right.every((w, k) => w === words[k])) right = shuffle(words);
+    fixed = ""; ropes.innerHTML = ""; let matched = 0;
+    const H = A.clientHeight - 28, mh = Math.min(110, Math.max(54, H / n - 20)); A.style.setProperty("--mh", mh + "px");
+    mL.innerHTML = words.map((w, k) => `<button class="mplate" data-w="${w}" style="animation-delay:${k * 0.06}s">${w}</button>`).join("");
+    mR.innerHTML = right.map((w, k) => `<button class="mplate" data-w="${w}" style="animation-delay:${0.2 + k * 0.06}s">${PIC[w] && Math.random() < 0.6 ? svg(PIC[w]) : w}</button>`).join("");
+    A.querySelectorAll(".mplate").forEach(el => el.addEventListener("pointerdown", e => {
+      if (el.classList.contains("ok")) return; e.preventDefault(); audio(); try { el.setPointerCapture(e.pointerId); } catch (er) {}
+      el.classList.add("on"); SFX.click(); const [ax, ay] = anchor(el);
+      const move = ev => { const [x, y] = rel(ev.clientX, ev.clientY); ropes.innerHTML = fixed + chain(ax, ay, x, y, true); };
+      const up = ev => {
+        el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up); el.classList.remove("on");
+        const hit = document.elementFromPoint(ev.clientX, ev.clientY), tgt = hit && hit.closest(".mplate");
+        if (!tgt || tgt === el || tgt.parentElement === el.parentElement || tgt.classList.contains("ok")) { ropes.innerHTML = fixed; return; }
+        if (tgt.dataset.w === el.dataset.w) {
+          const [bx, by] = anchor(tgt); fixed += chain(ax, ay, bx, by, false); ropes.innerHTML = fixed;
+          el.classList.add("ok"); tgt.classList.add("ok"); SFX.pop(); confetti(...center(tgt), 22); api.right(el.dataset.w, ...center(tgt)); say(el.dataset.w);
+          matched++; done++; api.progress(done);
+          if (matched === n) { board++; later(() => { SFX.honk(); say(board >= 2 ? "All hooked up!" : "Nice! Next ones!"); }, 700); later(deal, 2000); }
+        } else { ropes.innerHTML = fixed; SFX.bonk(); api.wrong(el.dataset.w); say(`That's ${tgt.dataset.w}. Find ${el.dataset.w}.`); }
+      };
+      el.addEventListener("pointermove", move); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+    }));
+    if (board === 0) later(() => ask("Drag a chain from a word to the same word!"), 500);
+  }
+  deal();
+} };
+
+// ---------- 8. Trace It: trace every stroke from its start to its end, in order. No shortcuts, no timer. ----------
+// Letters are single strokes in school handwriting order. Units: top line y=10, middle y=50, baseline y=90, tails reach y=115.
+function arcPts(cx, cy, rx, ry, a0, a1) { const pts = [], n = Math.max(8, Math.ceil(Math.abs(a1 - a0) / 8)); for (let i = 0; i <= n; i++) { const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180; pts.push([cx + rx * Math.cos(a), cy + ry * Math.sin(a)]); } return pts; }
+const BOWL = () => arcPts(22, 70, 18, 20, -15, -375);
+const GL = {
+  a: { w: 46, s: [BOWL(), [[40, 50], [40, 90]]] },
+  b: { w: 46, s: [[[6, 10], [6, 90]], arcPts(24, 70, 18, 20, 180, 540)] },
+  c: { w: 44, s: [arcPts(24, 70, 18, 20, -40, -320)] },
+  d: { w: 46, s: [BOWL(), [[40, 10], [40, 90]]] },
+  e: { w: 46, s: [[[6, 70], [42, 70], ...arcPts(24, 70, 18, 20, 0, -300)]] },
+  f: { w: 38, s: [[...arcPts(28, 24, 12, 14, -20, -180), [16, 90]], [[4, 50], [32, 50]]] },
+  g: { w: 46, s: [BOWL(), [[40, 50], [40, 104], ...arcPts(24, 104, 16, 11, 0, 165)]] },
+  h: { w: 46, s: [[[6, 10], [6, 90]], [[6, 72], ...arcPts(23, 68, 17, 18, 180, 360), [40, 90]]] },
+  i: { w: 16, s: [[[8, 50], [8, 90]], [[8, 32], [8, 34]]] },
+  j: { w: 28, s: [[[20, 50], [20, 104], ...arcPts(9, 104, 11, 11, 0, 165)], [[20, 32], [20, 34]]] },
+  k: { w: 40, s: [[[6, 10], [6, 90]], [[36, 50], [6, 74]], [[16, 66], [38, 90]]] },
+  l: { w: 16, s: [[[8, 10], [8, 90]]] },
+  m: { w: 64, s: [[[6, 50], [6, 90]], [[6, 68], ...arcPts(19, 64, 13, 14, 180, 360), [32, 90]], [[32, 68], ...arcPts(45, 64, 13, 14, 180, 360), [58, 90]]] },
+  n: { w: 46, s: [[[6, 50], [6, 90]], [[6, 72], ...arcPts(23, 68, 17, 18, 180, 360), [40, 90]]] },
+  o: { w: 46, s: [arcPts(23, 70, 18, 20, -90, -450)] },
+  p: { w: 46, s: [[[6, 50], [6, 115]], arcPts(24, 70, 18, 20, 180, 540)] },
+  q: { w: 46, s: [BOWL(), [[40, 50], [40, 115]]] },
+  r: { w: 36, s: [[[6, 50], [6, 90]], [[6, 72], ...arcPts(22, 68, 16, 16, 180, 300)]] },
+  s: { w: 38, s: [[...arcPts(20, 60, 14, 10, -25, -270), ...arcPts(20, 80, 14, 10, -90, 150)]] },
+  t: { w: 34, s: [[[16, 22], [16, 82], ...arcPts(26, 82, 10, 8, 180, 90)], [[4, 50], [30, 50]]] },
+  u: { w: 46, s: [[[6, 50], [6, 72], ...arcPts(23, 72, 17, 18, 180, 0)], [[40, 50], [40, 90]]] },
+  v: { w: 42, s: [[[4, 50], [21, 90], [38, 50]]] },
+  w: { w: 58, s: [[[4, 50], [16, 90], [29, 58], [42, 90], [54, 50]]] },
+  x: { w: 42, s: [[[6, 50], [36, 90]], [[36, 50], [6, 90]]] },
+  y: { w: 42, s: [[[4, 50], [21, 90]], [[38, 50], [12, 115]]] },
+  z: { w: 42, s: [[[6, 50], [36, 50], [6, 90], [36, 90]]] },
+  I: { w: 24, s: [[[12, 10], [12, 90]], [[2, 10], [22, 10]], [[2, 90], [22, 90]]] },
+};
+const GLGAP = 9;
+const traceWord = w => [...norm(w)].filter(c => GL[c]).join("");
+function resample(pts, step) {
+  const out = [pts[0]]; let carry = 0;
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], seg = Math.hypot(x1 - x0, y1 - y0); if (!seg) continue;
+    let d = step - carry; while (d <= seg) { const t = d / seg; out.push([x0 + (x1 - x0) * t, y0 + (y1 - y0) * t]); d += step; }
+    carry = seg - (d - step);
+  }
+  const L = pts[pts.length - 1], o = out[out.length - 1]; if (Math.hypot(L[0] - o[0], L[1] - o[1]) > 0.5) out.push(L);
+  return out;
+}
+const CARIMG = new Image(); CARIMG.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(TOPCAR.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" '));
+let TRACE = null, TRACE_NEXT = null;
+GAMES.trace = { name: "Trace It", art: "roller", total: 3, start(A, api) {
+  A.innerHTML = `<div class="tboard"><canvas id="tpad"></canvas></div>`;
+  const cv = A.querySelector("#tpad"), cx = cv.getContext("2d"), gen = GEN;
+  const queue = []; if (TRACE_NEXT) { queue.push(TRACE_NEXT); TRACE_NEXT = null; }
+  for (const w of pickWords(6)) if (queue.length < 3 && traceWord(w) && !queue.includes(w)) queue.push(w);
+  let ver = 0, i = 0, word = "", strokes = [], si = 0, pi = 0, active = false, last = null, done = false, Wd = 0, Hd = 0, K = 1, oy = 0, tol = 24, startR = 34, lastNag = 0, dpr = 1;
+  function layout() {
+    const r = cv.parentElement.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    Wd = r.width; Hd = r.height; cv.width = Wd * dpr; cv.height = Hd * dpr; build();
+  }
+  function build() {
+    const old = strokes[si] ? pi / strokes[si].length : 0;
+    strokes = []; if (!word) return;
+    const glyphs = [...word].map(c => GL[c]), total = glyphs.reduce((a, g) => a + g.w, 0) + GLGAP * (glyphs.length - 1);
+    K = Math.min(Wd * 0.86 / total, Hd * 0.82 / 110, 4); const ox = (Wd - total * K) / 2; oy = (Hd - 110 * K) / 2 - 2 * K;
+    let ux = 0; for (const g of glyphs) { for (const s of g.s) strokes.push(resample(s.map(([x, y]) => [ox + (ux + x) * K, oy + y * K]), 4)); ux += g.w + GLGAP; }
+    tol = Math.max(26, K * 15); startR = Math.max(36, K * 18);
+    if (strokes[si]) pi = Math.min(strokes[si].length - 1, Math.round(old * strokes[si].length));
+  }
+  function load(w) { word = traceWord(w); si = 0; pi = 0; active = false; done = false; build(); later(() => ask(`Trace... ${w}`), 400); }
+  function next() { api.progress(i); if (i >= queue.length) return api.finish(); load(queue[i]); }
+  const xy = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  function nag(atStart) { const now = performance.now(); if (now - lastNag < 2500) return; lastNag = now; SFX.bonk(); say(atStart ? "Start at the green light!" : "Keep going from the car!"); }
+  cv.addEventListener("pointerdown", e => {
+    if (done || !strokes[si]) return; audio(); const [x, y] = xy(e), tip = strokes[si][pi];
+    if (Math.hypot(x - tip[0], y - tip[1]) <= startR) { active = true; last = [x, y]; try { cv.setPointerCapture(e.pointerId); } catch (er) {} advance(x, y); }
+    else nag(pi === 0);
+  });
+  cv.addEventListener("pointermove", e => {
+    if (!active) return; const [x, y] = xy(e), d = Math.hypot(x - last[0], y - last[1]), n = Math.max(1, Math.ceil(d / 3));
+    for (let k = 1; k <= n && active; k++) advance(last[0] + (x - last[0]) * k / n, last[1] + (y - last[1]) * k / n);
+    last = [x, y];
+  });
+  ["pointerup", "pointercancel"].forEach(t => cv.addEventListener(t, () => { active = false; }));
+  function advance(x, y) {        // only moves forward along the stroke, and only a short way past the tip (no skipping, no going backwards)
+    const s = strokes[si]; if (!s) return; let best = pi;
+    for (let j = pi + 1; j <= Math.min(pi + 10, s.length - 1); j++) if (Math.hypot(x - s[j][0], y - s[j][1]) <= tol) best = j;
+    pi = best;
+    if (pi >= s.length - 1) {
+      SFX.pop(); const e = s[s.length - 1], r = cv.getBoundingClientRect(); confetti(r.left + e[0], r.top + e[1], 10);
+      si++; pi = 0;
+      if (si >= strokes.length) { active = false; return wordDone(); }
+      const ns = strokes[si][0]; if (Math.hypot(x - ns[0], y - ns[1]) > startR) active = false;   // next stroke starts somewhere else: lift and go to the green light
+    }
+  }
+  function wordDone() {
+    done = true; const [mx, my] = center(cv); api.right(queue[i], mx, my);
+    later(() => { explode(mx, my, 1, ["#2f63d8", "#ffc21a", "#ff6a1a"]); say(`${queue[i]}! ${pick(["You traced it!", "Great tracing!", "Perfect!"])}`); }, 200);
+    const v = ver; later(() => { if (v === ver) { i++; next(); } }, 2600);
+  }
+  function path(pts, from, to) { cx.beginPath(); for (let k = from; k <= to; k++) k === from ? cx.moveTo(pts[k][0], pts[k][1]) : cx.lineTo(pts[k][0], pts[k][1]); if (from === to) cx.lineTo(pts[from][0] + 0.1, pts[from][1]); cx.stroke(); }
+  function draw(now) {
+    if (gen !== GEN) return; requestAnimationFrame(draw);
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, Wd, Hd); if (!word) return;
+    const top = oy + 10 * K, mid = oy + 50 * K, base = oy + 90 * K;
+    cx.lineWidth = 3; cx.setLineDash([]); cx.strokeStyle = "#8fb0d8"; [top, base].forEach(y => { cx.beginPath(); cx.moveTo(20, y); cx.lineTo(Wd - 20, y); cx.stroke(); });
+    cx.strokeStyle = "#c8b8e0"; cx.setLineDash([14, 12]); cx.beginPath(); cx.moveTo(20, mid); cx.lineTo(Wd - 20, mid); cx.stroke();
+    cx.lineCap = "round"; cx.lineJoin = "round";
+    const ink = Math.max(9, K * 7), dot = Math.max(5, K * 3.6), gap = Math.max(10, K * 6);
+    strokes.forEach((s, k) => {
+      if (k < si) { cx.setLineDash([]); cx.strokeStyle = "#2f63d8"; cx.lineWidth = ink; path(s, 0, s.length - 1); return; }
+      cx.setLineDash([0.1, gap]); cx.lineWidth = dot; cx.strokeStyle = k === si ? "#22252b" : "#b9b2a5"; path(s, k === si ? pi : 0, s.length - 1);
+      if (k === si && pi > 0) { cx.setLineDash([]); cx.strokeStyle = "#2f63d8"; cx.lineWidth = ink; path(s, 0, pi); }
+    });
+    cx.setLineDash([]);
+    const s = strokes[si]; if (!s || done) return;
+    // direction arrows ahead of the car
+    cx.strokeStyle = "#ff6a1a"; cx.lineWidth = Math.max(4, K * 2.2);
+    for (let c = 0, j = pi + 9; c < 3 && j < s.length - 2; c++, j += 12) {
+      const a = Math.atan2(s[j + 1][1] - s[j - 1][1], s[j + 1][0] - s[j - 1][0]), L = Math.max(9, K * 5), [px, py] = s[j];
+      cx.beginPath(); cx.moveTo(px + Math.cos(a + 2.5) * L, py + Math.sin(a + 2.5) * L); cx.lineTo(px, py); cx.lineTo(px + Math.cos(a - 2.5) * L, py + Math.sin(a - 2.5) * L); cx.stroke();
+    }
+    // checkered finish flag at the end of this stroke
+    if (s.length > 3) { const [fx_, fy] = s[s.length - 1], q = Math.max(5, K * 2.6); for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) { cx.fillStyle = (r + c) % 2 ? "#fff" : "#111"; cx.fillRect(fx_ - q + c * q, fy - q + r * q, q, q); } cx.strokeStyle = "#111"; cx.lineWidth = 2; cx.strokeRect(fx_ - q, fy - q, q * 2, q * 2); }
+    // green start light (pulses) and the little car at the tip
+    const [tx, ty] = s[pi];
+    if (pi === 0) { const pr = startR * (0.6 + 0.15 * Math.sin(now / 180)); cx.fillStyle = "rgba(34,169,94,.25)"; cx.beginPath(); cx.arc(tx, ty, pr, 0, 7); cx.fill(); cx.fillStyle = "#22a95e"; cx.beginPath(); cx.arc(tx, ty, Math.max(8, K * 4.5), 0, 7); cx.fill(); }
+    if (s.length > 1) { const j = Math.min(s.length - 1, pi + 3), jj = j === pi ? Math.max(0, pi - 1) : pi, a = Math.atan2(s[j][1] - s[jj][1], s[j][0] - s[jj][0]) + Math.PI / 2, cw = Math.max(22, K * 11);
+      cx.save(); cx.translate(tx, ty); cx.rotate(a); cx.drawImage(CARIMG, -cw / 2, -cw * 0.85, cw, cw * 5 / 3); cx.restore(); }
+  }
+  TRACE = { state: () => ({ word, strokes, si, pi, done, i, rect: cv.getBoundingClientRect().toJSON() }), setWord(w) { ver++; if (done) { i++; queue.splice(i, 0, w); } else queue.splice(i, 1, w); load(w); api.progress(i); } };
+  addEventListener("resize", () => { if (gen === GEN) build(); });
+  layout(); next(); requestAnimationFrame(draw);
+} };
+
+// ---------- type a new word (keyboard button): saved to the list for good, then traced right away ----------
+function openKb() { $("#kb").hidden = false; $("#kbIn").value = ""; $("#kbMsg").textContent = ""; setTimeout(() => $("#kbIn").focus(), 50); }
+function closeKb() { $("#kb").hidden = true; $("#kbIn").blur(); }
+function addTyped() {
+  const raw = $("#kbIn").value.trim(), w = traceWord(raw);
+  if (!/^[A-Za-z]{1,12}$/.test(raw) || !w) { $("#kbMsg").textContent = "Use only the letters a to z, no spaces or numbers."; return; }
+  if (!wordList().includes(w)) { S.words = w + " " + S.words; save(); }
+  closeKb();
+  if (CUR === "trace" && TRACE) TRACE.setWord(w); else { TRACE_NEXT = w; startGame("trace"); }
+}
+$("#kbAdd").onclick = addTyped;
+$("#kbIn").addEventListener("keydown", e => { if (e.key === "Enter") addTyped(); });
+$("#kbCancel").onclick = closeKb;
+$("#kbBtn").onclick = openKb;
+$("#homeKb").onclick = () => { audio(); openKb(); };
 
 // ================= the big reward: push the detonator, blow up the old building =================
 function openBoom() {
@@ -735,11 +1034,9 @@ function openGarage() {
 function goHome() {
   stopAll(); show("home"); updBolts(); $("#gcount").textContent = `${S.garage.length}/${VEH.length}`;
 }
-$("#tiles").innerHTML = Object.entries(GAMES).map(([id, g]) => `<button class="tile t-${id}" data-g="${id}">${svg(g.art)}${g.name}</button>`).join("")
-  + `<a class="tile t-trace btn" id="traceTile" href="index.html#trace">${svg("roller")}Trace It</a>`;
+const TILE_ORDER = ["trace", "cards", "match", "mem", "wreck", "dig", "race", "train"];
+$("#tiles").innerHTML = TILE_ORDER.map(id => `<button class="tile t-${id}" data-g="${id}">${svg(GAMES[id].art)}${GAMES[id].name}</button>`).join("");
 $("#tiles").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { audio(); startGame(b.dataset.g); });
-// "Trace It" opens the writing pad with three of his current practice words
-$("#traceTile").onclick = () => { try { const k = JSON.parse(localStorage.getItem("krashpad") || "{}"); k.words = pickWords(3).join(", "); localStorage.setItem("krashpad", JSON.stringify(k)); } catch (e) {} };
 $("#go").onclick = () => { audio(); SFX.engine(); startGame(randomGame()); };
 $("#garageBtn").onclick = () => { audio(); openGarage(); };
 $("#gBack").onclick = goHome;
@@ -775,7 +1072,12 @@ $("#pReset").onclick = () => {
 };
 $("#pClose").onclick = goHome;
 
-goHome();
+if (!S.padMerged) {
+  try { const old = JSON.parse(localStorage.getItem("krashpad") || "{}").words;
+    if (old && old.trim() !== "mom, dad, car, truck, go") { const L = wordList(); const add = old.split(/[\n,\s]+/).map(norm).filter(w => w && traceWord(w) === w && !L.includes(w)); if (add.length) S.words += " " + add.join(" "); } } catch (e) {}
+  S.padMerged = true; save();
+}
+if (location.hash === "#trace") startGame("trace"); else goHome();
 </script>
 </body>
 </html>

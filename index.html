@@ -429,7 +429,8 @@ function wordDone(){ step++; const last = step >= queue.length; dots(); celebrat
 
 // ============ Buttons ============
 function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("show", s.id===id)); }
-document.querySelectorAll(".modes button").forEach(b => b.onclick = () => { audio(); start(b.dataset.mode); });
+// Tracing now lives in Krash Zone, where every stroke must be traced start to finish (no early reward). Free writing stays here.
+document.querySelectorAll(".modes button").forEach(b => b.onclick = () => { if (b.dataset.mode !== "free") { location.href = "zone.html#trace"; return; } audio(); start(b.dataset.mode); });
 document.getElementById("homeBtn").onclick = () => show("home");
 document.getElementById("hear").onclick = () => say(word);
 document.getElementById("clear").onclick = () => { strokes = []; ic.clearRect(0,0,W,H); finished = false; render(); };
@@ -459,7 +460,7 @@ document.getElementById("testSound").onclick = () => SFX.dino();
 document.getElementById("testVoice").onclick = () => say("truck");
 document.getElementById("words").oninput = e => { S.words = e.target.value; save(); };
 document.getElementById("parentClose").onclick = () => show("home");
-if (location.hash === "#trace") start("trace");   // opened from Krash Zone's "Trace It"
+if (location.hash === "#trace") location.replace("zone.html#trace");
 </script>
 </body>
 </html>

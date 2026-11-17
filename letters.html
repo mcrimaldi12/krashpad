@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Letter Tracer</title>
+<style>
+  :root { --bg:#f6f3ec; --ink:#2f3a4a; --soft:#d9d3c7; --guide:#e7e1d5; --go:#4f9d69; --trace:#3c6fb0; --card:#fffdf8; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink); font-family: "Trebuchet MS", system-ui, sans-serif; overflow:hidden; overscroll-behavior:none; }
+  .app { display:flex; flex-direction:column; height:100%; padding:12px 16px; gap:10px; }
+  .bar { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  button { font:inherit; color:var(--ink); background:var(--card); border:2px solid var(--soft); border-radius:16px; padding:10px 16px; font-size:20px; min-width:56px; min-height:56px; cursor:pointer; }
+  button:active { background:var(--guide); }
+  .word { font-size:34px; font-weight:bold; text-align:center; flex:1; min-height:28px; }
+  .stage { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; position:relative; }
+  canvas { background:var(--card); border-radius:24px; border:2px solid var(--soft); touch-action:none; }
+  .reward { position:absolute; inset:0; display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px; background:rgba(246,243,236,.94); border-radius:24px; }
+  .reward.show { display:flex; }
+  .reward svg { width:min(60vw,320px); height:auto; }
+  .reward .say { font-size:28px; }
+  .garage { position:fixed; inset:0; background:var(--bg); display:none; flex-direction:column; padding:16px; gap:12px; }
+  .garage.show { display:flex; }
+  .shelf { flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; align-content:start; }
+  .slot { background:var(--card); border:2px solid var(--soft); border-radius:16px; padding:8px; text-align:center; font-size:22px; }
+  .slot svg { width:100%; height:auto; }
+  .slot.empty { opacity:.35; }
+  .slot.empty svg { visibility:hidden; }
+  .slot b { display:block; font-size:30px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <button id="prev" aria-label="Previous letter">◀</button>
+    <div class="word" id="word"></div>
+    <button id="next" aria-label="Next letter">▶</button>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="c"></canvas>
+    <div class="reward" id="reward">
+      <div id="rewardPic"></div>
+      <div class="say" id="rewardSay"></div>
+      <button id="onward">Next letter ▶</button>
+    </div>
+  </div>
+  <div class="bar">
+    <button id="hear">🔊 Hear it</button>
+    <button id="again">↺ Start over</button>
+    <button id="openGarage">My garage</button>
+  </div>
+</div>
+
+<div class="garage" id="garage">
+  <div class="bar"><div class="word">My garage</div><button id="closeGarage">Back</button></div>
+  <div class="shelf" id="shelf"></div>
+</div>
+
+<script>
+// ---------- Letter shapes: strokes on a 0-100 box, drawn in teaching order ----------
+function arc(cx, cy, rx, ry, a0, a1) {
+  const pts = [], n = Math.max(8, Math.ceil(Math.abs(a1 - a0) / 8));
+  for (let i = 0; i <= n; i++) { const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180; pts.push([cx + rx * Math.cos(a), cy + ry * Math.sin(a)]); }
+  return pts;
+}
+const P_BOWL = [[25,10],[50,10], ...arc(50,30,22,20,-90,90), [25,50]];
+const SHAPES = {
+  A: [[[50,10],[15,90]], [[50,10],[85,90]], [[30,62],[70,62]]],
+  B: [[[25,10],[25,90]], P_BOWL, [[25,50],[52,50], ...arc(52,70,24,20,-90,90), [25,90]]],
+  C: [arc(55,50,35,40,-40,-320)],
+  D: [[[25,10],[25,90]], [[25,10],[42,10], ...arc(42,50,38,40,-90,90), [25,90]]],
+  E: [[[25,10],[25,90]], [[25,10],[75,10]], [[25,50],[65,50]], [[25,90],[75,90]]],
+  F: [[[25,10],[25,90]], [[25,10],[75,10]], [[25,50],[65,50]]],
+  G: [arc(55,50,35,40,-40,-360), [[62,50],[90,50]]],
+  H: [[[25,10],[25,90]], [[75,10],[75,90]], [[25,50],[75,50]]],
+  I: [[[50,10],[50,90]], [[30,10],[70,10]], [[30,90],[70,90]]],
+  J: [[[62,10],[62,70], ...arc(42,70,20,20,0,180)], [[42,10],[82,10]]],
+  K: [[[25,10],[25,90]], [[75,10],[25,55]], [[40,45],[78,90]]],
+  L: [[[25,10],[25,90],[75,90]]],
+  M: [[[15,90],[15,10],[50,62],[85,10],[85,90]]],
+  N: [[[22,90],[22,10],[78,90],[78,10]]],
+  O: [arc(50,50,35,40,-90,-450)],
+  P: [[[25,10],[25,90]], P_BOWL],
+  Q: [arc(50,50,35,40,-90,-450), [[58,68],[85,92]]],
+  R: [[[25,10],[25,90]], P_BOWL, [[45,50],[78,90]]],
+  S: [[...arc(50,30,25,20,-25,-270), ...arc(50,70,25,20,-90,150)]],
+  T: [[[15,10],[85,10]], [[50,10],[50,90]]],
+  U: [[[22,10],[22,60], ...arc(50,60,28,30,180,0), [78,10]]],
+  V: [[[15,10],[50,90],[85,10]]],
+  W: [[[10,10],[30,90],[50,35],[70,90],[90,10]]],
+  X: [[[20,10],[80,90]], [[80,10],[20,90]]],
+  Y: [[[20,10],[50,50]], [[80,10],[50,50]], [[50,50],[50,90]]],
+  Z: [[[20,10],[80,10],[20,90],[80,90]]],
+};
+
+// ---------- Rewards: made-up vehicles, spaceships and heroes (no real characters) ----------
+const WORDS = {
+  A:["ambulance","ambulance"], B:["bus","bus"], C:["car","car"], D:["dump truck","truck"], E:["engine","fire"],
+  F:["fire truck","fire"], G:["garbage truck","truck"], H:["hero","hero"], I:["ice cream truck","truck"], J:["jet","jet"],
+  K:["kart","car"], L:["ladder truck","fire"], M:["moon rocket","rocket"], N:["night hero","hero"], O:["orbiter","saucer"],
+  P:["police car","police"], Q:["quick hero","hero"], R:["rocket","rocket"], S:["spaceship","saucer"], T:["tow truck","truck"],
+  U:["UFO","saucer"], V:["van","bus"], W:["wheels","car"], X:["taxi","car"], Y:["yellow bus","bus"], Z:["zoom hero","hero"],
+};
+const COLORS = ["#c85a54","#3c6fb0","#4f9d69","#d39b3a","#7a5fa8","#3b8f94"];
+function wheels(y){ return `<circle cx="55" cy="${y}" r="13" fill="#2f3a4a"/><circle cx="55" cy="${y}" r="5" fill="#ddd"/><circle cx="145" cy="${y}" r="13" fill="#2f3a4a"/><circle cx="145" cy="${y}" r="5" fill="#ddd"/>`; }
+function picture(letter) {
+  const kind = WORDS[letter][1], c = COLORS[letter.charCodeAt(0) % COLORS.length];
+  let body = "";
+  switch (kind) {
+    case "car": body = `<path d="M30 105 L45 75 Q50 68 60 68 L130 68 Q140 68 148 78 L165 95 L175 98 Q182 100 182 108 L182 118 L20 118 L20 108 Q20 105 30 105Z" fill="${c}"/><path d="M60 75 L95 75 L95 98 L48 98Z M102 75 L132 75 L150 98 L102 98Z" fill="#cfe3f2"/>${wheels(120)}`; break;
+    case "police": body = `<path d="M30 105 L45 75 L150 75 L168 98 L182 102 L182 118 L20 118 L20 105Z" fill="#2f3a4a"/><rect x="20" y="98" width="162" height="12" fill="#fff"/><rect x="88" y="62" width="24" height="12" rx="3" fill="#3c6fb0"/><path d="M58 80 L95 80 L95 97 L50 97Z M102 80 L145 80 L160 97 L102 97Z" fill="#cfe3f2"/>${wheels(120)}`; break;
+    case "ambulance": body = `<rect x="20" y="55" width="120" height="62" rx="6" fill="#fff" stroke="#d9d3c7" stroke-width="3"/><path d="M140 70 L165 70 L182 95 L182 117 L140 117Z" fill="#fff" stroke="#d9d3c7" stroke-width="3"/><rect x="72" y="70" width="14" height="38" fill="#c85a54"/><rect x="60" y="82" width="38" height="14" fill="#c85a54"/><rect x="66" y="44" width="24" height="11" rx="3" fill="#c85a54"/><path d="M146 76 L162 76 L174 94 L146 94Z" fill="#cfe3f2"/>${wheels(120)}`; break;
+    case "fire": body = `<rect x="20" y="62" width="120" height="55" rx="5" fill="#c85a54"/><path d="M140 66 L165 66 L182 92 L182 117 L140 117Z" fill="#c85a54"/><path d="M146 72 L162 72 L174 90 L146 90Z" fill="#cfe3f2"/><g stroke="#ddd" stroke-width="4"><line x1="25" y1="52" x2="135" y2="52"/><line x1="25" y1="44" x2="135" y2="44"/>${[35,55,75,95,115].map(x=>`<line x1="${x}" y1="42" x2="${x}" y2="54"/>`).join("")}</g>${wheels(120)}`; break;
+    case "truck": body = `<rect x="20" y="58" width="112" height="58" rx="5" fill="${c}"/><path d="M136 70 L162 70 L182 94 L182 116 L136 116Z" fill="${c}" opacity=".85"/><path d="M142 76 L160 76 L174 92 L142 92Z" fill="#cfe3f2"/>${wheels(120)}`; break;
+    case "bus": body = `<rect x="18" y="50" width="166" height="68" rx="10" fill="${letter==="Y"?"#e0b23f":c}"/>${[30,62,94,126].map(x=>`<rect x="${x}" y="60" width="26" height="22" rx="3" fill="#cfe3f2"/>`).join("")}<rect x="156" y="60" width="20" height="40" rx="3" fill="#cfe3f2"/>${wheels(120)}`; break;
+    case "jet": body = `<path d="M20 90 Q100 70 175 82 Q190 88 175 94 Q100 106 20 90Z" fill="#cfd6df"/><path d="M80 86 L60 40 L78 40 L115 86Z M80 94 L60 138 L78 138 L115 94Z" fill="${c}"/><path d="M20 90 L10 62 L28 62 L42 86Z" fill="${c}"/><circle cx="160" cy="86" r="5" fill="#3c6fb0"/>`; break;
+    case "rocket": body = `<path d="M100 18 Q128 45 128 100 L72 100 Q72 45 100 18Z" fill="#e7e1d5" stroke="#2f3a4a" stroke-width="3"/><circle cx="100" cy="62" r="11" fill="#cfe3f2" stroke="#2f3a4a" stroke-width="3"/><path d="M72 80 L52 112 L72 104Z M128 80 L148 112 L128 104Z" fill="${c}"/><path d="M84 100 Q100 140 116 100Z" fill="#d39b3a"/>`; break;
+    case "saucer": body = `<ellipse cx="100" cy="86" rx="80" ry="20" fill="${c}"/><path d="M65 80 Q100 30 135 80Z" fill="#cfe3f2" stroke="#2f3a4a" stroke-width="2"/>${[45,75,105,135,160].map(x=>`<circle cx="${x}" cy="90" r="4" fill="#f4e3a8"/>`).join("")}`; break;
+    case "hero": body = `<path d="M72 62 L50 128 L150 128 L128 62Z" fill="${c}"/><circle cx="100" cy="38" r="16" fill="#e8c4a0"/><rect x="86" y="32" width="28" height="7" rx="3" fill="${c}"/><rect x="82" y="56" width="36" height="46" rx="8" fill="#3c6fb0"/><path d="M100 66 L108 80 L100 92 L92 80Z" fill="#f4e3a8"/><rect x="84" y="100" width="12" height="28" fill="#2f3a4a"/><rect x="104" y="100" width="12" height="28" fill="#2f3a4a"/>`; break;
+  }
+  return `<svg viewBox="0 0 200 145" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+}
+
+// ---------- Saved progress: only on this device ----------
+function loadDone(){ try { return JSON.parse(localStorage.getItem("lt-done") || "[]"); } catch { return []; } }
+function saveDone(d){ try { localStorage.setItem("lt-done", JSON.stringify(d)); } catch {} }
+let done = loadDone();
+
+// ---------- Speech (the tablet's own voice, works offline) ----------
+function say(text){
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.8; u.pitch = 1.05; speechSynthesis.speak(u); } catch {}
+}
+
+// ---------- Tracing ----------
+const LETTERS = Object.keys(SHAPES);
+let idx = 0, strokes = [], cur = 0, ink = [], drawing = false, size = 300;
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+const HIT = 11;           // how close (in 0-100 units) the finger must pass
+const NEED = 0.8;         // share of the stroke he must cover
+
+function sample(pts){ // evenly spaced points along a stroke
+  const out = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x0,y0] = pts[i], [x1,y1] = pts[i+1], n = Math.max(1, Math.ceil(Math.hypot(x1-x0,y1-y0) / 2.5));
+    for (let k = 0; k < n; k++) out.push({x:x0+(x1-x0)*k/n, y:y0+(y1-y0)*k/n, hit:false});
+  }
+  const [lx,ly] = pts[pts.length-1]; out.push({x:lx, y:ly, hit:false});
+  return out;
+}
+function setLetter(i){
+  idx = (i + LETTERS.length) % LETTERS.length;
+  strokes = SHAPES[LETTERS[idx]].map(s => ({pts:s, samples:sample(s), done:false}));
+  cur = 0; ink = [];
+  document.getElementById("reward").classList.remove("show");
+  document.getElementById("word").textContent = LETTERS[idx];
+  draw();
+}
+function fit(){
+  const st = document.getElementById("stage"), s = Math.min(st.clientWidth, st.clientHeight) - 4;
+  size = Math.max(200, s); const r = window.devicePixelRatio || 1;
+  cv.style.width = cv.style.height = size + "px"; cv.width = cv.height = size * r;
+  ctx.setTransform(r,0,0,r,0,0); draw();
+}
+const M = 0.12; // margin
+function toPx(x){ return size*M + x/100 * size*(1-2*M); }
+function toUnit(px){ return (px - size*M) / (size*(1-2*M)) * 100; }
+function path(pts){ ctx.beginPath(); pts.forEach(([x,y],i)=> i ? ctx.lineTo(toPx(x),toPx(y)) : ctx.moveTo(toPx(x),toPx(y))); ctx.stroke(); }
+function draw(){
+  ctx.clearRect(0,0,size,size);
+  ctx.lineCap = ctx.lineJoin = "round";
+  const w = size * 0.075;
+  strokes.forEach((s,i) => {
+    ctx.lineWidth = w; ctx.strokeStyle = s.done ? "#c9d9ec" : "#e7e1d5"; path(s.pts);
+    if (i === cur && !s.done) { ctx.setLineDash([2, w*0.6]); ctx.lineWidth = w*0.18; ctx.strokeStyle = "#b9b1a2"; path(s.pts); ctx.setLineDash([]); }
+  });
+  ink.forEach(line => { if (line.length < 2) return; ctx.lineWidth = w*0.55; ctx.strokeStyle = "#3c6fb0"; ctx.beginPath(); line.forEach(([x,y],i)=> i?ctx.lineTo(toPx(x),toPx(y)):ctx.moveTo(toPx(x),toPx(y))); ctx.stroke(); });
+  const s = strokes[cur];
+  if (s && !s.done) { // green start dot + small arrow direction hint
+    const [x,y] = s.pts[0], [nx,ny] = s.pts[Math.min(2, s.pts.length-1)];
+    ctx.fillStyle = "#4f9d69"; ctx.beginPath(); ctx.arc(toPx(x),toPx(y), w*0.55, 0, Math.PI*2); ctx.fill();
+    const a = Math.atan2(ny-y, nx-x), d = w*1.1;
+    ctx.fillStyle = "#9cc7a9"; ctx.beginPath();
+    ctx.moveTo(toPx(x)+Math.cos(a)*d*1.6, toPx(y)+Math.sin(a)*d*1.6);
+    ctx.lineTo(toPx(x)+Math.cos(a+2.5)*d*0.5+Math.cos(a)*d, toPx(y)+Math.sin(a+2.5)*d*0.5+Math.sin(a)*d);
+    ctx.lineTo(toPx(x)+Math.cos(a-2.5)*d*0.5+Math.cos(a)*d, toPx(y)+Math.sin(a-2.5)*d*0.5+Math.sin(a)*d);
+    ctx.fill();
+  }
+}
+function pos(e){ const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function mark(px,py){
+  const s = strokes[cur]; if (!s) return;
+  const ux = toUnit(px), uy = toUnit(py);
+  s.samples.forEach(p => { if (!p.hit && Math.hypot(p.x-ux, p.y-uy) < HIT) p.hit = true; });
+}
+cv.addEventListener("pointerdown", e => {
+  if (!strokes[cur]) return;
+  const [px,py] = pos(e), [sx,sy] = strokes[cur].pts[0];
+  if (Math.hypot(toUnit(px)-sx, toUnit(py)-sy) > HIT*1.8) return; // start near the green dot
+  drawing = true; cv.setPointerCapture(e.pointerId); ink.push([[toUnit(px),toUnit(py)]]); mark(px,py); draw();
+});
+cv.addEventListener("pointermove", e => {
+  if (!drawing) return; const [px,py] = pos(e); ink[ink.length-1].push([toUnit(px),toUnit(py)]); mark(px,py); draw();
+});
+function endStroke(){
+  if (!drawing) return; drawing = false;
+  const s = strokes[cur], hits = s.samples.filter(p=>p.hit).length / s.samples.length;
+  const reachedEnd = s.samples.slice(-3).some(p=>p.hit);
+  if (hits >= NEED && reachedEnd) { s.done = true; cur++; if (cur >= strokes.length) return finish(); }
+  else { s.samples.forEach(p=>p.hit=false); ink.pop(); } // quietly let him try that line again
+  draw();
+}
+cv.addEventListener("pointerup", endStroke);
+cv.addEventListener("pointercancel", endStroke);
+
+function finish(){
+  const L = LETTERS[idx], w = WORDS[L][0];
+  if (!done.includes(L)) { done.push(L); saveDone(done); }
+  draw();
+  document.getElementById("rewardPic").innerHTML = picture(L);
+  document.getElementById("rewardSay").textContent = `${L} is for ${w}`;
+  setTimeout(()=>{ document.getElementById("reward").classList.add("show"); say(`${L}. ${L} is for ${w}.`); }, 350);
+}
+function renderGarage(){
+  document.getElementById("shelf").innerHTML = LETTERS.map(L =>
+    `<div class="slot ${done.includes(L)?"":"empty"}">${picture(L)}<b>${L}</b></div>`).join("");
+}
+
+document.getElementById("prev").onclick = () => setLetter(idx-1);
+document.getElementById("next").onclick = () => setLetter(idx+1);
+document.getElementById("onward").onclick = () => setLetter(idx+1);
+document.getElementById("again").onclick = () => setLetter(idx);
+document.getElementById("hear").onclick = () => { const L = LETTERS[idx]; say(`${L}. ${L} is for ${WORDS[L][0]}.`); };
+document.getElementById("openGarage").onclick = () => { renderGarage(); document.getElementById("garage").classList.add("show"); };
+document.getElementById("closeGarage").onclick = () => document.getElementById("garage").classList.remove("show");
+window.addEventListener("resize", fit);
+document.addEventListener("gesturestart", e => e.preventDefault());
+
+setLetter(0); fit();
+</script>
+</body>
+</html>

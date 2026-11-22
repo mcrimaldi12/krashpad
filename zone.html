@@ -6,6 +6,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Krash Zone</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="KrashPad">
+<meta name="theme-color" content="#151b2e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap">
 <style>
@@ -52,7 +56,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .t-trace{--c1:#a78bfa;--c2:#5b21b6}.t-draw{--c1:#f9a8d4;--c2:#9d174d}.t-cards{--c1:#38bdf8;--c2:#1d4ed8}.t-match{--c1:#fb7185;--c2:#be185d}.t-mem{--c1:#34d399;--c2:#047857}.t-wreck{--c1:#f87171;--c2:#991b1b}.t-dig{--c1:#fbbf24;--c2:#b45309}.t-race{--c1:#22d3ee;--c2:#0e7490}.t-train{--c1:#fb923c;--c2:#c2410c}.t-fire{--c1:#ff8a3d;--c2:#b91c1c}.t-chase{--c1:#818cf8;--c2:#1e3a8a}
 .row2{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .pill{font-family:var(--display);font-weight:700;font-size:20px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.16);box-shadow:0 6px 16px rgba(0,0,0,.3);border-radius:999px;padding:12px 22px;color:var(--hazard)}
-.gear{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
+.gear{position:fixed;bottom:calc(30px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));width:52px;height:52px;border-radius:50%;font-size:26px;color:#6b717c;display:grid;place-items:center}
 .gear i{position:absolute;inset:0;border-radius:50%;border:4px solid var(--hazard);clip-path:inset(100% 0 0 0)}
 
 /* ---------- Game frame ---------- */
@@ -292,7 +296,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .crew button:nth-child(2){animation-delay:-.6s}.crew button:nth-child(3){animation-delay:-1.2s}.crew button:nth-child(4){animation-delay:-1.8s}
 .crew svg{width:100%;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45))}
 @keyframes bob{50%{transform:translateY(-6px)}}
-.heropop{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;align-items:flex-end;gap:4px;pointer-events:none}
+.heropop{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;align-items:flex-end;gap:4px;pointer-events:none}
 .heropop .hfig{width:clamp(80px,16vmin,130px)}
 .heropop .hfig svg{width:100%;height:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
 .hbub{order:2;margin-bottom:60%;background:#fff;color:var(--asphalt);font-family:var(--display);font-weight:700;font-size:clamp(20px,4vmin,30px);padding:8px 16px;border-radius:20px 20px 20px 4px;box-shadow:0 6px 18px rgba(0,0,0,.35);white-space:nowrap}
@@ -332,6 +336,26 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 .bcard img{width:100%;height:auto;border-radius:10px;background:#fff}
 .gsub{grid-column:1/-1;margin:10px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(22px,4.4vw,32px);color:#c4b5fd}
 .gnote{grid-column:1/-1;margin:0;color:#9aa3b2;font-size:17px}
+/* ---------- Krash Kart (pseudo-3D racing) ---------- */
+.a-kart{background:#5bb6f2}
+.a-kart canvas{display:block;width:100%;height:100%;touch-action:none}
+.kpick{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.4vh,20px);background:radial-gradient(90% 70% at 50% 30%,#33467a,#151b2e);padding:16px}
+.kpick h2{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(30px,6.4vw,54px);color:var(--hazard);transform:skewX(-8deg);text-shadow:0 4px 0 var(--hazard-dk)}
+.kpick p{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(16px,3.4vw,22px);color:#c7d2fe;text-align:center}
+.kracers{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,2vw,18px);width:min(100%,640px)}
+.kracer{display:flex;flex-direction:column;align-items:center;gap:4px;background:linear-gradient(160deg,#3a4569,#1f2747);border-radius:22px;padding:10px 6px;font-family:var(--display);font-weight:700;font-size:clamp(13px,2.6vw,18px);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.3),inset 0 2px 0 rgba(255,255,255,.15)}
+.kracer svg{width:100%;max-width:110px;height:auto}
+.kracer.on{box-shadow:0 0 0 5px var(--hazard),0 6px 0 rgba(0,0,0,.3)}
+.kgo{font-family:var(--display);font-weight:700;font-size:clamp(28px,6vw,44px);color:#3a2200;background:linear-gradient(180deg,#ffe066,#ff9f1a);border-radius:24px;padding:8px 44px;box-shadow:0 8px 0 #c46f00}
+.kpod{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(13,16,32,.82);animation:fade .4s;padding:16px}
+.kpod h2{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(40px,10vw,84px);color:var(--hazard);text-shadow:0 5px 0 var(--hazard-dk)}
+.kpod .who{width:clamp(110px,22vmin,180px);animation:bob 1.4s ease-in-out infinite}.kpod .who svg{width:100%;height:auto}
+.kpod .stand{width:clamp(150px,30vmin,240px);height:clamp(40px,8vmin,64px);border-radius:10px 10px 0 0;background:linear-gradient(#ffe066,#e8a400);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:clamp(26px,6vmin,44px);color:#5a3a00;margin-top:-10px}
+.kpod p{margin:0;color:#e2e8f0;font-family:var(--display);font-weight:600;font-size:clamp(18px,4vw,26px);text-align:center}
+.t-knum{--c1:#4ade80;--c2:#15803d}.t-kword{--c1:#f472b6;--c2:#9d174d}.t-kmath{--c1:#facc15;--c2:#a16207}
+/* ---------- "Powered by TCO Technology", always in the corner ---------- */
+.tco{position:fixed;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:70;pointer-events:none;font:600 11px/1 var(--display);letter-spacing:.3px;color:rgba(255,255,255,.92);background:rgba(15,20,40,.62);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 10px;backdrop-filter:blur(4px)}
+.tco b{color:var(--hazard);font-weight:700}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.go,.push{animation:none}}
 </style>
@@ -400,6 +424,13 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
   <h3>How he's doing</h3>
   <div class="note">Right / missed for each word. Red means tricky (the games show these more often). Green means mastered.</div>
   <div class="wtable" id="pTable"></div>
+  <h3>Save his progress</h3>
+  <div class="note">Progress saves by itself on this device, every time he earns something. For the safest setup, add Krash Zone to the home screen and always open it from there. To move his progress to another device or browser, copy the backup code here and paste it there.</div>
+  <div class="prow"><button class="pbtn dark" id="pCopy">Copy backup code</button><span class="note" id="pCopyNote"></span></div>
+  <label for="pCode">Paste a backup code to bring progress back
+    <textarea id="pCode" style="min-height:70px;font-size:14px" spellcheck="false" autocapitalize="none"></textarea>
+  </label>
+  <div class="prow"><button class="pbtn" id="pRestore">Restore from code</button><span class="note" id="pRestoreNote"></span></div>
   <div class="prow"><button class="pbtn warn" id="pReset">Reset progress</button><span class="note" id="pResetNote"></span></div>
   <div class="note">Everything stays on this device. Nothing is sent anywhere, there are no ads, and there are no accounts. The voice is the tablet's own reading voice.</div>
 </div>
@@ -415,6 +446,7 @@ button:focus-visible,.btn:focus-visible{outline:4px solid var(--hazard);outline-
 </div>
 
 <div id="flash"></div>
+<div class="tco" aria-label="Powered by TCO Technology">Powered by <b>TCO</b> Technology</div>
 <div class="heropop" id="heropop" hidden><div class="hbub" id="hbub"></div><div class="hfig" id="hfig"></div></div>
 </div>
 <canvas id="fx"></canvas>
@@ -435,7 +467,25 @@ const DEFAULT_WORDS = "I the like we go see can he she them they tar car hair bu
 const MORE_WORDS = "help fire police red blue run jump come here said in on at no yes not play down away one two three find make where what this that was are have do get will all am be for fast hot";
 let S = { vol: 80, muted: false, words: DEFAULT_WORDS, stats: {}, bolts: 0, garage: [], rounds: 0 };
 try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+// Progress is saved the moment it changes, in two places on the device (localStorage and IndexedDB),
+// and the browser is asked to keep it (not clear it to free space). A grown-up can also copy a backup code.
+let mirrorT = null;
+function save() { S.savedAt = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} clearTimeout(mirrorT); mirrorT = setTimeout(() => idbPut("S", S), 300); }
+function idb() { return new Promise((res, rej) => { try { const r = indexedDB.open("krashzone", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); } }); }
+function idbPut(k, v) { idb().then(db => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(JSON.parse(JSON.stringify(v)), k); }).catch(() => {}); }
+function idbGet(k) { return idb().then(db => new Promise(res => { const r = db.transaction("kv").objectStore("kv").get(k); r.onsuccess = () => res(r.result); r.onerror = () => res(null); })).catch(() => null); }
+const progressSize = o => o ? (o.bolts || 0) + (o.garage || []).length * 10 + (o.rounds || 0) + Object.keys(o.stats || {}).length : 0;
+function restoreMirror() {     // if the main copy went missing, bring back the backup copy
+  idbGet("S").then(m => {
+    if (m && (progressSize(m) > progressSize(S) || (m.savedAt || 0) > (S.savedAt || 0) + 5000 && progressSize(m) >= progressSize(S))) {
+      Object.assign(S, m); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+      if (document.querySelector("#home.show")) goHome();
+    } else idbPut("S", S);
+  });
+  idbGet("buddies").then(b => { try { if (b && b.length && !localStorage.getItem("krashzone-buddies")) localStorage.setItem("krashzone-buddies", JSON.stringify(b)); } catch (e) {} });
+}
+function keepStorage() { try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {} }
+addEventListener("pagehide", () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} });
 function norm(w) { w = String(w).trim().toLowerCase().replace(/[^a-z']/g, ""); return w === "i" ? "I" : w; }
 function wordList() { const out = []; for (const w of S.words.split(/[\s,]+/)) { const n = norm(w); if (n && !out.includes(n)) out.push(n); } return out.length >= 3 ? out : DEFAULT_WORDS.split(" "); }
 const st = w => S.stats[w] || { r: 0, m: 0 };
@@ -632,7 +682,7 @@ const over = (x, y, el, pad = 30) => { const r = el.getBoundingClientRect(); ret
 // ================= game runner =================
 let GEN = 0, TIMERS = [], CUR = null, LAST = null, LASTPROMPT = "", STREAK = 0;
 function later(fn, ms) { const g = GEN; TIMERS.push(setTimeout(() => { if (g === GEN) fn(); }, ms)); }
-function stopAll() { GEN++; TIMERS.forEach(clearTimeout); TIMERS = []; try { speechSynthesis.cancel(); } catch (e) {} CUR = null; TRACE = null; }
+function stopAll() { engineOff(); GEN++; TIMERS.forEach(clearTimeout); TIMERS = []; try { speechSynthesis.cancel(); } catch (e) {} CUR = null; TRACE = null; }
 function ask(text) { LASTPROMPT = text; return say(text); }
 function show(id) { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("show", s.id === id)); }
 const arena = $("#arena");
@@ -1149,7 +1199,7 @@ const BPARTS = [
   { id: "smile", name: "SMILE", say: "Last one! Give your buddy a big smile!", col: "#e0457f", pts: () => arcPts(50, 31, 8, 6, 160, 20), dots: 3 },
 ];
 function loadBuddies() { try { return JSON.parse(localStorage.getItem("krashzone-buddies") || "[]"); } catch (e) { return []; } }
-function saveBuddy(b) { let a = loadBuddies(); a.unshift(b); a = a.slice(0, 24); for (let n = a.length; n > 0; n--) { try { localStorage.setItem("krashzone-buddies", JSON.stringify(a.slice(0, n))); return; } catch (e) {} } }
+function saveBuddy(b) { let a = loadBuddies(); a.unshift(b); a = a.slice(0, 24); idbPut("buddies", a); for (let n = a.length; n > 0; n--) { try { localStorage.setItem("krashzone-buddies", JSON.stringify(a.slice(0, n))); return; } catch (e) {} } }
 const PV = lv => `<svg class="ic" viewBox="0 0 60 60" aria-hidden="true"><ellipse cx="30" cy="30" rx="16" ry="22" fill="none" stroke="${lv === 1 ? "#22252b" : "#c9c2b2"}" stroke-width="4" stroke-dasharray="${lv === 1 ? "0.1 9" : "0"}" stroke-linecap="round" ${lv === 2 ? 'opacity="0"' : ""}/>${lv === 2 ? [0, 1, 2, 3, 4, 5, 6, 7].map(k => `<circle cx="${30 + 16 * Math.cos(k * Math.PI / 4)}" cy="${30 + 22 * Math.sin(k * Math.PI / 4)}" r="4" fill="#7c3aed"/>`).join("") : ""}${lv === 3 ? '<path d="M14 46 L44 16 L50 22 L20 52 L12 54Z" fill="#ffc21a" stroke="#22252b" stroke-width="3" stroke-linejoin="round"/>' : ""}</svg>`;
 let DRAW = null;
 GAMES.draw = { name: "Draw a Buddy", tile: BUDDY_TILE, total: 7, start(A, api) {
@@ -1275,6 +1325,245 @@ GAMES.draw = { name: "Draw a Buddy", tile: BUDDY_TILE, total: 7, start(A, api) {
   layout(); requestAnimationFrame(draw);
 } };
 
+// ---------- 12-14. Krash Kart: pseudo-3D kart racing. Collect the right number, word or answer for a turbo boost ----------
+// The road is drawn from many short segments projected toward the horizon (the classic arcade method).
+const KSEG = 200, KROAD = 2000, KDRAW = 150, KCAMH = 1000, KDEPTH = 1 / Math.tan(50 * Math.PI / 180), KMAX = KSEG * 60;
+const KCOLORS = { blaze: ["#e8443a", "#c4281f", "#ffc21a"], ace: ["#2f63d8", "#1c46b8", "#1f2a4d"], dozer: ["#ffc21a", "#e0a000", "#5c6573"], turbo: ["#ff6a1a", "#d1500a", "#e8443a"] };
+let KENGINE = null;
+if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) { r = Math.min(r || 0, w / 2, h / 2); this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r); this.arcTo(x + w, y + h, x, y + h, r); this.arcTo(x, y + h, x, y, r); this.arcTo(x, y, x + w, y, r); this.closePath(); };
+function engineOn() { const a = audio(); if (!a || S.muted || !S.vol || KENGINE) return; try { const o = a.createOscillator(), f = a.createBiquadFilter(), g = a.createGain(); o.type = "sawtooth"; o.frequency.value = 60; f.type = "lowpass"; f.frequency.value = 500; g.gain.value = S.vol / 100 * 0.07; o.connect(f).connect(g).connect(a.destination); o.start(); KENGINE = { o, g }; } catch (e) {} }
+function engineSet(pct) { if (KENGINE) try { KENGINE.o.frequency.setTargetAtTime(55 + pct * 110, AC.currentTime, 0.1); } catch (e) {} }
+function engineOff() { if (KENGINE) { try { KENGINE.g.gain.setTargetAtTime(0.0001, AC.currentTime, 0.05); KENGINE.o.stop(AC.currentTime + 0.3); } catch (e) {} KENGINE = null; } }
+function kartGame(A, api, mode) {
+  const gen = GEN; A.classList.add("a-kart");
+  A.innerHTML = `<canvas id="kcv"></canvas><div class="kpick" id="kpick"><h2>KRASH KART</h2><p>${mode === "num" ? "Collect the numbers in order: 1, 2, 3!" : mode === "word" ? "Drive into the word you hear!" : "Drive into the right answer!"}</p>
+    <div class="kracers">${HEROES.map(h => `<button class="kracer" data-h="${h.id}">${heroSvg(h.id)}${h.name}</button>`).join("")}</div><button class="kgo" id="kgo">RACE!</button></div>`;
+  const cv = A.querySelector("#kcv"), c = cv.getContext("2d"), pickEl = A.querySelector("#kpick");
+  let racer = S.racer || "turbo";
+  const mark = () => pickEl.querySelectorAll(".kracer").forEach(b => b.classList.toggle("on", b.dataset.h === racer));
+  pickEl.querySelectorAll(".kracer").forEach(b => b.onclick = () => { audio(); racer = b.dataset.h; S.racer = racer; save(); mark(); const h = HEROES.find(x => x.id === racer); SFX.cheer(); say(h.name + "!", 1.05, 1.35); });
+  mark(); later(() => ask("Pick your racer!"), 300);
+  // ----- track -----
+  const segs = [];
+  const lastY = () => segs.length ? segs[segs.length - 1].p2.w.y : 0;
+  const addSeg = (curve, y) => { const n = segs.length; segs.push({ i: n, p1: { w: { x: 0, y: lastY(), z: n * KSEG }, c: {}, s: {} }, p2: { w: { x: 0, y, z: (n + 1) * KSEG }, c: {}, s: {} }, curve, sprites: [], cars: [], light: Math.floor(n / 3) % 2, clip: 0 }); };
+  const easeIn = (a, b, t) => a + (b - a) * t * t, easeInOut = (a, b, t) => a + (b - a) * ((-Math.cos(t * Math.PI) / 2) + 0.5);
+  const road = (en, ho, le, curve, hill) => { const sy = lastY(), ey = sy + hill * KSEG, tot = en + ho + le; for (let n = 0; n < en; n++) addSeg(easeIn(0, curve, n / en), easeInOut(sy, ey, n / tot)); for (let n = 0; n < ho; n++) addSeg(curve, easeInOut(sy, ey, (en + n) / tot)); for (let n = 0; n < le; n++) addSeg(easeInOut(curve, 0, n / le), easeInOut(sy, ey, (en + ho + n) / tot)); };
+  road(40, 40, 40, 0, 0); road(30, 50, 30, 2.2, 6); road(25, 30, 25, 0, -4); road(30, 40, 30, -2.8, 0); road(30, 40, 30, 0, 10); road(25, 35, 25, 3.2, -6);
+  road(30, 30, 30, -1.8, 0); road(25, 40, 25, 2.4, 8); road(30, 40, 30, -3, -8); road(40, 40, 40, 0, 0); road(30, 30, 30, 0, -lastY() / KSEG);
+  const LEN = segs.length, TRACK = LEN * KSEG;
+  const put = (i, sp) => segs[((i % LEN) + LEN) % LEN].sprites.push(sp);
+  for (let n = 20; n < LEN; n += 5) { put(n, { k: "tree", x: -(1.4 + Math.random() * 1.2), v: rand(3) }); if (n % 10 === 0) put(n + 2, { k: "tree", x: 1.4 + Math.random() * 1.2, v: rand(3) }); }
+  for (let n = 60; n < LEN; n += 140) put(n, { k: "board", x: n % 280 === 60 ? -1.35 : 1.35, t: n % 280 === 60 ? "TCO TECHNOLOGY" : "KRASH ZONE" });
+  for (let n = 110; n < LEN - 40; n += 95) { const lane = [-0.62, 0, 0.62][rand(3)]; for (let k = 0; k < 5; k++) put(n + k * 3, { k: "coin", x: lane }); }
+  for (let n = 170; n < LEN - 40; n += 160) put(n, { k: "oil", x: [-0.62, 0.62][rand(2)] });
+  for (let n = 230; n < LEN - 40; n += 190) put(n, { k: "pad", x: 0 });
+  // ----- questions -----
+  let goal = 8, asked = 0, got = 0, target = null, choices = [], row = null, prompt = "", hud = "", numGoal = (S.kart && S.kart.num) || 10, mathMax = (S.kart && S.kart.math) || 5, misses = 0, totalMiss = 0;
+  const words = mode === "word" ? pickWords(8) : [];
+  if (mode === "num") goal = numGoal;
+  function makeQuestion() {
+    if (mode === "num") { target = got + 1; const pool = []; for (let v = 1; v <= numGoal; v++) if (v !== target) pool.push(v); pool.sort((a, b) => Math.abs(a - target) - Math.abs(b - target) + (Math.random() - 0.5) * 3); choices = shuffle([target, pool[0], pool[1]]); prompt = `Find ${target}!`; hud = `FIND ${target}`; }
+    else if (mode === "word") { target = words[got % words.length]; choices = shuffle([target, ...distract(target, 2)]); prompt = `Drive into... ${target}`; hud = "🔊"; }
+    else { const a = 1 + rand(mathMax - 1), b = 1 + rand(mathMax - a); target = a + b; const opts = new Set([target]); while (opts.size < 3) { const v = target + [-2, -1, 1, 2, 3][rand(5)]; if (v >= 0 && v <= mathMax + 3) opts.add(v); } choices = shuffle([...opts]); prompt = `${a} plus ${b}!`; hud = `${a} + ${b} = ?`; KM = { a, b }; }
+    ask(prompt);
+  }
+  let KM = null;
+  function spawnRow(ahead) {
+    if (row) row.items.forEach(it => it.gone = true);
+    const abs = playerAbs() + ahead, lanes = shuffle([-0.62, 0, 0.62]);
+    row = { abs, items: choices.map((v, k) => ({ k: "target", x: lanes[k], v, ok: v === target, row: true })) };
+    row.items.forEach(it => put(abs, it));
+  }
+  // ----- player and rivals -----
+  let pos = 0, laps = 0, speed = 0, px = 0, steerTo = null, keys = 0, boost = 0, spin = 0, finished = false, racing = false, prevAbs = 0, skyX = 0, flashT = 0, lean = 0, bump = 0, coins = 0, finishAbs = -1;
+  const PZ = KCAMH * KDEPTH;
+  const rivals = HEROES.filter(h => h.id !== racer).map((h, k) => ({ id: h.id, z: KSEG * (8 + k * 7), laps: 0, x: [-0.55, 0.5, -0.1][k], speedF: [0.9, 0.95, 1.0][k] }));
+  const playerAbs = () => Math.floor((laps * TRACK + pos + PZ) / KSEG);
+  const place = () => 1 + rivals.filter(r => r.laps * TRACK + r.z > laps * TRACK + pos + PZ).length;
+  let W = 0, H = 0, dpr = 1;
+  function size() { const r = A.getBoundingClientRect(); dpr = Math.min(1.5, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; }
+  size(); addEventListener("resize", () => { if (gen === GEN) size(); });
+  cv.addEventListener("pointerdown", e => { audio(); steerTo = e.clientX; try { cv.setPointerCapture(e.pointerId); } catch (er) {} });
+  cv.addEventListener("pointermove", e => { if (steerTo !== null) steerTo = e.clientX; });
+  ["pointerup", "pointercancel"].forEach(t => cv.addEventListener(t, () => { steerTo = null; }));
+  const onKey = e => { if (gen !== GEN) return removeEventListener("keydown", onKey); if (e.key === "ArrowLeft") keys = -1; if (e.key === "ArrowRight") keys = 1; };
+  const offKey = e => { if (gen !== GEN) return removeEventListener("keyup", offKey); if (e.key === "ArrowLeft" || e.key === "ArrowRight") keys = 0; };
+  addEventListener("keydown", onKey); addEventListener("keyup", offKey);
+  // ----- start: countdown lights -----
+  let lights = -1;
+  A.querySelector("#kgo").onclick = () => {
+    audio(); pickEl.remove(); rivals.forEach((r, k) => r.id = HEROES.filter(h => h.id !== racer)[k].id);
+    lights = 0; [0, 1, 2].forEach(k => later(() => { lights = k + 1; SFX.beep(520); say(String(3 - k), 1.1, 1.3); }, 300 + k * 800));
+    later(() => { lights = 4; SFX.beep(880); cheer("GO!"); racing = true; engineOn(); makeQuestion(); spawnRow(70); api.progress(0); }, 300 + 3 * 800);
+    later(() => { lights = -1; }, 300 + 3 * 800 + 900);
+  };
+  function collect(it, sx, sy) {
+    it.gone = true;
+    if (it.k === "coin") { coins++; S.bolts++; save(); SFX.coin(); updBolts(); return; }
+    if (it.k === "oil") { spin = 0.9; SFX.bonk(); if (Math.random() < 0.5) say("Whoa! Slippery!", 1.05, 1.3); return; }
+    if (it.k === "pad") { boost = Math.max(boost, 0.8); SFX.zoom(); return; }
+    if (it.k !== "target") return;
+    if (it.ok) {
+      got++; boost = 1.7; SFX.zoom(); confetti(sx, sy, 34);
+      if (mode === "word") api.right(target, sx, sy); else { api.reward(sx, sy); }
+      api.progress(got); row.items.forEach(x => x.gone = true); row = null; misses = 0;
+      const l = pick(PRAISE); heroSay(l, racer); cheer(`${l} ${mode === "math" ? KM.a + " plus " + KM.b + " is " + target : target}!`);
+      if (got >= goal) { finishAbs = playerAbs() + 60; put(finishAbs, { k: "finish", x: 0 }); later(() => say("Go for the finish line!", 1.05, 1.3), 1600); }
+      else later(() => { if (!finished) { makeQuestion(); spawnRow(80); } }, 1400);
+    } else {
+      speed *= 0.55; bump = 0.4; SFX.bonk(); misses++; totalMiss++;
+      if (mode === "word") { if (misses === 1) api.wrong(target); say(`That's ${it.v}. Find... ${target}`); }
+      else if (mode === "num") say(`That's ${it.v}. Find ${target}!`);
+      else say(`${KM.a} plus ${KM.b}... count them! It's not ${it.v}.`);
+    }
+  }
+  function endRace() {
+    finished = true; racing = false; engineOff(); const pl = place(), names = ["1ST", "2ND", "3RD", "4TH"];
+    S.kart = S.kart || {};
+    if (mode === "num" && totalMiss === 0 && numGoal < 20) S.kart.num = numGoal + 5;   // a perfect run counts higher next time (10, then 15, then 20)
+    if (mode === "math" && totalMiss <= 1) S.kart.math = Math.min(10, mathMax + 1);   // sums grow from up to 5 toward up to 10
+    S.kart.best = Math.min(S.kart.best || 9, pl); S.bolts += [5, 3, 2, 1][pl - 1]; save(); updBolts();
+    const pod = document.createElement("div"); pod.className = "kpod";
+    pod.innerHTML = `<h2>${names[pl - 1]} PLACE!</h2><div class="who">${heroSvg(racer)}</div><div class="stand">${pl}</div><p>+${[5, 3, 2, 1][pl - 1]} bolts for the race${coins ? `, plus ${coins} you picked up` : ""}</p><button class="big" id="kprize">GET MY PRIZE!</button>`;
+    A.appendChild(pod); SFX.tada(); const r = A.getBoundingClientRect(); for (let k = 0; k < 6; k++) later(() => confetti(r.left + Math.random() * r.width, r.top + Math.random() * r.height * 0.5, 40), k * 180);
+    cheer(pl === 1 ? "First place! You're the champion!" : pl === 2 ? "Second place! Awesome race!" : "You finished the race! Great driving!");
+    pod.querySelector("#kprize").onclick = () => { audio(); api.finish(); };
+  }
+  // ----- drawing helpers -----
+  function project(p, cx, cy, cz) { p.c.x = p.w.x - cx; p.c.y = p.w.y - cy; p.c.z = p.w.z - cz; p.s.scale = KDEPTH / p.c.z; p.s.x = Math.round(W / 2 + p.s.scale * p.c.x * W / 2); p.s.y = Math.round(H / 2 - p.s.scale * p.c.y * H / 2); p.s.w = Math.round(p.s.scale * KROAD * W / 2); }
+  const quad = (col, x1, y1, w1, x2, y2, w2) => { c.fillStyle = col; c.beginPath(); c.moveTo(x1 - w1, y1); c.lineTo(x2 - w2, y2); c.lineTo(x2 + w2, y2); c.lineTo(x1 + w1, y1); c.closePath(); c.fill(); };
+  function drawSegment(seg) {
+    const a = seg.p1.s, b = seg.p2.s, L = seg.light;
+    c.fillStyle = L ? "#4fb04a" : "#47a343"; c.fillRect(0, b.y, W, a.y - b.y + 1);
+    const r1 = a.w / 6, r2 = b.w / 6;
+    quad(L ? "#e8443a" : "#fffaf0", a.x, a.y, a.w + r1, b.x, b.y, b.w + r2);
+    quad(L ? "#555a66" : "#5d6270", a.x, a.y, a.w, b.x, b.y, b.w);
+    if (L) { const l1 = a.w / 40, l2 = b.w / 40; [-1 / 3, 1 / 3].forEach(f => quad("#f4f4f0", a.x + a.w * f * 2, a.y, l1, b.x + b.w * f * 2, b.y, l2)); }
+  }
+  function drawKart(x, y, w, id, tilt, flame) {
+    const [body, dark, helm] = KCOLORS[id] || KCOLORS.turbo, h = w * 0.62;
+    c.save(); c.translate(x, y); c.rotate(tilt);
+    c.fillStyle = "rgba(0,0,0,.28)"; c.beginPath(); c.ellipse(0, 0, w * 0.55, h * 0.12, 0, 0, 7); c.fill();
+    if (flame) { c.fillStyle = "#ffb02e"; c.beginPath(); c.moveTo(-w * 0.18, -h * 0.25); c.lineTo(-w * 0.1, h * (0.25 + Math.random() * 0.25)); c.lineTo(-w * 0.02, -h * 0.25); c.fill(); c.beginPath(); c.moveTo(w * 0.02, -h * 0.25); c.lineTo(w * 0.1, h * (0.25 + Math.random() * 0.25)); c.lineTo(w * 0.18, -h * 0.25); c.fill(); }
+    c.fillStyle = "#1d1f24"; c.beginPath(); c.roundRect(-w * 0.5, -h * 0.42, w * 0.22, h * 0.42, w * 0.05); c.roundRect(w * 0.28, -h * 0.42, w * 0.22, h * 0.42, w * 0.05); c.fill();
+    const g = c.createLinearGradient(0, -h * 0.75, 0, -h * 0.1); g.addColorStop(0, body); g.addColorStop(1, dark);
+    c.fillStyle = g; c.beginPath(); c.moveTo(-w * 0.34, -h * 0.12); c.lineTo(-w * 0.28, -h * 0.55); c.lineTo(w * 0.28, -h * 0.55); c.lineTo(w * 0.34, -h * 0.12); c.closePath(); c.fill();
+    c.fillStyle = "#22252b"; c.fillRect(-w * 0.4, -h * 0.68, w * 0.8, h * 0.08); c.fillRect(-w * 0.3, -h * 0.62, w * 0.05, h * 0.1); c.fillRect(w * 0.25, -h * 0.62, w * 0.05, h * 0.1);
+    c.fillStyle = helm; c.beginPath(); c.arc(0, -h * 0.82, w * 0.17, 0, 7); c.fill();
+    c.fillStyle = "rgba(255,255,255,.35)"; c.beginPath(); c.arc(-w * 0.05, -h * 0.88, w * 0.06, 0, 7); c.fill();
+    c.fillStyle = "#c9ced6"; c.beginPath(); c.arc(-w * 0.1, -h * 0.2, w * 0.035, 0, 7); c.arc(w * 0.1, -h * 0.2, w * 0.035, 0, 7); c.fill();
+    c.restore();
+  }
+  function rr(x, y, w, h, r) { c.beginPath(); c.roundRect(x, y, w, h, r); }
+  function drawSprite(sp, sx, sy, sc, clip) {
+    const unit = sc * KROAD * W / 2;   // pixels for one road half-width at this distance
+    if (unit < 2) return;
+    c.save(); c.beginPath(); c.rect(0, 0, W, clip); c.clip();
+    if (sp.k === "tree") { const w = unit * 0.5; c.fillStyle = "#6b4423"; c.fillRect(sx - w * 0.08, sy - w * 0.7, w * 0.16, w * 0.7); c.fillStyle = ["#2f9e44", "#2b8a3e", "#37b24d"][sp.v]; c.beginPath(); c.arc(sx, sy - w * 0.95, w * 0.42, 0, 7); c.arc(sx - w * 0.25, sy - w * 0.7, w * 0.3, 0, 7); c.arc(sx + w * 0.25, sy - w * 0.7, w * 0.3, 0, 7); c.fill(); }
+    else if (sp.k === "board") { const w = unit * 0.9, h = w * 0.36; c.fillStyle = "#3a3d44"; c.fillRect(sx - w * 0.35, sy - h * 1.6, w * 0.05, h * 1.6); c.fillRect(sx + w * 0.3, sy - h * 1.6, w * 0.05, h * 1.6); c.fillStyle = sp.t.startsWith("TCO") ? "#151b2e" : "#ffc21a"; rr(sx - w / 2, sy - h * 2.4, w, h, h * 0.15); c.fill(); c.fillStyle = sp.t.startsWith("TCO") ? "#ffc21a" : "#22252b"; c.font = `700 ${h * 0.4}px Fredoka, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(sp.t, sx, sy - h * 1.9); }
+    else if (sp.k === "coin") { const w = unit * 0.09, sq = Math.abs(Math.sin(performance.now() / 180 + sp.x)); c.fillStyle = "#ffd84d"; c.strokeStyle = "#b88500"; c.lineWidth = Math.max(1, w * 0.12); c.beginPath(); c.ellipse(sx, sy - w * 1.4, w * 0.5 * (0.3 + 0.7 * sq), w * 0.5, 0, 0, 7); c.fill(); c.stroke(); }
+    else if (sp.k === "oil") { const w = unit * 0.32; c.fillStyle = "rgba(20,20,30,.85)"; c.beginPath(); c.ellipse(sx, sy - w * 0.05, w * 0.5, w * 0.14, 0, 0, 7); c.fill(); c.fillStyle = "rgba(120,90,200,.35)"; c.beginPath(); c.ellipse(sx - w * 0.1, sy - w * 0.08, w * 0.18, w * 0.04, 0, 0, 7); c.fill(); }
+    else if (sp.k === "pad") { const w = unit * 0.5; c.fillStyle = "#ffb02e"; for (let k = 0; k < 3; k++) { const yy = sy - w * 0.04 * k; c.beginPath(); c.moveTo(sx - w * 0.4, yy); c.lineTo(sx, yy - w * 0.06); c.lineTo(sx + w * 0.4, yy); c.lineTo(sx + w * 0.4, yy - w * 0.02); c.lineTo(sx, yy - w * 0.08); c.lineTo(sx - w * 0.4, yy - w * 0.02); c.fill(); } }
+    else if (sp.k === "finish") { const w = unit * 2.3, h = w * 0.1; c.fillStyle = "#e2e8f0"; c.fillRect(sx - w / 2, sy - h * 6, w * 0.03, h * 6); c.fillRect(sx + w / 2 - w * 0.03, sy - h * 6, w * 0.03, h * 6); const q = h / 2; for (let yy = 0; yy < 2; yy++) for (let xx = 0; xx < w / q; xx++) { c.fillStyle = (xx + yy) % 2 ? "#111" : "#fff"; c.fillRect(sx - w / 2 + xx * q, sy - h * 6 + yy * q, q + 0.5, q + 0.5); } }
+    else if (sp.k === "target") {
+      const txt = String(sp.v), wordy = txt.length > 2, d = unit * (wordy ? 0.42 : 0.34), cy = sy - d * 1.25 + Math.sin(performance.now() / 300 + sp.x * 3) * d * 0.05;
+      c.strokeStyle = "rgba(255,255,255,.8)"; c.lineWidth = Math.max(1, d * 0.03); c.beginPath(); c.moveTo(sx, sy); c.lineTo(sx, cy + d * 0.45); c.stroke();
+      const cols = ["#e8443a", "#2f63d8", "#22a95e", "#ff6a1a", "#9b5de5"], col = cols[(txt.charCodeAt(0) + txt.length) % cols.length];
+      if (wordy) { rr(sx - d * 0.75, cy - d * 0.42, d * 1.5, d * 0.84, d * 0.25); c.fillStyle = "#fffaf0"; c.fill(); c.lineWidth = Math.max(2, d * 0.08); c.strokeStyle = col; c.stroke(); }
+      else { const g = c.createRadialGradient(sx - d * 0.15, cy - d * 0.15, d * 0.05, sx, cy, d * 0.5); g.addColorStop(0, "#fff"); g.addColorStop(0.25, col); g.addColorStop(1, col); c.fillStyle = g; c.beginPath(); c.ellipse(sx, cy, d * 0.45, d * 0.52, 0, 0, 7); c.fill(); }
+      if (d > 14) { c.font = `700 ${wordy ? d * 0.46 : d * 0.55}px Andika, sans-serif`; c.textAlign = "center"; c.textBaseline = "middle"; c.lineWidth = Math.max(2, d * 0.07); c.strokeStyle = wordy ? "#fffaf0" : "rgba(0,0,0,.45)"; c.strokeText(txt, sx, cy + d * 0.02); c.fillStyle = wordy ? "#22252b" : "#fff"; c.fillText(txt, sx, cy + d * 0.02); }
+    }
+    else if (sp.k === "car") drawKart(sx, sy, unit * 0.26, sp.id, 0, false);   // same size as his kart at the same distance
+    c.restore();
+  }
+  function background() {
+    const g = c.createLinearGradient(0, 0, 0, H * 0.6); g.addColorStop(0, "#3b9ae8"); g.addColorStop(1, "#bfe6ff"); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.fillStyle = "rgba(255,240,180,.9)"; c.beginPath(); c.arc(W * 0.8 - skyX * 0.02 % W, H * 0.16, Math.min(W, H) * 0.06, 0, 7); c.fill();
+    const layer = (col, amp, base, freq, par) => { c.fillStyle = col; c.beginPath(); c.moveTo(0, H); for (let x = 0; x <= W + 10; x += 10) { const t = (x + skyX * par) / W; c.lineTo(x, H * base - (Math.sin(t * freq) * 0.5 + Math.sin(t * freq * 2.3 + 1) * 0.25 + 0.75) * H * amp); } c.lineTo(W, H); c.fill(); };
+    layer("#8aa4c8", 0.14, 0.55, 5, 0.25); layer("#5b9f6a", 0.08, 0.56, 9, 0.5);
+  }
+  function hudDraw() {
+    if (racing || finished) {
+      const pl = place(), sz = Math.max(30, Math.min(W, H) * 0.09); c.font = `700 ${sz}px Fredoka, sans-serif`; c.textAlign = "left"; c.textBaseline = "top";
+      c.lineWidth = sz * 0.16; c.strokeStyle = "#22252b"; c.strokeText(`${pl}${["st", "nd", "rd", "th"][pl - 1]}`, 14, 12); c.fillStyle = pl === 1 ? "#ffc21a" : "#fff"; c.fillText(`${pl}${["st", "nd", "rd", "th"][pl - 1]}`, 14, 12);
+      if (!finished && got < goal && hud) {
+        const fs = Math.max(26, Math.min(W * 0.07, H * 0.08)); c.font = `700 ${fs}px ${hud === "🔊" ? "sans-serif" : "Fredoka, sans-serif"}`; const tw = c.measureText(hud).width + fs * 1.2;
+        rr(W / 2 - tw / 2, 10, tw, fs * 1.4, fs * 0.4); c.fillStyle = "rgba(15,20,40,.78)"; c.fill(); c.fillStyle = "#ffc21a"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(hud, W / 2, 10 + fs * 0.72);
+        if (mode === "math" && KM) { const r = fs * 0.16, yy = 10 + fs * 1.4 + r * 2.4; const dots = (n, x0, col) => { for (let k = 0; k < n; k++) { c.fillStyle = col; c.beginPath(); c.arc(x0 + k * r * 2.6, yy, r, 0, 7); c.fill(); } };
+          const totalW = (KM.a + KM.b) * r * 2.6 + r * 4, x0 = W / 2 - totalW / 2; dots(KM.a, x0, "#ff6a1a"); dots(KM.b, x0 + KM.a * r * 2.6 + r * 4, "#3b82f6"); }
+      }
+      if (got >= goal && !finished) { const fs = Math.max(24, W * 0.05); c.font = `700 ${fs}px Fredoka, sans-serif`; c.textAlign = "center"; c.textBaseline = "top"; c.lineWidth = fs * 0.15; c.strokeStyle = "#22252b"; c.strokeText("FINISH LINE AHEAD!", W / 2, 14); c.fillStyle = "#ffc21a"; c.fillText("FINISH LINE AHEAD!", W / 2, 14); }
+    }
+    if (lights > 0) { const r = Math.min(W, H) * 0.06, x0 = W / 2 - r * 3.3, y0 = H * 0.22; rr(x0 - r * 0.6, y0 - r * 1.3, r * 7.8, r * 2.6, r * 0.6); c.fillStyle = "#22252b"; c.fill();
+      for (let k = 0; k < 3; k++) { c.fillStyle = lights === 4 ? "#2fdc6b" : (k < lights ? "#ff3b30" : "#4a4f58"); c.beginPath(); c.arc(x0 + r * 0.7 + k * r * 2.6, y0, r, 0, 7); c.fill(); } }
+  }
+  // ----- the game loop -----
+  let tPrev = performance.now();
+  function frame(now) {
+    if (gen !== GEN) { engineOff(); return; }
+    requestAnimationFrame(frame);
+    const dt = Math.min(1 / 30, (now - tPrev) / 1000); tPrev = now;
+    const base = segs[Math.floor(pos / KSEG) % LEN], ps = segs[Math.floor((pos + PZ) / KSEG) % LEN];
+    if (racing) {
+      const cruise = KMAX * 0.55, top = KMAX * (boost > 0 ? 0.95 : 0.55), off = Math.abs(px) > 1.05;
+      let want = off ? KMAX * 0.25 : top; if (spin > 0) want = KMAX * 0.2;
+      speed += (want - speed) * Math.min(1, dt * (boost > 0 ? 3 : 1.6));
+      boost = Math.max(0, boost - dt); spin = Math.max(0, spin - dt); bump = Math.max(0, bump - dt);
+      let tx = px; if (steerTo !== null) { const r = cv.getBoundingClientRect(); tx = ((steerTo - r.left) / r.width - 0.5) * 2.8; } else if (keys) tx = px + keys * 0.6;
+      tx = Math.max(-1.4, Math.min(1.4, tx)); const dpx = (tx - px) * Math.min(1, dt * 6); px += dpx; lean = lean * 0.8 + dpx * 6;
+      px -= ps.curve * (speed / KMAX) * dt * 0.55;   // the road pushes outward on curves, so he has to steer
+      px = Math.max(-2, Math.min(2, px));
+      pos += speed * dt; while (pos >= TRACK) { pos -= TRACK; laps++; }
+      skyX += ps.curve * speed * dt * 0.02;
+      rivals.forEach(r => { r.z += cruise * r.speedF * dt; if (r.z >= TRACK) { r.z -= TRACK; r.laps++; } r.x += Math.sin(now / 900 + r.speedF * 7) * dt * 0.1; r.x = Math.max(-0.8, Math.min(0.8, r.x));
+        const gap = (r.laps * TRACK + r.z) - (laps * TRACK + pos + PZ); if (Math.abs(gap) < KSEG * 0.8 && Math.abs(r.x - px) < 0.32) { speed = Math.min(speed, cruise * r.speedF * 0.9); px += px > r.x ? 0.05 : -0.05; } });
+      engineSet(speed / KMAX);
+      // things he drives through since last frame
+      const nowAbs = playerAbs();
+      for (let a = prevAbs + 1; a <= nowAbs; a++) {
+        const seg = segs[a % LEN];
+        seg.sprites.forEach(sp => { if (sp.gone || (sp.k !== "coin" && sp.k !== "oil" && sp.k !== "pad" && sp.k !== "target")) return; if (sp.k === "target" && (!row || !row.items.includes(sp))) return;
+          const hw = sp.k === "target" ? 0.3 : sp.k === "pad" ? 0.55 : 0.26; if (Math.abs(px - sp.x) < hw) collect(sp, W / 2, H * 0.55); });
+        if (finishAbs > 0 && a >= finishAbs && !finished) endRace();
+      }
+      if (row && nowAbs > row.abs + 1 && !finished) { const missed = row; missed.items.forEach(x => x.gone = true); row = null; say(mode === "num" ? `Oops, you missed ${target}! Here it comes again.` : "Here it comes again!", 1, 1.2); later(() => { if (!finished && !row) spawnRow(60); }, 900); }
+      prevAbs = nowAbs;
+      if (finishAbs < 0 && got >= goal) finishAbs = nowAbs + 40;
+    } else prevAbs = playerAbs();
+    // ----- draw -----
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); background();
+    const basePct = (pos % KSEG) / KSEG, playerPct = ((pos + PZ) % KSEG) / KSEG, playerY = ps.p1.w.y + (ps.p2.w.y - ps.p1.w.y) * playerPct;
+    let maxy = H, x = 0, dx = -(base.curve * basePct);
+    for (let n = 0; n < KDRAW; n++) { segs[(base.i + n) % LEN].cars = []; }
+    rivals.forEach(r => { const rel = Math.floor(r.z / KSEG) - base.i, d = (rel + LEN) % LEN; if (d >= 4 && d < KDRAW) segs[(base.i + d) % LEN].cars.push({ k: "car", id: r.id, x: r.x }); });
+    for (let n = 0; n < KDRAW; n++) {
+      const seg = segs[(base.i + n) % LEN], looped = seg.i < base.i, camZ = pos - (looped ? TRACK : 0);
+      seg.clip = maxy;
+      project(seg.p1, px * KROAD - x, playerY + KCAMH, camZ); project(seg.p2, px * KROAD - x - dx, playerY + KCAMH, camZ);
+      x += dx; dx += seg.curve;
+      if (seg.p1.c.z <= KDEPTH || seg.p2.s.y >= seg.p1.s.y || seg.p2.s.y >= maxy) continue;
+      drawSegment(seg); maxy = seg.p1.s.y < maxy ? seg.p2.s.y : maxy; maxy = seg.p2.s.y;
+    }
+    for (let n = KDRAW - 1; n > 0; n--) {
+      const seg = segs[(base.i + n) % LEN]; if (seg.p1.c.z <= KDEPTH) continue;
+      const sc = seg.p1.s.scale;
+      seg.sprites.forEach(sp => { if (!sp.gone) drawSprite(sp, seg.p1.s.x + sc * sp.x * KROAD * W / 2, seg.p1.s.y, sc, seg.clip); });
+      seg.cars.forEach(cr => drawSprite(cr, seg.p1.s.x + sc * cr.x * KROAD * W / 2, seg.p1.s.y, sc, seg.clip));
+    }
+    const kw = Math.max(110, Math.min(W * 0.26, H * 0.34)), bounce = racing ? Math.sin(now / 60) * (speed / KMAX) * 2 : 0;
+    drawKart(W / 2, H - 14 + bounce, kw, racer, spin > 0 ? Math.sin(now / 40) * 0.5 : Math.max(-0.25, Math.min(0.25, lean)) + (bump > 0 ? Math.sin(now / 30) * 0.08 : 0), boost > 0);
+    if (boost > 0) { c.strokeStyle = "rgba(255,255,255,.5)"; c.lineWidth = 3; for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2 + now / 300, r0 = Math.min(W, H) * 0.35; c.beginPath(); c.moveTo(W / 2 + Math.cos(a) * r0, H * 0.5 + Math.sin(a) * r0 * 0.6); c.lineTo(W / 2 + Math.cos(a) * r0 * 1.5, H * 0.5 + Math.sin(a) * r0 * 0.9); c.stroke(); } }
+    hudDraw();
+  }
+  window.KDBG = { state: () => ({ racing, finished, got, goal, target, place: place(), px, speed: speed / KMAX, row: row ? row.items.map(i => ({ x: i.x, v: i.v, ok: i.ok, gone: !!i.gone })) : null }) };
+  requestAnimationFrame(frame);
+}
+GAMES.knum = { name: "Number Rally", art: "race", total: 10, start(A, api) { this.total = (S.kart && S.kart.num) || 10; progress(0); kartGame(A, api, "num"); } };
+GAMES.kword = { name: "Word Kart", art: "monster", total: 8, start(A, api) { kartGame(A, api, "word"); } };
+GAMES.kmath = { name: "Math Kart", art: "moto", total: 8, start(A, api) { kartGame(A, api, "math"); } };
+GAME_HERO.knum = GAME_HERO.kword = GAME_HERO.kmath = "turbo";
+
 // ---------- type a new word (keyboard button): saved to the list for good, then traced right away ----------
 function openKb() { $("#kb").hidden = false; $("#kbIn").value = ""; $("#kbMsg").textContent = ""; setTimeout(() => $("#kbIn").focus(), 50); }
 function closeKb() { $("#kb").hidden = true; $("#kbIn").blur(); }
@@ -1357,7 +1646,9 @@ function openGarage() {
 function goHome() {
   stopAll(); show("home"); updBolts(); $("#gcount").textContent = `${S.garage.length}/${VEH.length}`;
 }
-const TILE_ORDER = ["trace", "draw", "cards", "match", "mem", "fire", "chase", "wreck", "dig", "race", "train"];
+const TILE_ORDER = ["knum", "kword", "kmath", "trace", "draw", "cards", "match", "mem", "fire", "chase", "wreck", "dig", "race", "train"];
+const KART_TILE = (col, label) => `<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M60 140 L92 40 H108 L140 140Z" fill="#5d6270"/><path d="M98 50 h4 v14 h-4z M97 80 h6 v18 h-6z M96 112 h8 v24 h-8z" fill="#fff"/><circle cx="52" cy="40" r="22" fill="${col}"/><text x="52" y="48" font-size="22" font-weight="900" text-anchor="middle" fill="#fff" font-family="Arial">${label}</text><path d="M52 62 V90" stroke="#fff" stroke-width="2"/><rect x="66" y="96" width="68" height="30" rx="8" fill="#ff6a1a"/><rect x="60" y="104" width="16" height="26" rx="4" fill="#1d1f24"/><rect x="124" y="104" width="16" height="26" rx="4" fill="#1d1f24"/><circle cx="100" cy="88" r="14" fill="#e8443a"/><rect x="88" y="84" width="24" height="7" rx="3" fill="#101a24"/><rect x="62" y="92" width="76" height="6" fill="#22252b"/></svg>`;
+GAMES.knum.tile = KART_TILE("#22a95e", "123"); GAMES.kword.tile = KART_TILE("#e0457f", "the"); GAMES.kmath.tile = KART_TILE("#e0a000", "2+3");
 $("#tiles").innerHTML = TILE_ORDER.map(id => `<button class="tile t-${id}" data-g="${id}">${GAMES[id].tile || svg(GAMES[id].art)}${GAMES[id].name}</button>`).join("");
 $("#tiles").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { audio(); startGame(b.dataset.g); });
 $("#crew").innerHTML = HEROES.map(h => `<button data-h="${h.id}" aria-label="${h.name}">${heroSvg(h.id)}</button>`).join("");
@@ -1402,6 +1693,21 @@ $("#pReset").onclick = () => {
   S.stats = {}; S.bolts = 0; S.garage = []; S.rounds = 0; save(); table(); resetArmed = false; $("#pResetNote").textContent = "Progress erased.";
 };
 $("#pClose").onclick = goHome;
+const backupCode = () => "KZ1-" + btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+$("#pCopy").onclick = () => {
+  const code = backupCode(); $("#pCode").value = code; $("#pCode").select();
+  const ok = () => { $("#pCopyNote").textContent = "Copied. Paste it somewhere safe, like a note or a text to yourself."; };
+  try { navigator.clipboard.writeText(code).then(ok, () => { $("#pCopyNote").textContent = "The code is in the box below. Select it and copy it."; }); } catch (e) { $("#pCopyNote").textContent = "The code is in the box below. Select it and copy it."; }
+};
+let restoreArmed = false;
+$("#pRestore").onclick = () => {
+  const raw = $("#pCode").value.trim(); let o = null;
+  try { if (raw.startsWith("KZ1-")) o = JSON.parse(decodeURIComponent(escape(atob(raw.slice(4))))); } catch (e) {}
+  if (!o || typeof o !== "object" || !("stats" in o) || !("garage" in o)) { $("#pRestoreNote").textContent = "That code doesn't look right. Copy the whole code, starting with KZ1-."; restoreArmed = false; return; }
+  if (!restoreArmed) { restoreArmed = true; $("#pRestoreNote").textContent = `This has ${o.bolts || 0} bolts and ${(o.garage || []).length} vehicles. Tap again to use it (it replaces what is here now).`; return; }
+  const keep = { vol: S.vol, muted: S.muted, voice: S.voice }; S = Object.assign({}, o, keep); save(); idbPut("S", S); restoreArmed = false;
+  $("#pRestoreNote").textContent = "Progress restored."; table(); updBolts();
+};
 
 if ((S.wordsV || 1) < 2) {   // new words join the END of his list, so what he is learning now stays first
   const L = wordList(); const add = MORE_WORDS.split(" ").filter(w => !L.includes(w)); if (add.length) S.words = S.words.trim() + " " + add.join(" ");
@@ -1413,6 +1719,10 @@ if (!S.padMerged) {
   S.padMerged = true; save();
 }
 if (location.hash === "#trace") startGame("trace"); else goHome();
+restoreMirror();
+addEventListener("pointerdown", keepStorage, { once: true });
+// install as an app (works offline, opens full screen from the home screen)
+try { if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {}); } catch (e) {}
 </script>
 </body>
 </html>
